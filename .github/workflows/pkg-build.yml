@@ -1,0 +1,57 @@
+on:
+  workflow_call:
+    inputs:
+      package-name:
+        type: string
+        required: true
+      upload:
+        type: boolean
+        default: false
+        required: false
+
+jobs:
+  build:
+    defaults:
+      run:
+        shell: bash -el {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: 'ubuntu-22.04'
+            python-version: '3.9'
+          - os: 'macos-12'
+            python-version: '3.9'
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Set up miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          auto-update-conda: false
+          channels: andrsd,conda-forge,defaults
+          channel-priority: strict
+          miniforge-version: latest
+          miniforge-variant: Mambaforge
+          use-mamba: true
+
+      - name: Install prerequisites
+        run: |
+          mamba install \
+            conda-build \
+            conda-verify \
+            anaconda-client
+
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Build package
+        run: |
+          conda-build recipes/${{ inputs.package-name }}
+
+      - name: Upload package
+        if: inputs.upload
+        run: |
+          PKG_FILE_NAMES=$(conda-build --output recipes/${{ inputs.package-name }} 2> /dev/null | xargs)
+          echo anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u ${{ env.CHANNEL_NAME }} $PKG_FILE_NAMES

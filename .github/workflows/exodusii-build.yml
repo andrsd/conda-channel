@@ -1,0 +1,15 @@
+name: "Build package: exodusII"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - recipes/exodusii/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: exodusii
+      upload: true
