@@ -49,12 +49,12 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Build package
+      - name: Build
+        if: !github.event.inputs.upload
         run: |
-          conda build recipes/${{ github.event.inputs.package-name }}
+          conda-build recipes/${{ github.event.inputs.package-name }}
 
-      - name: Upload package
+      - name: Build (w/upload)
         if: github.event.inputs.upload
         run: |
-          PKG_FILE_NAMES=$(conda-build --output recipes/${{ github.event.inputs.package-name }} 2> /dev/null | xargs)
-          anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u ${{ vars.CHANNEL_NAME }} $PKG_FILE_NAMES
+          conda-build recipes/${{ github.event.inputs.package-name }} --user ${{ vars.CHANNEL_NAME }} --token ${{ secrets.ANACONDA_TOKEN }}

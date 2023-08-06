@@ -43,14 +43,15 @@ jobs:
             conda-verify \
             anaconda-client
 
-      - name: Set up upload args
-        if: inputs.upload
-        run: |
-          echo "UPLOAD_ARGS=--user ${{ vars.CHANNEL_NAME }} --token ${{ secrets.ANACONDA_TOKEN }}" >> "$GITHUB_ENV"
-
       - name: Checkout source
         uses: actions/checkout@v3
 
       - name: Build
+        if: !inputs.upload
         run: |
-          conda-build recipes/${{ inputs.package-name }} ${{ env.UPLOAD_ARGS }}
+          conda-build recipes/${{ inputs.package-name }}
+
+      - name: Build (w/upload)
+        if: inputs.upload
+        run: |
+          conda-build recipes/${{ inputs.package-name }} --user ${{ vars.CHANNEL_NAME }} --token ${{ secrets.ANACONDA_TOKEN }}
