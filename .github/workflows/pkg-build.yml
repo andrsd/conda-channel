@@ -47,11 +47,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build
-        if: !inputs.upload
+        if: !${{ inputs.upload }}
         run: |
           conda-build recipes/${{ inputs.package-name }}
 
       - name: Build (w/upload)
-        if: inputs.upload
+        if: ${{ inputs.upload }}
         run: |
           conda-build recipes/${{ inputs.package-name }} --user ${{ vars.CHANNEL_NAME }} --token ${{ secrets.ANACONDA_TOKEN }}
