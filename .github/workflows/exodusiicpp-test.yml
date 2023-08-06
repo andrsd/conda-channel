@@ -1,0 +1,13 @@
+name: "Test package: exodusIIcpp"
+
+on:
+  pull_request:
+    paths:
+      - recipes/exodusiicpp/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: exodusiicpp
+      upload: false
