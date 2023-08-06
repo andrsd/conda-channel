@@ -54,4 +54,4 @@ jobs:
         if: inputs.upload
         run: |
           PKG_FILE_NAMES=$(conda-build --output recipes/${{ inputs.package-name }} 2> /dev/null | xargs)
-          echo anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u ${{ env.CHANNEL_NAME }} $PKG_FILE_NAMES
+          anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u ${{ vars.CHANNEL_NAME }} $PKG_FILE_NAMES
