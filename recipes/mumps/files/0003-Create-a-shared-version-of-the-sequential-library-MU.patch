@@ -1,4 +1,4 @@
-From 5f98c74e99a992473ec24cda379a81941535c713 Mon Sep 17 00:00:00 2001
+From 211c9c317831b656c7a854f2894729ccf8073685 Mon Sep 17 00:00:00 2001
 From: David Andrs <andrsd@gmail.com>
 Date: Sun, 6 Aug 2023 13:50:18 -0600
 Subject: [PATCH 3/5] Create a shared version of the sequential library, MUST
@@ -10,7 +10,7 @@ Subject: [PATCH 3/5] Create a shared version of the sequential library, MUST
  2 files changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 71161b3..e216711 100644
+index 67c22b8..a81904f 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -48,6 +48,7 @@ prerequisites: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT).a $(libdir)
@@ -22,12 +22,12 @@ index 71161b3..e216711 100644
  # Build the libpord.a library and copy it into $(topdir)/lib
  $(libdir)/libpord$(PLAT).a:
 diff --git a/libseq/Makefile b/libseq/Makefile
-index e4e0b6f..0ee64e4 100644
+index b8b669f..609a07c 100644
 --- a/libseq/Makefile
 +++ b/libseq/Makefile
-@@ -8,15 +8,17 @@ all: libmpiseq
- 
- include ../Makefile.inc
+@@ -9,15 +9,17 @@ all: libmpiseq
+ topdir = ..
+ include $(topdir)/Makefile.inc
  
 -libmpiseq: libmpiseq$(PLAT)$(LIBEXT)
 +libmpiseq: libmpiseq$(PLAT).a libmpiseq$(PLAT)$(SHLIB_EXT)

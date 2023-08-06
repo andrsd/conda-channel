@@ -1,4 +1,4 @@
-From ab3616c9afd139b74cc0482ec310727d36a93d92 Mon Sep 17 00:00:00 2001
+From 310435226224f85232d84e44fd32896b79f8d02e Mon Sep 17 00:00:00 2001
 From: David Andrs <andrsd@gmail.com>
 Date: Sun, 6 Aug 2023 13:53:20 -0600
 Subject: [PATCH 4/5] These now need to link with the relevant Fortran or C MPI
@@ -9,7 +9,7 @@ Subject: [PATCH 4/5] These now need to link with the relevant Fortran or C MPI
  1 file changed, 22 insertions(+), 22 deletions(-)
 
 diff --git a/examples/Makefile b/examples/Makefile
-index 452941c..ff7c9e5 100644
+index 428585b..ac0d196 100644
 --- a/examples/Makefile
 +++ b/examples/Makefile
 @@ -21,53 +21,53 @@ multi:	multiple_arithmetics_example
