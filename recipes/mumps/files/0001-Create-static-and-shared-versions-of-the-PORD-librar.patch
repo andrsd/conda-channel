@@ -1,0 +1,90 @@
+From fc19104770964b0ae51d75ac9798f63b072b137f Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Sun, 6 Aug 2023 13:41:46 -0600
+Subject: [PATCH 1/5] Create static and shared versions of the PORD library.
+
+---
+ Makefile          | 15 ++++++++++-----
+ PORD/lib/Makefile | 12 ++++++++----
+ 2 files changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3c0f645..0ecddb1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -42,7 +42,7 @@ Makefile.inc:
+ 
+ include Makefile.inc
+ 
+-prerequisites: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT)$(LIBEXT)
++prerequisites: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT).a $(libdir)/libpord$(PLAT)$(SHLIB_EXT)
+ 
+ # dummy MPI library (sequential version)
+ 
+@@ -50,21 +50,26 @@ libseqneeded:
+ 	(cd libseq; $(MAKE))
+ 
+ # Build the libpord.a library and copy it into $(topdir)/lib
+-$(libdir)/libpord$(PLAT)$(LIBEXT):
++$(libdir)/libpord$(PLAT).a:
+ 	if [ "$(LPORDDIR)" != "" ] ; then \
+ 	  cd $(LPORDDIR); \
+ 	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" RANLIB="$(RANLIB)" OUTC="$(OUTC)" LIBEXT=$(LIBEXT); \
+ 	fi;
+ 	if [ "$(LPORDDIR)" != "" ] ; then \
+-	  cp $(LPORDDIR)/libpord$(LIBEXT) $@; \
++	  cp $(LPORDDIR)/libpord$(PLAT).a $@; \
+ 	fi;
+ 
++$(libdir)/libpord$(PLAT)$(SHLIB_EXT):
++	if [ "$(LPORDDIR)" != "" ] ; then \
++	cd $(LPORDDIR); $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" LDFLAGS="$(LDFLAGS)" AR="$(AR)" ARFLAGS="$(ARFLAGS)" ARFUNCT= RANLIB="$(RANLIB)" libpord$(PLAT)$(SHLIB_EXT); fi;
++	if [ "$(LPORDDIR)" != "" ] ; then \
++	cp -a $(LPORDDIR)/libpord*$(SHLIB_EXT) lib/; fi;
++
+ clean:
+ 	(cd src; $(MAKE) clean)
+ 	(cd examples; $(MAKE) clean)
+-	(cd $(libdir); $(RM) *$(PLAT)$(LIBEXT))
++	(cd $(libdir); $(RM) *$(PLAT).a *$(PLAT)$(SHLIB_EXT))
+ 	(cd libseq; $(MAKE) clean)
+ 	if [ "$(LPORDDIR)" != "" ] ; then \
+ 	  cd $(LPORDDIR); $(MAKE) realclean; \
+         fi;
+-
+diff --git a/PORD/lib/Makefile b/PORD/lib/Makefile
+index 8340bb6..6fa78b6 100644
+--- a/PORD/lib/Makefile
++++ b/PORD/lib/Makefile
+@@ -13,7 +13,7 @@ COPTIONS = $(INCLUDES) $(CFLAGS) $(OPTFLAGS)
+ 
+ OBJS = graph.o gbipart.o gbisect.o ddcreate.o ddbisect.o nestdiss.o \
+        multisector.o gelim.o bucket.o tree.o \
+-       symbfac.o interface.o sort.o minpriority.o 
++       symbfac.o interface.o sort.o minpriority.o
+ 
+ # Note: numfac.c read.c mapping.c triangular.c matrix.c kernel.c
+ # were not direcly used by MUMPS and have been removed from the
+@@ -24,12 +24,16 @@ OBJS = graph.o gbipart.o gbisect.o ddcreate.o ddbisect.o nestdiss.o \
+ .c.o:
+ 	$(CC) $(COPTIONS) -c $*.c $(OUTC)$*.o
+ 
+-libpord$(LIBEXT):$(OBJS)
+-	$(AR)$@ $(OBJS)
++libpord$(PLAT).a:$(OBJS)
++	$(AR) $@ $(OBJS)
+ 	$(RANLIB) $@
+ 
++libpord$(PLAT)$(SHLIB_EXT): $(OBJS)
++	$(CC) -shared $(OBJS) $(SONAME)libpord$(PLAT)-$(PKG_VERSION)$(SHLIB_EXT) -o libpord$(PLAT)-$(PKG_VERSION)$(SHLIB_EXT) $(LDFLAGS)
++	ln -sf libpord$(PLAT)-$(PKG_VERSION)$(SHLIB_EXT) $@
++
+ clean:
+ 	rm -f *.o
+ 
+ realclean:
+-	rm -f *.o libpord.a
++	rm -f *.o libpord*.a *$(SHLIB_EXT)
+-- 
+2.39.2 (Apple Git-143)
+

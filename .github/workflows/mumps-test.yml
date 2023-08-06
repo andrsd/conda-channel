@@ -1,0 +1,13 @@
+name: "Test package: MUMPS"
+
+on:
+  pull_request:
+    paths:
+      - recipes/mumps/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: mumps
+      upload: false

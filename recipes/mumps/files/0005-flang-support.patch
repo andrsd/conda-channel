@@ -1,0 +1,125 @@
+From 05337c7b3b7596c8c86a8c8c0d74cf167c4d4888 Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Sun, 6 Aug 2023 13:55:56 -0600
+Subject: [PATCH 5/5] flang-support
+
+---
+ libseq/elapse.h    |  4 ++--
+ src/mumps_c.c      | 14 +++++++-------
+ src/mumps_common.h |  4 ++--
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/libseq/elapse.h b/libseq/elapse.h
+index 07716e7..08755d5 100644
+--- a/libseq/elapse.h
++++ b/libseq/elapse.h
+@@ -8,7 +8,7 @@
+  *  Mumps Technologies, University of Bordeaux.
+  *
+  *  This version of MUMPS is provided to you free of charge. It is
+- *  released under the CeCILL-C license 
++ *  released under the CeCILL-C license
+  *  (see doc/CeCILL-C_V1-en.txt, doc/CeCILL-C_V1-fr.txt, and
+  *  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+  *
+@@ -25,7 +25,7 @@
+ #endif
+ #endif
+ 
+-#if (defined(_WIN32) && ! defined(__MINGW32__)) || defined(UPPER)
++#if defined(UPPER)
+ #define mumps_elapse MUMPS_ELAPSE
+ #elif defined(Add__)
+ #define mumps_elapse mumps_elapse__
+diff --git a/src/mumps_c.c b/src/mumps_c.c
+index 55b769c..a26ba33 100644
+--- a/src/mumps_c.c
++++ b/src/mumps_c.c
+@@ -8,7 +8,7 @@
+  *  Mumps Technologies, University of Bordeaux.
+  *
+  *  This version of MUMPS is provided to you free of charge. It is
+- *  released under the CeCILL-C license 
++ *  released under the CeCILL-C license
+  *  (see doc/CeCILL-C_V1-en.txt, doc/CeCILL-C_V1-fr.txt, and
+  *  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+  *
+@@ -43,7 +43,7 @@
+  *   CMUMPS_XXX in the code to get rid of any symbol convention annoyance.
+  */
+ #if MUMPS_ARITH == MUMPS_ARITH_s
+-# if defined(UPPER) || defined(MUMPS_WIN32)
++# if defined(UPPER)
+ #  define F_SYM_ARITH(lower_case,upper_case) SMUMPS_##upper_case
+ # elif defined(Add_)
+ #  define F_SYM_ARITH(lower_case,upper_case) smumps_##lower_case##_
+@@ -53,7 +53,7 @@
+ #  define F_SYM_ARITH(lower_case,upper_case) smumps_##lower_case
+ # endif
+ #elif MUMPS_ARITH == MUMPS_ARITH_d
+-# if defined(UPPER) || defined(MUMPS_WIN32)
++# if defined(UPPER)
+ #  define F_SYM_ARITH(lower_case,upper_case) DMUMPS_##upper_case
+ # elif defined(Add_)
+ #  define F_SYM_ARITH(lower_case,upper_case) dmumps_##lower_case##_
+@@ -63,7 +63,7 @@
+ #  define F_SYM_ARITH(lower_case,upper_case) dmumps_##lower_case
+ # endif
+ #elif MUMPS_ARITH == MUMPS_ARITH_c
+-# if defined(UPPER) || defined(MUMPS_WIN32)
++# if defined(UPPER)
+ #  define F_SYM_ARITH(lower_case,upper_case) CMUMPS_##upper_case
+ # elif defined(Add_)
+ #  define F_SYM_ARITH(lower_case,upper_case) cmumps_##lower_case##_
+@@ -73,7 +73,7 @@
+ #  define F_SYM_ARITH(lower_case,upper_case) cmumps_##lower_case
+ # endif
+ #elif MUMPS_ARITH == MUMPS_ARITH_z
+-# if defined(UPPER) || defined(MUMPS_WIN32)
++# if defined(UPPER)
+ #  define F_SYM_ARITH(lower_case,upper_case) ZMUMPS_##upper_case
+ # elif defined(Add_)
+ #  define F_SYM_ARITH(lower_case,upper_case) zmumps_##lower_case##_
+@@ -272,7 +272,7 @@ void MUMPS_CALL
+ mumps_c(MUMPS_STRUC_C * mumps_par)
+ {
+     /*
+-     * The following local variables will 
++     * The following local variables will
+      *  be passed to the F77 interface.
+      */
+     MUMPS_INT *icntl;
+@@ -514,7 +514,7 @@ mumps_c(MUMPS_STRUC_C * mumps_par)
+           , &write_problemlen
+           , &save_dirlen
+           , &save_prefixlen
+-          , metis_options    
++          , metis_options
+     );
+     /*
+      * Set interface to C (KEEP(500)=1) after job=-1
+diff --git a/src/mumps_common.h b/src/mumps_common.h
+index 2c3b8c3..ae7b629 100644
+--- a/src/mumps_common.h
++++ b/src/mumps_common.h
+@@ -8,7 +8,7 @@
+  *  Mumps Technologies, University of Bordeaux.
+  *
+  *  This version of MUMPS is provided to you free of charge. It is
+- *  released under the CeCILL-C license 
++ *  released under the CeCILL-C license
+  *  (see doc/CeCILL-C_V1-en.txt, doc/CeCILL-C_V1-fr.txt, and
+  *  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+  *
+@@ -28,7 +28,7 @@
+  *     knowledge, there is no way to perform the conversion with CPP
+  *     directives only.
+  */
+-#if defined(UPPER) || defined(MUMPS_WIN32)
++#if defined(UPPER)
+ # define F_SYMBOL(lower_case,upper_case) MUMPS_##upper_case
+ #elif defined(Add_)
+ # define F_SYMBOL(lower_case,upper_case) mumps_##lower_case##_
+-- 
+2.39.2 (Apple Git-143)
+
