@@ -1,0 +1,14 @@
+name: "Test package: PETSc"
+
+on:
+  pull_request:
+    paths:
+      - recipes/petsc/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: petsc
+      upload: false
+    secrets: inherit
