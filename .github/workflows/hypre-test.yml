@@ -11,3 +11,4 @@ jobs:
     with:
       package-name: hypre
       upload: false
+    secrets: inherit
