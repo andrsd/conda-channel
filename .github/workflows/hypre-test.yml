@@ -1,0 +1,13 @@
+name: "Test package: HYPRE"
+
+on:
+  pull_request:
+    paths:
+      - recipes/hypre/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: hypre
+      upload: false
