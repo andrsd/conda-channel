@@ -1,0 +1,56 @@
+{% set version = "2.2.1" %}
+{% set build = 0 %}
+
+{% set mpi = mpi or 'mpich' %}
+
+package:
+  name: scalapack
+  version: {{ version }}
+
+source:
+  url: https://github.com/Reference-ScaLAPACK/scalapack/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 4aede775fdb28fa44b331875730bcd5bab130caaec225fadeccf424c8fcb55aa
+  patches:
+    - files/0001-Use-C90-standard.patch
+
+build:
+  number: {{ build }}
+  skip: true  # [win]
+  {% set mpi_prefix = "mpi_" + mpi %}
+  string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
+
+  {% set build_pin = '' %}
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('fortran') }}
+    - {{ compiler('c') }}
+    - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
+  host:
+    - libblas
+    - liblapack
+    - {{ mpi }}
+  run:
+    - {{ mpi }}
+
+test:
+  commands:
+    - test -f $PREFIX/lib/libscalapack.dylib  # [osx]
+    - test -f $PREFIX/lib/libscalapack.so  # [linux]
+
+about:
+  home: http://www.netlib.org/scalapack/
+  license: BSD-2-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: ScaLAPACK is a library of high-performance linear algebra routines for parallel distributed memory machines
+  description: |
+    ScaLAPACK is a library of high-performance linear algebra routines for parallel distributed
+    memory machines. ScaLAPACK solves dense and banded linear systems, least squares problems,
+    eigenvalue problems, and singular value problems.
+
+extra:
+  recipe-maintainers:
+    - andrsd

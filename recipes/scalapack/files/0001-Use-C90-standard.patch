@@ -1,0 +1,25 @@
+From 62573b7c37b70b37b54f65c0fa846e9c1dfd9ab1 Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Mon, 7 Aug 2023 07:19:52 -0600
+Subject: [PATCH] Use C90 standard
+
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a4d7665..d8c8645 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.2)
+ 
+ project(SCALAPACK VERSION 2.2.1 LANGUAGES C Fortran)
+ 
++set(CMAKE_C_STANDARD 90)
++
+ # Configure the warning and code coverage suppression file
+ configure_file(
+   "${SCALAPACK_SOURCE_DIR}/CMAKE/CTestCustom.cmake.in"
+-- 
+2.39.2 (Apple Git-143)
+
