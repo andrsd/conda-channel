@@ -1,6 +1,6 @@
 {% set name = "mumps" %}
-{% set version = "5.4.0" %}
-{% set sha256 = "c613414683e462da7c152c131cebf34f937e79b30571424060dd673368bbf627" %}
+{% set version = "5.4.1" %}
+{% set sha256 = "93034a1a9fe0876307136dcde7e98e9086e199de76f1c47da822e7d4de987fa8" %}
 
 package:
   name: mumps

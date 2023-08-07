@@ -1,4 +1,4 @@
-From fc19104770964b0ae51d75ac9798f63b072b137f Mon Sep 17 00:00:00 2001
+From 9348a1767ee6031d85d619ac46a1bdc71855b4e5 Mon Sep 17 00:00:00 2001
 From: David Andrs <andrsd@gmail.com>
 Date: Sun, 6 Aug 2023 13:41:46 -0600
 Subject: [PATCH 1/5] Create static and shared versions of the PORD library.
@@ -9,7 +9,7 @@ Subject: [PATCH 1/5] Create static and shared versions of the PORD library.
  2 files changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 3c0f645..0ecddb1 100644
+index 8e459d2..f1edac9 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -42,7 +42,7 @@ Makefile.inc:
