@@ -1,0 +1,62 @@
+{% set version = "4.0.3-p6" %}
+{% set build = 0 %}
+
+{% set mpi = mpi or 'mpich' %}
+
+package:
+  name: parmetis
+  version: {{ version|replace('-', '.') }}
+
+source:
+  url: https://bitbucket.org/petsc/pkg-parmetis/get/v{{ version }}.tar.gz
+  sha256: 663a20f45066d94a2732e8f38742047e89cd2b159cec7b3c6a7d834ae59d8b1f
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+  {% set mpi_prefix = "mpi_" + mpi %}
+  string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
+
+  {% set build_pin = '' %}
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
+    - metis 5.1.*
+  host:
+    - {{ mpi }}
+    - metis 5.1.*
+  run:
+    - {{ mpi }}
+    - metis 5.1.*
+
+test:
+  commands:
+    - test -f "${PREFIX}/include/parmetis.h"
+    - test -f "${PREFIX}/lib/libparmetis.dylib"  # [osx]
+    - test -f "${PREFIX}/lib/libparmetis.so"  # [linux]
+
+about:
+  home: http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview
+  license: Non-free for commercial use
+  license_file: LICENSE.txt
+  summary: 'ParMETIS - Parallel Graph Partitioning and Fill-reducing Matrix Ordering'
+  description: |
+    ParMETIS is an MPI-based parallel library that implements a
+    variety of algorithms for partitioning unstructured graphs,
+    meshes, and for computing fill-reducing orderings of sparse
+    matrices. ParMETIS extends the functionality provided by METIS and
+    includes routines that are especially suited for parallel AMR
+    computations and large scale numerical simulations. The algorithms
+    implemented in ParMETIS are based on the parallel multilevel k-way
+    graph-partitioning, adaptive repartitioning, and parallel
+    multi-constrained partitioning schemes developed in our lab.
+  doc_url: http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/manual.pdf
+
+extra:
+  recipe-maintainers:
+    - andrsd
