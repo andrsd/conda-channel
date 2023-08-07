@@ -1,5 +1,5 @@
 {% set version = "3.17.5" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 {% set mpi = mpi or 'mpich' %}
 {% if scalar == "real" %}
@@ -40,6 +40,18 @@ requirements:
     - liblapack
     - {{ mpi }}
     - yaml
+    - hypre 2.24.* mpi_{{ mpi }}_*
+    - metis 5.1.*
+    - parmetis 4.0.* mpi_{{ mpi }}_*
+    - scalapack 2.2.* mpi_{{ mpi }}_*
+    - mumps 5.4.* mpi_{{ mpi }}_*
+    - hdf5
+    - hdf5 1.12.* mpi_{{ mpi }}_*
+    - exodusii 2022.08.* mpi_{{ mpi }}_*
+  run:
+    - libblas
+    - libcblas
+    - liblapack
     - hypre 2.24.* mpi_{{ mpi }}_*
     - metis 5.1.*
     - parmetis 4.0.* mpi_{{ mpi }}_*
