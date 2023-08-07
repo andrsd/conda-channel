@@ -1,4 +1,4 @@
-name: "Test package: PARMETIS"
+name: "Test package: ParMETIS"
 
 on:
   pull_request:

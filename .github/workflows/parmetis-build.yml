@@ -1,4 +1,4 @@
-name: "Build package: PARMETIS"
+name: "Build package: ParMETIS"
 
 on:
   push:
