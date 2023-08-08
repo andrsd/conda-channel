@@ -74,7 +74,6 @@ python ./configure \
   --with-hypre=1 \
   --with-metis=1 \
   --with-mpi=1 \
-  --with-mumps=1 \
   --with-parmetis=1 \
   --with-pthread=1 \
   --with-shared-libraries \
