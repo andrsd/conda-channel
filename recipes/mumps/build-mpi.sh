@@ -30,6 +30,6 @@ fi
 export CC=mpicc
 export FC=mpifort
 
-make all
+make allshared
 
 cp -av lib/*${SHLIB_EXT} ${PREFIX}/lib
