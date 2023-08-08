@@ -68,7 +68,7 @@ python ./configure \
   --with-cxx-dialect=cxx14 \
   --with-blas-lib=libblas${SHLIB_EXT} \
   --with-lapack-lib=liblapack${SHLIB_EXT} \
-  --with-yaml=1 \
+  --with-yaml=0 \
   --with-hdf5=1 \
   --with-hwloc=0 \
   --with-hypre=1 \
