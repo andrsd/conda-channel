@@ -1,0 +1,14 @@
+name: "Test package: fprops"
+
+on:
+  pull_request:
+    paths:
+      - recipes/fprops/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: fprops
+      upload: false
+    secrets: inherit
