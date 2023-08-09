@@ -71,11 +71,7 @@ python ./configure \
   --with-yaml=0 \
   --with-hdf5=1 \
   --with-hwloc=0 \
-  --with-hypre=1 \
-  --with-metis=1 \
   --with-mpi=1 \
-  --with-mumps=1 \
-  --with-parmetis=1 \
   --with-pthread=1 \
   --with-shared-libraries \
   --with-ssl=0 \
@@ -86,7 +82,6 @@ python ./configure \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
-  --with-scalar-type=${scalar} \
   $extra_opts \
   --prefix=$PREFIX || (cat configure.log && exit 1)
 
