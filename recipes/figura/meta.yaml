@@ -30,7 +30,7 @@ about:
   home: https://github.com/andrsd/figura
   license: MIT
   license_file: LICENSE
-  summary:
+  summary: User-friendly python scripting for creating parametrical 3D models
   doc_url: https://andrsd.github.io/figura
 
 extra:
