@@ -2,5 +2,10 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
   - 10.15                                                   # [not arm64 and osx]
   - 11.3                                                    # [arm64 and osx]
 
+python:
+  - 3.9
+  - 3.10
+  - 3.11
+
 mpi:
   - mpich  # [not win]

@@ -60,9 +60,6 @@ python ./configure \
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
   --FOPTFLAGS=-O3 \
-  --with-clib-autodetect=0 \
-  --with-cxxlib-autodetect=0 \
-  --with-fortranlib-autodetect=0 \
   --with-debugging=0 \
   --with-64-bit-indices \
   --with-cxx-dialect=cxx14 \
