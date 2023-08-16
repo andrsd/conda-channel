@@ -1,0 +1,44 @@
+{% set version = "5.1.0-p10" %}
+{% set build = 1 %}
+
+package:
+  name: metis
+  version: {{ version | replace('-', '.') }}
+
+source:
+  url: https://bitbucket.org/petsc/pkg-metis/get/v{{ version }}.tar.gz
+  sha256: 7f318541d87e05a6c279d48830c3456e1f55fefc36edda1a797e6d2eedfb5c54
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('c') }}
+
+test:
+  commands:
+    - test -f $PREFIX/include/metis.h  # [unix]
+    - test -f $PREFIX/lib/libmetis.dylib  # [osx]
+    - test -f $PREFIX/lib/libmetis.so  # [linux]
+
+about:
+  home: http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
+  license: Apache-2.0
+  license_file:
+    - LICENSE.txt
+  summary: 'METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering'
+  description: |
+    METIS is a set of serial programs for partitioning graphs, partitioning
+    finite element meshes, and producing fill reducing orderings for sparse
+    matrices. The algorithms implemented in METIS are based on the multilevel
+    recursive-bisection, multilevel k-way, and multi-constraint partitioning
+    schemes developed in our lab.
+  doc_url: http://glaros.dtc.umn.edu/gkhome/metis/metis/faq
+
+extra:
+  recipe-maintainers:
+    - andrsd

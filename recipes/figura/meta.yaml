@@ -1,0 +1,38 @@
+{% set version = "0.4.0" %}
+{% set build = "0" %}
+
+package:
+  name: figura
+  version: {{ version }}
+
+source:
+  url: https://github.com/andrsd/figura/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 396e275381881e4b37e09d2844fe95d1c12826d34e148362a432dcb71680e3b6
+
+build:
+  number: {{ build }}
+  script: ${PYTHON} -m pip install . --no-deps -vv
+
+requirements:
+  build:
+    - make
+  host:
+    - python {{ python }}
+    - setuptools
+    - pythonocc-core 7.6.*
+    - multimethod 1.9.*
+  run:
+    - python
+    - pythonocc-core 7.6.*
+    - multimethod 1.9.*
+
+about:
+  home: https://github.com/andrsd/figura
+  license: MIT
+  license_file: LICENSE
+  summary: User-friendly python scripting for creating parametrical 3D models
+  doc_url: https://andrsd.github.io/figura
+
+extra:
+  recipe-maintainers:
+    - andrsd

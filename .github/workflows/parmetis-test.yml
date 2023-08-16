@@ -1,0 +1,14 @@
+name: "Test package: ParMETIS"
+
+on:
+  pull_request:
+    paths:
+      - recipes/parmetis/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: parmetis
+      upload: false
+    secrets: inherit

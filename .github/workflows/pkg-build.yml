@@ -8,6 +8,9 @@ on:
         type: boolean
         default: false
         required: false
+    secrets:
+      ANACONDA_TOKEN:
+        required: true
 
 jobs:
   build:

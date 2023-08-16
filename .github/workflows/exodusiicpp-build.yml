@@ -13,3 +13,4 @@ jobs:
     with:
       package-name: exodusiicpp
       upload: true
+    secrets: inherit

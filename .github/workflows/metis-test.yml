@@ -1,0 +1,14 @@
+name: "Test package: METIS"
+
+on:
+  pull_request:
+    paths:
+      - recipes/metis/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: metis
+      upload: false
+    secrets: inherit

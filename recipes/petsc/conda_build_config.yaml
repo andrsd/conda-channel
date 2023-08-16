@@ -1,0 +1,24 @@
+MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
+  - 10.15                                                   # [not arm64 and osx]
+  - 11.3                                                    # [arm64 and osx]
+
+mpi:
+  - mpich
+
+python:
+  - 3.9
+
+pin_run_as_build:
+  hypre:
+    max_pin: x.x.x
+  metis:
+    max_pin: x.x
+  parmetis:
+    max_pin: x.x
+  scalapack:
+    max_pin: x.x
+  suitesparse:
+    max_pin: x.x  # [not osx]
+    max_pin: x.x.x  # [osx]
+  exodusii:
+    max_pin: x.x.x

@@ -1,0 +1,14 @@
+name: "Test package: gmsh2exo"
+
+on:
+  pull_request:
+    paths:
+      - recipes/gmsh2exo/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: gmsh2exo
+      upload: false
+    secrets: inherit

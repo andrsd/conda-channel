@@ -10,7 +10,7 @@
 
 # Begin orderings
 ISCOTCH  = -I$(PREFIX)/include
-LSCOTCH  = -L$(PREFIX)/lib -lptesmumps -lptscotch -lptscotcherr -lscotch
+LSCOTCH  = -L$(PREFIX)/lib
 
 LPORDDIR = $(topdir)/PORD/lib
 IPORD    = -I$(topdir)/PORD/include
@@ -20,7 +20,7 @@ IMETIS   = -I$(PREFIX)/include
 LMETIS   = -L$(PREFIX)/lib -lparmetis -lmetis
 
 # Corresponding variables reused later
-ORDERINGSF  = -Dparmetis -Dpord -Dptscotch
+ORDERINGSF  = -Dparmetis -Dpord
 ORDERINGSC  = $(ORDERINGSF)
 LORDERINGS  = $(LMETIS) $(LPORD) $(LSCOTCH)
 IORDERINGSF = $(ISCOTCH)
@@ -30,6 +30,7 @@ IORDERINGSC = $(IMETIS) $(IPORD) $(ISCOTCH)
 
 PLAT    =
 LIBEXT  = .a
+LIBEXT_SHARED = $(SHLIB_EXT)
 OUTC    = -o
 OUTF    = -o
 RM = /bin/rm -f
@@ -43,10 +44,11 @@ RANLIB = ranlib
 INCSEQ  = -I$(topdir)/libseq
 LIBSEQ  = -L$(topdir)/libseq -lmpiseq
 
-SCALAP  = -L$(PREFIX)/lib -lscalapack
+LAPACK  = -llapack
+SCALAP  = -lscalapack
 
 INCPAR  = -I$(PREFIX)/include
-LIBPAR  = $(SCALAP)
+LIBPAR  = -L$(PREFIX)/lib $(SCALAP) $(LAPACK)
 
 LIBBLAS = -Wl,-rpath,$(PREFIX)/lib -L$(PREFIX)/lib -llapack -lblas
 LIBOTHERS = -lpthread

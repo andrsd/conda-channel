@@ -11,3 +11,4 @@ jobs:
     with:
       package-name: mumps
       upload: false
+    secrets: inherit

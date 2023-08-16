@@ -13,3 +13,4 @@ jobs:
     with:
       package-name: exodusii
       upload: true
+    secrets: inherit
