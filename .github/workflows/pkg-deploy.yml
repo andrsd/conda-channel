@@ -13,16 +13,8 @@ jobs:
     defaults:
       run:
         shell: bash -el {0}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: 'ubuntu-22.04'
-            python-version: '3.9'
-          - os: 'macos-12'
-            python-version: '3.9'
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
     steps:
       - name: Set up miniconda
         uses: conda-incubator/setup-miniconda@v2
@@ -37,18 +29,13 @@ jobs:
 
       - name: Install prerequisites
         run: |
-          mamba install \
-            conda-build \
-            conda-verify \
-            anaconda-client
-
-      - name: Checkout source
-        uses: actions/checkout@v3
+          mamba install anaconda-client
 
       - name: Build
         if: ${{ inputs.upload }}
         run: |
-          conda-build recipes/${{ inputs.package-name }} \
-            --user ${{ vars.CHANNEL_NAME }} \
+          anaconda move \
             --token ${{ secrets.ANACONDA_TOKEN }} \
-            --label devel
+            --from-label devel \
+            --to-label main \
+            ${{ vars.CHANNEL_NAME }}/${{ inputs.package-name }} 

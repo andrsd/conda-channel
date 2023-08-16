@@ -1,9 +1,7 @@
 name: "Build package: MPICH"
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - recipes/mpich/meta.yaml
 
@@ -12,5 +10,4 @@ jobs:
     uses: ./.github/workflows/pkg-build.yml
     with:
       package-name: mpich
-      upload: true
     secrets: inherit

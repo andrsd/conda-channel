@@ -1,9 +1,7 @@
 name: "Build package: ptscotch"
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - recipes/ptscotch/meta.yaml
 
@@ -12,5 +10,4 @@ jobs:
     uses: ./.github/workflows/pkg-build.yml
     with:
       package-name: ptscotch
-      upload: true
     secrets: inherit

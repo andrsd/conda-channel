@@ -1,9 +1,7 @@
 name: "Build package: ScaLAPACK"
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - recipes/scalapack/meta.yaml
 
@@ -12,5 +10,4 @@ jobs:
     uses: ./.github/workflows/pkg-build.yml
     with:
       package-name: scalapack
-      upload: true
     secrets: inherit

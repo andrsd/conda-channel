@@ -1,14 +1,15 @@
-name: "Test package: HYPRE"
+name: "Deploy package: HYPRE"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - recipes/hypre/meta.yaml
 
 jobs:
   build:
-    uses: ./.github/workflows/pkg-build.yml
+    uses: ./.github/workflows/pkg-deploy.yml
     with:
       package-name: hypre
-      upload: false
     secrets: inherit

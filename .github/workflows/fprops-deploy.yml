@@ -1,14 +1,15 @@
-name: "Test package: fprops"
+name: "Deploy package: fprops"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - recipes/fprops/meta.yaml
 
 jobs:
   build:
-    uses: ./.github/workflows/pkg-build.yml
+    uses: ./.github/workflows/pkg-deploy.yml
     with:
       package-name: fprops
-      upload: false
     secrets: inherit

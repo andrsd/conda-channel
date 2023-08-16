@@ -1,14 +1,15 @@
-name: "Test package: PETSc"
+name: "Deploy package: PETSc"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - recipes/petsc/meta.yaml
 
 jobs:
   build:
-    uses: ./.github/workflows/pkg-build.yml
+    uses: ./.github/workflows/pkg-deploy.yml
     with:
       package-name: petsc
-      upload: false
     secrets: inherit

@@ -1,9 +1,7 @@
 name: "Build package: ParMETIS"
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - recipes/parmetis/meta.yaml
 
@@ -12,5 +10,4 @@ jobs:
     uses: ./.github/workflows/pkg-build.yml
     with:
       package-name: parmetis
-      upload: true
     secrets: inherit

@@ -1,14 +1,15 @@
-name: "Test package: exodusIIcpp"
+name: "Deploy package: exodusIIcpp"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - recipes/exodusiicpp/meta.yaml
 
 jobs:
   build:
-    uses: ./.github/workflows/pkg-build.yml
+    uses: ./.github/workflows/pkg-deploy.yml
     with:
       package-name: exodusiicpp
-      upload: false
     secrets: inherit

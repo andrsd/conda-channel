@@ -1,14 +1,15 @@
-name: "Test package: MUMPS"
+name: "Deploy package: MUMPS"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - recipes/mumps/meta.yaml
 
 jobs:
   build:
-    uses: ./.github/workflows/pkg-build.yml
+    uses: ./.github/workflows/pkg-deploy.yml
     with:
       package-name: mumps
-      upload: false
     secrets: inherit
