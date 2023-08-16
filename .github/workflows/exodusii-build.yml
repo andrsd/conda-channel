@@ -3,6 +3,7 @@ name: "Build package: exodusII"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/exodusii/meta.yaml

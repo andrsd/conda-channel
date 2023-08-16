@@ -3,6 +3,7 @@ name: "Build package: MPICH"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/mpich/meta.yaml

@@ -3,6 +3,7 @@ name: "Build package: gmsh2exo"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/gmsh2exo/meta.yaml
