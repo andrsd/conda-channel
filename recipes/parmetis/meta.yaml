@@ -1,7 +1,5 @@
 {% set version = "4.0.3-p6" %}
-{% set build = 0 %}
-
-{% set mpi = mpi or 'mpich' %}
+{% set build = 1 %}
 
 package:
   name: parmetis
@@ -14,19 +12,13 @@ source:
 build:
   number: {{ build }}
   skip: true # [win]
-  {% set mpi_prefix = "mpi_" + mpi %}
-  string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
-
-  {% set build_pin = '' %}
 
 requirements:
   build:
     - cmake
     - make
     - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
-    - metis 5.1.*
+    - {{ mpi }}
   host:
     - {{ mpi }}
     - metis 5.1.*
