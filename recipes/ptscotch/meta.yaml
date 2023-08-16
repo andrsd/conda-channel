@@ -1,0 +1,62 @@
+{% set version = "6.1.1" %}
+{% set build = 0 %}
+
+package:
+  name: ptscotch
+  version: {{ version }}
+
+source:
+  url: http://ftp.mcs.anl.gov/pub/petsc/externalpackages/scotch-v{{ version }}.tar.gz
+  sha256: 14daf151399fc67f83fd3ff2933854f5e8d2207c7d35dd66a05660bf0bbd583c
+
+build:
+  number: {{ build }}
+  skip: true  # [win]
+
+requirements:
+  build:
+    - make
+    - {{ compiler('c') }}
+    - {{ mpi }}
+    - bison
+    - flex
+    - parmetis
+  host:
+    - libblas
+    - liblapack
+    - {{ mpi }}
+    - parmetis
+    - zlib
+  run:
+    - libblas
+    - liblapack
+    - {{ mpi }}
+    - parmetis
+    - zlib
+
+test:
+  commands:
+    - test -f $PREFIX/lib/libesmumps.a
+    - test -f $PREFIX/lib/libptesmumps.a
+    - test -f $PREFIX/lib/libptscotch.a
+    - test -f $PREFIX/lib/libptscotcherr.a
+    - test -f $PREFIX/lib/libptscotchparmetis.a
+    - test -f $PREFIX/lib/libscotch.a
+    - test -f $PREFIX/lib/libscotcherr.a
+
+about:
+  home: https://www.labri.fr/perso/pelegrin/scotch/
+  license: CECILL-C
+  license_file: doc/CeCILL-C_V1-en.txt
+  summary: |
+    SCOTCH: Static Mapping, Graph, Mesh and Hypergraph Partitioning, and Parallel and Sequential Sparse Matrix Ordering 
+    Package
+  description: |
+    Software package and libraries for sequential and parallel graph partitioning, static mapping and clustering, 
+    sequential mesh and hypergraph partitioning, and sequential and parallel sparse matrix block ordering.
+  doc_url: http://gforge.inria.fr/docman/?group_id=248&dirid=326
+  dev_url: https://gitlab.inria.fr/scotch/scotch
+
+extra:
+  recipe-maintainers:
+    - andrsd
