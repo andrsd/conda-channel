@@ -77,6 +77,9 @@ python ./configure \
   --with-netcdf=1 \
   --with-pnetcdf=1 \
   --with-ptscotch=1 \
+  --with-metis=1 \
+  --with-parmetis=1 \
+  --with-hypre=1 \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
