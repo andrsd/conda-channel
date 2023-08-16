@@ -76,6 +76,7 @@ python ./configure \
   --with-exodusii=1 \
   --with-netcdf=1 \
   --with-pnetcdf=1 \
+  --with-ptscotch=1 \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
