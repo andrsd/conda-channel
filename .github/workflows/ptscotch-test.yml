@@ -1,0 +1,14 @@
+name: "Test package: ptscotch"
+
+on:
+  pull_request:
+    paths:
+      - recipes/ptscotch/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: ptscotch
+      upload: false
+    secrets: inherit
