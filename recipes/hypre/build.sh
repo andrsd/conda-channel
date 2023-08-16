@@ -1,12 +1,5 @@
 #!/bin/bash
-
 set -x
-
-if [[ "$mpi" == "openmpi" ]]; then
-    export OPAL_PREFIX=$PREFIX
-    export CC=mpicc
-    export CXX=mpicxx
-fi
 
 mkdir build
 cd build
