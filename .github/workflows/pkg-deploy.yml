@@ -9,7 +9,8 @@ on:
         required: true
 
 jobs:
-  build:
+  deploy:
+    name: "${{ inputs.package-name }}"
     defaults:
       run:
         shell: bash -el {0}

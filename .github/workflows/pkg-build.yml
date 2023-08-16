@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: "${{ matrix.os }}, py-${{ matrix.python-version }}"
     defaults:
       run:
         shell: bash -el {0}
