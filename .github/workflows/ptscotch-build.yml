@@ -3,6 +3,7 @@ name: "Build package: ptscotch"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/ptscotch/meta.yaml
