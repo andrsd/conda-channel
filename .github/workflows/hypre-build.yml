@@ -3,6 +3,7 @@ name: "Build package: HYPRE"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/hypre/meta.yaml

@@ -3,6 +3,7 @@ name: "Build package: fprops"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/fprops/meta.yaml
