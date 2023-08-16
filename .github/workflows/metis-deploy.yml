@@ -3,7 +3,7 @@ name: "Deploy package: METIS"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/metis/meta.yaml
 
