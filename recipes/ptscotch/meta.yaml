@@ -1,4 +1,4 @@
-{% set version = "6.1.1" %}
+{% set version = "7.0.3" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: http://ftp.mcs.anl.gov/pub/petsc/externalpackages/scotch-v{{ version }}.tar.gz
-  sha256: 14daf151399fc67f83fd3ff2933854f5e8d2207c7d35dd66a05660bf0bbd583c
+  sha256: 5b5351f0ffd6fcae9ae7eafeccaa5a25602845b9ffd1afb104db932dd4d4f3c5
 
 build:
   number: {{ build }}
@@ -40,7 +40,7 @@ test:
     - test -f $PREFIX/lib/libptesmumps.a
     - test -f $PREFIX/lib/libptscotch.a
     - test -f $PREFIX/lib/libptscotcherr.a
-    - test -f $PREFIX/lib/libptscotchparmetis.a
+    - test -f $PREFIX/lib/libptscotchparmetisv3.a
     - test -f $PREFIX/lib/libscotch.a
     - test -f $PREFIX/lib/libscotcherr.a
 
