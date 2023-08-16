@@ -1,4 +1,4 @@
-{% set version = "2.25.0" %}
+{% set version = "2.28.0" %}
 {% set build = 1 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/hypre-space/hypre/archive/v{{ version }}.tar.gz
-  sha256: f9fc8371d91239fca694284dab17175bfda3821d7b7a871fd2e8f9d5930f303c
+  sha256: 2eea68740cdbc0b49a5e428f06ad7af861d1e169ce6a12d2cf0aa2fc28c4a2ae
 
 build:
   number: {{ build }}
