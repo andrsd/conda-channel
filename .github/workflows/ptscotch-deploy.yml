@@ -3,7 +3,7 @@ name: "Deploy package: ptscotch"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/ptscotch/meta.yaml
 

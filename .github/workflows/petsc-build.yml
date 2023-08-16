@@ -2,6 +2,8 @@ name: "Build package: PETSc"
 
 on:
   pull_request:
+    branches:
+      - petsc-*
     paths:
       - recipes/petsc/meta.yaml
 
