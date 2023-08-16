@@ -12,9 +12,9 @@ CCD = $(CC)
 
 CLIBFLAGS =
 CP = cp
-LEX = flex -Pscotchyy -olex.yy.c
+FLEX = flex
 LN = ln
 MKDIR = mkdir -p
 MV = mv
 RANLIB = ranlib
-YACC = bison -pscotchyy -y -b y
+BISON = bison
