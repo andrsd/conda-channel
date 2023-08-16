@@ -3,7 +3,7 @@ name: "Deploy package: HYPRE"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/hypre/meta.yaml
 

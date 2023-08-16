@@ -3,7 +3,7 @@ name: "Deploy package: fprops"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/fprops/meta.yaml
 

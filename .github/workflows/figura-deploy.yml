@@ -3,7 +3,7 @@ name: "Deploy package: figura"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/figura/meta.yaml
 

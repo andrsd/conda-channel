@@ -2,6 +2,8 @@ name: "Build package: METIS"
 
 on:
   pull_request:
+    branches:
+      - petsc-*
     paths:
       - recipes/metis/meta.yaml
 

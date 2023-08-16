@@ -3,7 +3,7 @@ name: "Deploy package: ParMETIS"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/parmetis/meta.yaml
 

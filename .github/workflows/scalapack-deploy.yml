@@ -3,7 +3,7 @@ name: "Deploy package: ScaLAPACK"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/scalapack/meta.yaml
 
