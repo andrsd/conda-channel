@@ -32,7 +32,6 @@ jobs:
           mamba install anaconda-client
 
       - name: Build
-        if: ${{ inputs.upload }}
         run: |
           anaconda move \
             --token ${{ secrets.ANACONDA_TOKEN }} \
