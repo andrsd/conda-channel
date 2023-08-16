@@ -3,7 +3,7 @@ name: "Deploy package: exodusIIcpp"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/exodusiicpp/meta.yaml
 

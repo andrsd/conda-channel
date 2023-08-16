@@ -2,6 +2,8 @@ name: "Build package: MUMPS"
 
 on:
   pull_request:
+    branches:
+      - petsc-*
     paths:
       - recipes/mumps/meta.yaml
 

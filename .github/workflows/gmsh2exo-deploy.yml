@@ -3,7 +3,7 @@ name: "Deploy package: gmsh2exo"
 on:
   push:
     branches:
-      - main
+      - petsc-*
     paths:
       - recipes/gmsh2exo/meta.yaml
 
