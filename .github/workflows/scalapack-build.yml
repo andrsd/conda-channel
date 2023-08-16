@@ -3,6 +3,7 @@ name: "Build package: ScaLAPACK"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/scalapack/meta.yaml

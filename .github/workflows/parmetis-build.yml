@@ -3,6 +3,7 @@ name: "Build package: ParMETIS"
 on:
   pull_request:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/parmetis/meta.yaml
