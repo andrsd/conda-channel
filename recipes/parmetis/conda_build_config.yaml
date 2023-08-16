@@ -4,7 +4,6 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
 
 mpi:
   - mpich
-  - openmpi
 
 pin_run_as_build:
   mpich: x.x
