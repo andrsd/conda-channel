@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: false
           channels: ${{ vars.CHANNEL_NAME }},main
-          channel-priority: strict
+          channel-priority: flexible
 
       - name: Install prerequisites
         run: |
