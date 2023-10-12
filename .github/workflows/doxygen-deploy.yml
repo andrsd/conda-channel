@@ -1,0 +1,15 @@
+name: "Deploy package: doxygen"
+
+on:
+  push:
+    branches:
+      - petsc-*
+    paths:
+      - recipes/doxygen/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-deploy.yml
+    with:
+      package-name: doxygen
+    secrets: inherit

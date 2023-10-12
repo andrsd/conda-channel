@@ -1,0 +1,16 @@
+name: "Build package: doxygen"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - petsc-*
+    paths:
+      - recipes/doxygen/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: doxygen
+    secrets: inherit
