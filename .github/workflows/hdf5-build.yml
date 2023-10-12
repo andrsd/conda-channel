@@ -1,0 +1,16 @@
+name: "Build package: hdf5"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - petsc-*
+    paths:
+      - recipes/hdf5/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: hdf5
+    secrets: inherit

@@ -1,0 +1,15 @@
+name: "Deploy package: hdf5"
+
+on:
+  push:
+    branches:
+      - petsc-*
+    paths:
+      - recipes/hdf5/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-deploy.yml
+    with:
+      package-name: hdf5
+    secrets: inherit
