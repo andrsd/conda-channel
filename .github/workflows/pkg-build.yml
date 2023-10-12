@@ -30,15 +30,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: false
-          channels: ${{ vars.CHANNEL_NAME }},conda-forge,defaults
+          channels: ${{ vars.CHANNEL_NAME }},main
           channel-priority: strict
-          miniforge-version: latest
-          miniforge-variant: Mambaforge
-          use-mamba: true
 
       - name: Install prerequisites
         run: |
-          mamba install \
+          conda install \
             conda-build \
             conda-verify \
             anaconda-client
