@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - petsc-*
+      - main
     paths:
       - recipes/figura/meta.yaml
 
