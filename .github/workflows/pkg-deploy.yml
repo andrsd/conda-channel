@@ -20,7 +20,7 @@ jobs:
       - name: Set up miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.9
           auto-update-conda: false
           channels: ${{ vars.CHANNEL_NAME }},main
           channel-priority: flexible
