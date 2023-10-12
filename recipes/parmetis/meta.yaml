@@ -1,5 +1,5 @@
 {% set version = "4.0.3-p6" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: parmetis
@@ -11,6 +11,7 @@ source:
 
 build:
   number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   skip: true # [win]
 
 requirements:
