@@ -1,0 +1,16 @@
+name: "Build package: libpnetcdf"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - petsc-*
+    paths:
+      - recipes/libpnetcdf/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: libpnetcdf
+    secrets: inherit

@@ -1,0 +1,11 @@
+--- ./scripts/config.sub.org	2022-09-23 08:58:59.000000000 -0600
++++ ./scripts/config.sub	2022-09-23 08:59:50.000000000 -0600
+@@ -376,7 +376,7 @@
+ 	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+-	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
++	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* | arm64-* \
+ 	| avr-* | avr32-* \
+ 	| ba-* \
+ 	| be32-* | be64-* \

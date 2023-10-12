@@ -1,0 +1,15 @@
+name: "Deploy package: libpnetcdf"
+
+on:
+  push:
+    branches:
+      - petsc-*
+    paths:
+      - recipes/libpnetcdf/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-deploy.yml
+    with:
+      package-name: libpnetcdf
+    secrets: inherit

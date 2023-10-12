@@ -1,0 +1,45 @@
+{% set version = "1.12.3" %}
+{% set build = 0 %}
+
+package:
+  name: libpnetcdf
+  version: {{ version }}
+
+source:
+  url: https://parallel-netcdf.github.io/Release/pnetcdf-{{ version }}.tar.gz
+  sha256: 439e359d09bb93d0e58a6e3f928f39c2eae965b6c97f64e67cd42220d6034f77
+  patches:
+    - files/script-config-arm64-apple.patch  # [osx and arm64]
+
+build:
+  number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - gnuconfig  # [unix]
+    - autoconf  # [not win]
+    - automake  # [not win]
+    - libtool  # [not win]
+    - m4  # [not win]
+    - make  # [not win]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - {{ mpi }}
+  host:
+    - {{ mpi }}
+  run:
+    - {{ mpi }}
+
+about:
+  home: https://parallel-netcdf.github.io/
+  license: LicenseRef-PNETCDF
+  license_family: BSD
+  license_file: COPYING
+  summary: PnetCDF is a parallel I/O library for accessing Unidata's NetCDF files in classic formats.
+
+extra:
+  recipe-maintainers:
+    - andrsd
