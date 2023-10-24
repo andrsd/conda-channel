@@ -1,4 +1,4 @@
-{% set version = "0.4.1" %}
+{% set version = "0.4.2" %}
 {% set build = "0" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/figura/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 9273bf1c036f2552cde7cccdbef654567e1aa16ac60bfa78ecd112e17dbbdd1e
+  sha256: 7f4b9c9d90966d78c29fbe0c9edde9b43a60b93b519a35bd1670f94490f5de18
 
 build:
   number: {{ build }}
