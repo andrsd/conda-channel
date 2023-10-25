@@ -30,13 +30,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: false
-          channels: ${{ vars.CHANNEL_NAME }},main
+          channels: ${{ vars.CHANNEL_NAME }},conda-forge,main
           channel-priority: flexible
+          miniforge-version: latest
+          miniforge-variant: Mambaforge
+          use-mamba: true
 
       - name: Install prerequisites
         run: |
           conda install \
             conda-build \
+            conda-verify \
             anaconda-client
 
       - name: Checkout source
