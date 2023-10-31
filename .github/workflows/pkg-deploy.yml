@@ -31,8 +31,7 @@ jobs:
 
       - name: Build
         run: |
-          anaconda move \
-            --token ${{ secrets.ANACONDA_TOKEN }} \
+          anaconda -t ${{ secrets.ANACONDA_TOKEN }} move \
             --from-label devel \
             --to-label main \
             ${{ vars.CHANNEL_NAME }}/${{ inputs.package-name }} 
