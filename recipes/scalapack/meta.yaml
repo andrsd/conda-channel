@@ -1,5 +1,5 @@
 {% set version = "2.2.1" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: scalapack
@@ -13,6 +13,7 @@ source:
 
 build:
   number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   skip: true  # [win]
 
 requirements:
@@ -22,14 +23,12 @@ requirements:
     - {{ compiler('fortran') }}
     - {{ compiler('c') }}
     - {{ mpi }}
-  host:
-    - libblas
-    - liblapack
-    - {{ mpi }}
+    - {{ blas }}
+    - {{ lapack }}
   run:
-    - libblas
-    - liblapack
     - {{ mpi }}
+    - {{ blas }}
+    - {{ lapack }}
 
 test:
   commands:
