@@ -1,0 +1,22 @@
+From a3c66e547d2f67e495f9fbeb62cb969ce7407760 Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Thu, 26 Oct 2023 10:17:56 -0600
+Subject: [PATCH] Fixing install command for the python package
+
+---
+ python/src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/src/CMakeLists.txt b/python/src/CMakeLists.txt
+index 72bf108..b866bf5 100644
+--- a/python/src/CMakeLists.txt
++++ b/python/src/CMakeLists.txt
+@@ -22,5 +22,5 @@ target_link_libraries(
+ install(
+     TARGETS ${PROJECT_NAME}
+     COMPONENT python
+-    LIBRARY DESTINATION "${Python3_SITELIB}/pyfprops"
++    LIBRARY DESTINATION "lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages/pyfprops"
+ )
+--
+2.39.3 (Apple Git-145)

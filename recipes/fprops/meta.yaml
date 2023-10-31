@@ -1,4 +1,4 @@
-{% set version = "2.0" %}
+{% set version = "3.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,9 @@ package:
 
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 2fc344ede8860c2d8bc9b5919ba6880ee2f4abf397985ebdac4244946282b327
+  sha256: 68d1885833a50db832d41b340e78ca45b05e96dda54e4e63acd4906cb8e989b0
+  patches:
+    - files/0001-Fixing-install-command-for-the-python-package.patch
 
 build:
   number: {{ build }}
@@ -22,10 +24,25 @@ requirements:
     - python {{ python }}
   host:
     - fmt 9.*
+    - hdf5 >=1.8
+    - eigen 3.4.*
     - python {{ python }}
+    - zlib
   run:
     - fmt 9.*
+    - eigen 3.4.*
+    - hdf5 >=1.8
     - python {{ python }}
+    - zlib
+
+test:
+  commands:
+    - test -f $PREFIX/lib/libfprops$SHLIB_EXT # [unix]
+    - test -f $PREFIX/include/fprops/SinglePhaseFluidProperties.h
+  imports:
+    - pyfprops
+  requires:
+    - pip
 
 about:
   home: data['url']
