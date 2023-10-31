@@ -30,11 +30,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: false
-          channels: ${{ vars.CHANNEL_NAME }},conda-forge,main
+          channels: ${{ vars.CHANNEL_NAME }},main
           channel-priority: flexible
-          miniforge-version: latest
-          miniforge-variant: Mambaforge
-          use-mamba: true
 
       - name: Install prerequisites
         run: |
