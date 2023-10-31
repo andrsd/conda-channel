@@ -3,6 +3,7 @@ name: "Deploy package: libaccelerate-osx"
 on:
   push:
     branches:
+      - main
       - petsc-*
     paths:
       - recipes/libaccelerate-osx/meta.yaml
