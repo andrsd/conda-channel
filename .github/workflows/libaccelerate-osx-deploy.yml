@@ -1,0 +1,15 @@
+name: "Deploy package: libaccelerate-osx"
+
+on:
+  push:
+    branches:
+      - petsc-*
+    paths:
+      - recipes/libaccelerate-osx/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-deploy.yml
+    with:
+      package-name: libaccelerate-osx
+    secrets: inherit
