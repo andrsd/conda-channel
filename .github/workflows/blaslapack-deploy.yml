@@ -1,0 +1,16 @@
+name: "Deploy package: blaslapack"
+
+on:
+  push:
+    branches:
+      - main
+      - petsc-*
+    paths:
+      - recipes/blaslapack/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-deploy.yml
+    with:
+      package-name: blaslapack
+    secrets: inherit
