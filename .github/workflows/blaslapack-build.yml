@@ -1,0 +1,16 @@
+name: "Build package: blaslapack"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - petsc-*
+    paths:
+      - recipes/blaslapack/meta.yaml
+
+jobs:
+  build:
+    uses: ./.github/workflows/pkg-build.yml
+    with:
+      package-name: blaslapack
+    secrets: inherit
