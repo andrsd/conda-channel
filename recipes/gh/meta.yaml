@@ -1,0 +1,41 @@
+{% set name = "gh" %}
+{% set version = "2.37.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/cli/cli/archive/v{{ version }}.tar.gz
+  sha256: 527ca3aeaf6a565a0b058825748683ec5f5e199d5754466943c1f5c69a7d5bfe
+
+build:
+  script_env:
+    - GH_VERSION=v{{ version }}
+  number: {{ build }}
+  skip: True  # [win or linux]
+
+requirements:
+  build:
+    - go >=1.21
+    - {{ compiler('c') }}
+    - make  # [unix]
+
+test:
+  commands:
+    - gh help
+    - gh version
+
+about:
+  home: https://github.com/cli/cli
+  license: Apache-2.0
+  license_family: APACHE
+  license_file: LICENSE
+  summary: Github CLI.
+  doc_url: https://cli.github.com/
+  dev_url: https://github.com/cli/cli
+
+extra:
+  recipe-maintainers:
+    - andrsd
