@@ -1,0 +1,46 @@
+{% set version = "2.6.3" %}
+{% set build = 0 %}
+
+package:
+  name: livereload
+  version: {{ version }}
+
+source:
+  url: https://github.com/lepture/python-livereload/archive/{{ version }}.tar.gz
+  sha256: 1d31d598d8dea0445e5d53e592e5fce5befd2265b001ce8995462200d3d247bf
+
+build:
+  number: {{ build }}
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+  entry_points:
+    - livereload = livereload.cli:main
+
+requirements:
+  build:
+    - python
+    - pip
+  run:
+    - python
+    - setuptools
+    - tornado
+    - six
+
+test:
+  imports:
+    - livereload
+  commands:
+    - pip check
+    - livereload --help
+  requires:
+    - pip
+
+about:
+  home: https://github.com/lepture/python-livereload
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: Python LiveReload is an awesome tool for web developers
+
+extra:
+  recipe-maintainers:
+    - andrsd
