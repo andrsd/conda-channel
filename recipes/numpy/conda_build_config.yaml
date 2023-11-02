@@ -1,0 +1,10 @@
+python:
+  - 3.9
+
+blas:
+  - libblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+lapack:
+  - liblapack  # [linux]
+  - libaccelerate-osx  # [osx]

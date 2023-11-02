@@ -1,0 +1,22 @@
+diff -ruN -x __pycache__ -x obj -x '*~' -x tags -x TAGS -x autom4te.cache lxml-4.9.2.orig/src/lxml/etree.pyx lxml-4.9.2/src/lxml/etree.pyx
+--- lxml-4.9.2.orig/src/lxml/etree.pyx	2022-12-13 21:29:13.000000000 +0100
++++ lxml-4.9.2/src/lxml/etree.pyx	2023-06-11 21:44:44.574619376 +0200
+@@ -142,15 +142,15 @@
+     const_xmlChar* c_name
+     python.PyObject* href
+ 
++# initialize parser (and threading)
++xmlparser.xmlInitParser()
++
+ # global per-thread setup
+ tree.xmlThrDefIndentTreeOutput(1)
+ tree.xmlThrDefLineNumbersDefaultValue(1)
+ 
+ _initThreadLogging()
+ 
+-# initialize parser (and threading)
+-xmlparser.xmlInitParser()
+-
+ # filename encoding
+ cdef bytes _FILENAME_ENCODING = (sys.getfilesystemencoding() or sys.getdefaultencoding() or 'ascii').encode("UTF-8")
+ cdef char* _C_FILENAME_ENCODING = _cstr(_FILENAME_ENCODING)
