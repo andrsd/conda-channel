@@ -4,3 +4,11 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
 
 mpi:
   - mpich
+
+blas:
+  - libblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+lapack:
+  - liblapack  # [linux]
+  - libaccelerate-osx  # [osx]
