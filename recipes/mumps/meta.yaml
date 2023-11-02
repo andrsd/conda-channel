@@ -16,9 +16,8 @@ build:
   script:
     - ${RECIPE_DIR}/build-mpi.sh
     - ${RECIPE_DIR}/build-headers.sh
-  skip: true  # [win]
-  {% set mpi_prefix = "mpi_" + mpi %}
-  string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
+  skip: true  # [win or osx]
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
 
   {% set build_pin = '' %}
 
@@ -30,19 +29,19 @@ requirements:
     - make  # [unix]
     - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
   host:
-    - libblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
     - metis 5.1.*
-    - parmetis 4.0.* mpi_{{ mpi }}_*
-    - scalapack 2.2.* mpi_{{ mpi }}_*
+    - parmetis 4.0.* {{ mpi }}_*
+    - scalapack 2.2.* {{ mpi }}_*
   run:
-    - libblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
     - metis 5.1.*
-    - parmetis 4.0.* mpi_{{ mpi }}_*
-    - scalapack 2.2.* mpi_{{ mpi }}_*
+    - parmetis 4.0.* {{ mpi }}_*
+    - scalapack 2.2.* {{ mpi }}_*
 
 test:
   commands:
