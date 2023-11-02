@@ -1,0 +1,40 @@
+{% set version = "9.2.2" %}
+{% set build = 0 %}
+
+package:
+  name: vtk
+  version: {{ version }}
+
+source:
+  url: https://www.vtk.org/files/release/9.2/VTK-{{ version }}.tar.gz
+  sha256: 1c5b0a2be71fac96ff4831af69e350f7a0ea3168981f790c000709dcf9121075
+  patches:
+    - files/liblzma-fix.patch
+
+build:
+  number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - cmake
+    - make
+    - python {{ python }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ mpi }}
+    - mesalib  # [linux]
+  run:
+    - {{ mpi }}
+    - python
+    - mesalib  # [linux]
+
+about:
+  summary: |
+    The Visualization Toolkit (VTK) is open source software for manipulating
+    and displaying scientific data.
+
+extra:
+  recipe-maintainers:
+    - andrsd
