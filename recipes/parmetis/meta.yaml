@@ -11,6 +11,7 @@ source:
 
 build:
   number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   skip: true # [win]
 
 requirements:
