@@ -1,0 +1,28 @@
+diff --git a/configure.ac b/configure.ac
+index d7c7dc0..5b6c48f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -22,7 +22,13 @@
+ #
+ 
+ # Initialize Autoconf
+-AC_PREREQ([2.70])
++
++# conda-forge patch: upstream requires Autoconf 2.70, but our Windows tooling
++# only provides 2.69. As of 1.3.0, this script does not appear to rely on any
++# features introduced in 2.70, so it should be OK to hack the version
++# requirement.
++AC_PREREQ([2.69])
++
+ AC_INIT([libXt], [1.3.0],
+ 	[https://gitlab.freedesktop.org/xorg/lib/libxt/-/issues/], [libXt])
+ AC_CONFIG_SRCDIR([Makefile.am])
+@@ -112,7 +118,7 @@ esac
+ 
+ # Link with winsock if mingw target
+ case $host_os in
+-	*mingw*)
++	*mingw*|*msys*)
+ 		AC_CHECK_LIB([ws2_32],[main])
+ 	;;
+ 	*)
