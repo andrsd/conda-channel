@@ -1,0 +1,61 @@
+{% set name = "libraw" %}
+{% set version = "0.21.1" %}
+{% set build = 2 %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  - folder: libraw
+    url: https://github.com/LibRaw/LibRaw/archive/{{ version }}.tar.gz
+    sha256: b63d7ffa43463f74afcc02f9083048c231349b41cc9255dec0840cf8a67b52e0
+
+  - folder: cmake
+    url: https://github.com/LibRaw/LibRaw-cmake/archive/6e26c9e73677dc04f9eb236a97c6a4dc225ba7e8.tar.gz
+    sha256: d0ecc870bb395ca05d4de61314d092437bb37afac1e17131cc64c58e57369a11
+
+build:
+  number: {{ build }}
+  run_exports:
+    - {{ pin_subpackage(name, max_pin='x.x') }}
+
+requirements:
+  build:
+    - automake  # [unix]
+    - libtool  # [unix]
+    - pkg-config
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - make  # [unix]
+    - cmake  # [win]
+  host:
+    - zlib
+    - lcms2
+    - libjpeg-turbo
+    - llvm-openmp  # [osx]
+    - libgomp      # [linux]
+
+test:
+  commands:
+#    - raw-identify -h
+#    - simple_dcraw -h
+    - test -f ${PREFIX}/include/libraw/libraw.h  # [unix]
+    - test -f ${PREFIX}/lib/libraw${SHLIB_EXT}  # [unix]
+    - if exist %PREFIX%\\Library\\include\\libraw\\libraw.h (exit 0) else (exit 1)  # [win]
+    - if exist $PREFIX$\\Library\\lib\\raw.lib (exit 0) else (exit 1)  # [win]
+    - if exist $PREFIX$\\Library\\bin\\raw.dll (exit 0) else (exit 1)  # [win]
+
+about:
+  home: http://www.libraw.org/
+  license: LGPL-2.1-only
+  license_family: LGPL
+  license_file: libraw/LICENSE.LGPL
+  description: |
+    LibRaw is a library for reading RAW files from digital photo cameras
+    (CRW/CR2, NEF, RAF, DNG, MOS, KDC, DCR, etc, virtually all RAW formats are supported).
+  summary: Library for reading and processing of RAW digicam images.
+
+extra:
+  recipe-maintainers:
+    - andrsd

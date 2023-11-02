@@ -1,0 +1,65 @@
+{% set xorg_name = "xcb-proto" %}
+{% set xorg_category = "proto" %}
+{% set name = "xcb-proto" %}
+{% set version = "1.16.0" %}
+{% set am_version = "1.15" %} # keep synchronized with build.sh
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://xorg.freedesktop.org/archive/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.gz
+  sha256: d9c7f010b1105fc3858bf07b5169b2dd8e7493c6652b1fe45f3321d874f291d7
+  patches:
+    - windows-pythondir.patch  # [win]
+
+build:
+  number: 1
+  detect_binary_files_with_prefix: true
+
+requirements:
+  build:
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - m2-autoconf                   # [win]
+    - m2-automake{{ am_version }}   # [win]
+    - m2-libtool                    # [win]
+    - m2w64-pkg-config              # [win]
+    - pkg-config                    # [not win]
+    - posix                         # [win]
+    - {{ compiler('c') }}           # [unix]
+    - {{ compiler('m2w64_c') }}     # [win]
+    - make                          # [unix]
+    - autoconf                      # [unix]
+    - automake                      # [unix]
+    - gettext                       # [unix]
+    - libtool                       # [unix]
+  host:
+    - python
+    - xorg-util-macros
+  run:
+    - python
+
+test:
+  requires:
+    - m2w64-pkg-config  # [win]
+    - pkg-config        # [not win]
+  imports:
+    - xcbgen
+  commands:
+    - pkg-config --variable=pythondir xcb-proto  # [not win]
+    - set "PKG_CONFIG_PATH=%LIBRARY_PREFIX%\share\pkgconfig" && pkg-config --variable=pythondir xcb-proto  # [win]
+
+about:
+  home: http://xcb.freedesktop.org/
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: "Provides the XML-XCB protocol descriptions that libxcb uses to generate the majority of its code and API"
+
+extra:
+  recipe-maintainers:
+    - ccordoba12
+    - mingwandroid
+    - pkgw

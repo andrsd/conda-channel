@@ -1,0 +1,62 @@
+{% set name = "doxygen" %}
+{% set version = "1.9.8" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/{{ name }}/{{ name }}/archive/Release_{{ version | replace(".", "_") }}.tar.gz
+  sha256: 77371e8a58d22d5e03c52729844d1043e9cbf8d0005ec5112ffa4c8f509ddde8
+
+  patches:
+    # CMake finds iconv_open in glibc, but finds iconv.h from libiconv.
+    # Make sure both are found from one place.
+    - files/find_iconv.patch
+    - files/fix_osx.diff
+    # https://github.com/doxygen/doxygen/issues/10055
+    - files/macos.patch  # [osx]
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - bison  # [not win]
+    - cmake
+    - flex  # [not win]
+    - m4  # [not win]
+    - make  # [not win]
+    - python
+    - texlive-core  # [not win]
+  host:
+    - libiconv
+  run:
+    - libiconv
+
+test:
+  commands:
+    - doxygen --help
+
+about:
+  home: https://www.doxygen.nl/index.html
+  license: GPL-2.0-only
+  license_file: LICENSE
+  summary: Generate documentation from source code
+
+  description: |
+    Doxygen is the de facto standard tool for
+    generating documentation from annotated C++ sources,
+    but it also supports other popular programming
+    languages such as C, Objective-C, C#, PHP, Java,
+    Python, IDL (Corba, Microsoft, and UNO/OpenOffice flavors),
+    Fortran, VHDL, Tcl, and to some extent D.
+  doc_url: https://www.doxygen.nl/manual/index.html
+  dev_url: https://github.com/doxygen/doxygen
+
+extra:
+  recipe-maintainers:
+    - andrsd

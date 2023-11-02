@@ -1,0 +1,64 @@
+{% set version = "3.10.0" %}
+{% set build = 0 %}
+
+package:
+  name: h5py
+  version: {{ version }}
+
+source:
+  url: https://github.com/h5py/h5py/archive/{{ version }}.tar.gz
+  sha256: 9cac7838ab139ec71adf721a1305b954e18efa4f80c82fcfe34e1eb9639ded29
+
+build:
+  skip: true  # [py<=37]
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  number: {{ build }}
+  script_env:
+    - HDF5_HAS_ROS3=1  # [build_platform != target_platform]
+
+requirements:
+  build:
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - cython 0.29.32                         # [build_platform != target_platform]
+    - hdf5 * {{ mpi }}_*                     # [build_platform != target_platform]
+    - numpy                                  # [build_platform != target_platform]
+    - {{ compiler("c") }}
+    - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
+  host:
+    - python
+    - pip
+    - numpy
+    - {{ mpi }}  # [mpi != 'nompi']
+    - mpi4py >=3.0  # [mpi != 'nompi']
+    - hdf5 * {{ mpi }}_*
+    - cython 0.29.32
+    - pkgconfig
+  run:
+    - python
+    - cached-property
+    - {{ pin_compatible('numpy') }}
+    - {{ mpi }}  # [mpi != 'nompi']
+    - mpi4py >=3.0  # [mpi != 'nompi']
+    - hdf5 * {{ mpi }}_*
+
+test:
+  imports:
+    - h5py
+  commands:
+    - pip check
+  requires:
+    - pip
+    - pytest
+    - pytest-mpi
+
+about:
+  home: http://www.h5py.org/
+  license: BSD-3-Clause
+  license_file: licenses/license.txt
+  summary: Read and write HDF5 files from Python
+  dev_url: https://github.com/h5py/h5py
+
+extra:
+  recipe-maintainers:
+    - andrsd

@@ -1,0 +1,5 @@
+mpi:
+  - mpich  # [not win]
+
+numpy:
+  - 1.26
