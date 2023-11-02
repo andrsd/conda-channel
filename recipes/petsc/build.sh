@@ -62,9 +62,6 @@ python ./configure \
   --FOPTFLAGS=-O3 \
   --with-debugging=0 \
   --with-64-bit-indices \
-  --with-cxx-dialect=cxx14 \
-  --with-blas-lib=libblas${SHLIB_EXT} \
-  --with-lapack-lib=liblapack${SHLIB_EXT} \
   --with-yaml=0 \
   --with-hdf5=1 \
   --with-hwloc=0 \
