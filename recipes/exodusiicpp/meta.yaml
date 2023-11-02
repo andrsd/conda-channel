@@ -1,5 +1,5 @@
 {% set version = "1.6" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: exodusiicpp
@@ -15,17 +15,15 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
     - {{ mpi }}
     - cmake
     - make
   host:
-    - exodusii 2022.08.*
+    - exodusii 2022.08.* {{ mpi }}_*
     - fmt 9.*
   run:
-    - exodusii 2022.08.*
+    - exodusii 2022.08.* {{ mpi }}_*
     - fmt 9.*
 
 about:
