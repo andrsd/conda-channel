@@ -1,5 +1,5 @@
 {% set version = "3.19.4" %}
-{% set build = 2 %}
+{% set build = 3 %}
 
 package:
   name: petsc
@@ -11,6 +11,7 @@ source:
 
 build:
   skip: true  # [win]
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   number: {{ build }}
 
 requirements:
@@ -25,31 +26,29 @@ requirements:
     - gnuconfig  # [unix]
     - {{ mpi }}
   host:
-    - libblas
-    - libcblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
     - zlib
-    - hdf5 1.12.* mpi_mpich_*
-    - scalapack 2.2.*
-    - exodusii 2022.08.*
-    - ptscotch 7.0.*
+    - hdf5 1.12.* {{ mpi }}_*
+    - scalapack 2.2.* {{ mpi }}_*
+    - exodusii 2022.08.* {{ mpi }}_*
+    - ptscotch 7.0.* {{ mpi }}_*
     - metis 5.1.*
-    - parmetis 4.0.*
-    - hypre 2.28.*
+    - parmetis 4.0.* {{ mpi }}_*
+    - hypre 2.28.* {{ mpi }}_*
   run:
-    - libblas
-    - libcblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
     - zlib
-    - hdf5 1.12.* mpi_mpich_*
-    - scalapack 2.2.*
-    - exodusii 2022.08.*
-    - ptscotch 7.0.*
+    - hdf5 1.12.* {{ mpi }}_*
+    - scalapack 2.2.* {{ mpi }}_*
+    - exodusii 2022.08.* {{ mpi }}_*
+    - ptscotch 7.0.* {{ mpi }}_*
     - metis 5.1.*
-    - parmetis 4.0.*
-    - hypre 2.28.*
+    - parmetis 4.0.* {{ mpi }}_*
+    - hypre 2.28.* {{ mpi }}_*
 
 test:
   requires:
