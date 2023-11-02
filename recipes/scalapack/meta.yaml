@@ -13,6 +13,7 @@ source:
 
 build:
   number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   skip: true  # [win]
 
 requirements:
@@ -23,12 +24,12 @@ requirements:
     - {{ compiler('c') }}
     - {{ mpi }}
   host:
-    - libblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
   run:
-    - libblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
 
 test:
