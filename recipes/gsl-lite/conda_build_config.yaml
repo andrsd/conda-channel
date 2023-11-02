@@ -1,0 +1,17 @@
+MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
+  - 10.15                                                   # [not arm64 and osx]
+  - 11.3                                                    # [arm64 and osx]
+
+c_compiler:
+  - clang                                                   # [osx]
+  - gcc                                                     # [linux]
+c_compiler_version:
+  - 14                                                      # [osx]
+  - 11                                                      # [linux]
+
+cxx_compiler:
+  - clangxx                                                 # [osx]
+  - gxx                                                     # [linux]
+cxx_compiler_version:
+  - 14                                                      # [osx]
+  - 11                                                      # [linux]

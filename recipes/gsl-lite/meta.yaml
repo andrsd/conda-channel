@@ -1,0 +1,63 @@
+# copy from https://github.com/conda-forge/gsl-lite-feedstock/ because conda-forge does not have osx-arm64 version for
+# this package as of 2022/09/29
+{% set version = "0.40.0" %}
+{% set build = 0 %}
+
+package:
+  name: gsl-lite
+  version: {{ version }}
+
+source:
+  url: https://github.com/martinmoene/gsl-lite/archive/v{{ version }}.tar.gz
+  sha256: 65af4ec8a1050dac4f1ca4622881bb02a9c3978a9baec289fb56e25412d6cac7
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - cmake
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - make  # [unix]
+
+test:
+  requires:
+    - cmake
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - make  # [unix]
+    - ninja
+  files:
+    - test
+
+  commands:
+    - echo on  # [win]
+    - cd test
+
+    - mkdir build_default
+    - cd build_default
+    - cmake .. -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release  # [win]
+    - cmake .. -G"$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=Release  # [unix]
+    - cmake --build . --config Release --verbose
+    - ./program  # [unix]
+    - program.exe  # [win]
+    - cd ..
+
+    - mkdir build_ninja
+    - cd build_ninja
+    - cmake .. -G"Ninja" -DCMAKE_BUILD_TYPE=Release
+    - cmake --build . --config Release --verbose
+    - ./program  # [unix]
+    - program.exe  # [win]
+
+about:
+  home: https://github.com/martinmoene/gsl-lite
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: A single-file header-only version of ISO C++ Guidelines Support Library (GSL) for C++98, C++11 and later
+
+extra:
+  recipe-maintainers:
+    - andrsd
