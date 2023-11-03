@@ -43,10 +43,10 @@ requirements:
     - xorg-libx11
     - xorg-libxext
     - xorg-xextproto
-    - xorg-xf86vidmodeproto  #
-    - xorg-libxrandr  #
+    - xorg-xf86vidmodeproto
+    - xorg-libxrandr
     - xorg-libxfixes
-    - xorg-glproto  #
+    - xorg-glproto
     - libxcb
     - xorg-libxdamage
 
