@@ -21,9 +21,9 @@ build:
 
 requirements:
   host:
-    - sysroot_linux-64 2.12.*
+    - sysroot_linux-64 2.17.*
   run:
-    - sysroot_linux-64 2.12.*
+    - sysroot_linux-64 2.17.*
 
 test:
   commands:
