@@ -33,11 +33,11 @@ about:
   home: http://www.x.org/
   license: MIT
   license_family: MIT
-  license_file: libxshmfence-license
+  license_file: libxshmfence-license.txt
   summary: (CDT) X11 shared memory fences
   description: |
     Shared memory fences for X11, as used in DRI3.
 
 extra:
   recipe-maintainers:
-    - conda-forge/help-cdts
+    - andrsd
