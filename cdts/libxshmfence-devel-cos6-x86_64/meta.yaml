@@ -37,7 +37,7 @@ about:
   home: http://www.x.org/
   license: MIT
   license_family: MIT
-  license_file: libxshmfence-license
+  license_file: libxshmfence-license.txt
   summary: (CDT) Development files for libxshmfence
   description: |
     The libxshmfence-devel package contains libraries and header files for
@@ -45,4 +45,4 @@ about:
 
 extra:
   recipe-maintainers:
-    - conda-forge/help-cdts
+    - andrsd
