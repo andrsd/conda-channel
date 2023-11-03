@@ -1,0 +1,44 @@
+#!/bin/bash
+
+export CC=mpicc
+export CXX=mpic++
+export FC=mpifort
+
+CMAKE_BUILD_TYPE=Release
+
+if [[ "$target_platform" == linux-* ]]
+then
+  SCREEN_ARGS=(
+      "-DVTK_USE_X=OFF"
+      "-DVTK_OPENGL_HAS_OSMESA=ON"
+  )
+else
+  SCREEN_ARGS=()
+fi
+
+mkdir build
+cd build
+cmake ${CMAKE_ARGS} \
+  -DCMAKE_FIND_ROOT_PATH="${PREFIX};${BUILD_PREFIX};${BUILD_PREFIX}/${HOST}/sysroot" \
+  -DCMAKE_PREFIX_PATH=${BUILD_PREFIX} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+  -DBUILD_SHARED_LIBS=ON \
+  -DVTK_GROUP_ENABLE_Imaging=DEFAULT \
+  -DVTK_GROUP_ENABLE_MPI=DEFAULT \
+  -DVTK_GROUP_ENABLE_Qt=DONT_WANT \
+  -DVTK_GROUP_ENABLE_Rendering=WANT \
+  -DVTK_GROUP_ENABLE_StandAlone=WANT \
+  -DVTK_GROUP_ENABLE_Views=DEFAULT \
+  -DVTK_GROUP_ENABLE_Web=DEFAULT \
+  -DVTK_PYTHON_VERSION=3 \
+  -DVTK_SMP_IMPLEMENTATION_TYPE=Sequential \
+  -DVTK_USE_CUDA=OFF \
+  -DVTK_USE_LARGE_DATA=OFF \
+  -DVTK_USE_MPI=ON \
+  -DVTK_WRAP_JAVA=OFF \
+  -DVTK_WRAP_PYTHON=ON \
+  -DVTK_MODULE_ENABLE_VTK_sqlite=NO \
+  ${SCREEN_ARGS[@]} \
+  ${SRC_DIR}
+make install -j${CPU_COUNT}
