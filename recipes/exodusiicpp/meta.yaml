@@ -1,5 +1,5 @@
-{% set version = "1.6" %}
-{% set build = 1 %}
+{% set version = "1.7" %}
+{% set build = 0 %}
 
 package:
   name: exodusiicpp
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 2f5e0f56752db7cc044e4dd255ceb56c8b22e02dc245d26348ae430115ca60ce
+  sha256: 437aa8a668d49783ef1841b653b264a5923191282ea96b90985b10030173822f
 
 build:
   number: {{ build }}
@@ -21,9 +21,11 @@ requirements:
     - make
   host:
     - exodusii 2022.08.* {{ mpi }}_*
+    - yaml-cpp
     - fmt 9.*
   run:
     - exodusii 2022.08.* {{ mpi }}_*
+    - yaml-cpp
     - fmt 9.*
 
 about:
