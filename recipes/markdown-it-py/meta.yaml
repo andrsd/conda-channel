@@ -1,0 +1,56 @@
+{% set name = "markdown-it-py" %}
+{% set version = "3.0.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb
+
+build:
+  number: {{ build }}
+  entry_points:
+    - markdown-it = markdown_it.cli.parse:main
+  noarch: python
+  script: '{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv '
+
+requirements:
+  host:
+    - python >=3.8
+    - pip
+    - flit-core >=3.4,<4
+  run:
+    - python >=3.8
+    - mdurl >=0.1,<1
+
+test:
+  requires:
+    - pip
+  imports:
+    - markdown_it
+    - markdown_it.cli
+    - markdown_it.common
+    - markdown_it.helpers
+    - markdown_it.presets
+    - markdown_it.rules_block
+    - markdown_it.rules_core
+    - markdown_it.rules_inline
+  commands:
+    - markdown-it --help
+    - pip check
+
+about:
+  home: https://github.com/ExecutableBookProject/markdown-it-py
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: Python port of markdown-it. Markdown parsing, done right!
+  doc_url: https://github.com/ExecutableBookProject/markdown-it-py/blob/master/README.md
+  dev_url: https://github.com/ExecutableBookProject/markdown-it-py
+
+extra:
+  recipe-maintainers:
+    - andrsd
