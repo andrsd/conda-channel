@@ -1,0 +1,53 @@
+{% set name = "myst-parser" %}
+{% set version = "2.0.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
+  sha256: ea929a67a6a0b1683cdbe19b8d2e724cd7643f8aa3e7bb18dd65beac3483bead
+
+build:
+  number: {{ build }}
+  entry_points:
+    - myst-benchmark = myst_parser.cli.benchmark:main
+  noarch: python
+  script: '{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv '
+
+requirements:
+  host:
+    - python >=3.8
+    - pip
+    - flit-core >=3.4,<4
+  run:
+    - docutils >=0.16,<0.21
+    - markdown-it-py >=3.0.0,<4.0.0
+    - mdit-py-plugins >=0.4,<1
+    - jinja2
+    - python >=3.8
+    - pyyaml
+    - sphinx >=6,<8
+
+test:
+  requires:
+    - pip
+  commands:
+    - pip check
+  imports:
+    - myst_parser
+    - myst_parser.cli
+
+about:
+  home: https://github.com/ExecutableBookProject/MyST-Parser
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: An extended commonmark compliant parser, with bridges to docutils & sphinx.
+  doc_url: https://myst-parser.readthedocs.io
+
+extra:
+  recipe-maintainers:
+    - andrsd
