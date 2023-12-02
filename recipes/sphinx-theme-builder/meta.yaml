@@ -1,0 +1,49 @@
+{% set name = "sphinx-theme-builder" %}
+{% set version = "0.2.0b2" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/sphinx-theme-builder-{{ version }}.tar.gz
+  sha256: e9cd98c2bb35bf414fe721469a043cdcc10f0808d1ffcf606acb4a6282a6f288
+
+build:
+  number: {{ build }}
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - flit-core 3.3.0
+    - pip
+    - python >=3.7
+  run:
+    - nodeenv
+    - packaging
+    - pyproject-metadata
+    - python >=3.7
+    - rich
+    - setuptools
+    - tomli
+
+test:
+  imports:
+    - sphinx_theme_builder
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home: https://pypi.org/project/sphinx-theme-builder/
+  summary: A tool for authoring Sphinx themes with a simple (opinionated) workflow.
+  dev_url: https://github.com/pradyunsg/sphinx_theme_builder
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - andrsd
