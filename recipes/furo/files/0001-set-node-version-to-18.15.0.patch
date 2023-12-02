@@ -1,0 +1,25 @@
+From 891ba6094af27f5265fe9b7bf2618a7932245501 Mon Sep 17 00:00:00 2001
+From: Gil Forsyth <gil@forsyth.dev>
+Date: Mon, 11 Sep 2023 09:12:39 -0400
+Subject: [PATCH] set node version to 18.15.0
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 0e4af5db..82fa9463 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -3,7 +3,7 @@ requires = ["sphinx-theme-builder >= 0.2.0a10"]
+ build-backend = "sphinx_theme_builder"
+ 
+ [tool.sphinx-theme-builder]
+-node-version = "18.16.0"
++node-version = "18.15.0"
+ additional-compiled-static-assets = ["styles/furo-extensions.css"]
+ 
+ [project]
+-- 
+2.34.1
+
