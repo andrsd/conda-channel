@@ -1,0 +1,57 @@
+{% set name = "furo" %}
+{% set version = "2023.9.10" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/furo-{{ version }}.tar.gz
+  sha256: 5707530a476d2a63b8cad83b4f961f3739a69f4b058bcf38a03a39fa537195b2
+  patches:
+    - files/0001-set-node-version-to-18.15.0.patch
+
+build:
+  number: {{ build }}
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+  script_env:
+    - STB_USE_SYSTEM_NODE=1
+
+requirements:
+  host:
+    - flit-core >=2,<4
+    - pip
+    - python >=3.7
+    - sphinx-theme-builder
+    - nodeenv
+    - nodejs ==18.15.0
+  run:
+    - beautifulsoup4
+    - pygments >=2.7
+    - python >=3.7
+    - sphinx >=6.0,<8.0
+    - sphinx-basic-ng
+
+
+test:
+  imports:
+    # This is a dirty hack because sphinx.application
+    # isn't available with a simple `import sphinx`
+    - sphinx.application
+    - furo
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home: https://github.com/pradyunsg/furo
+  summary: A clean customisable Sphinx documentation theme.
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - andrsd
