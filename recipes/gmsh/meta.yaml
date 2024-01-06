@@ -1,6 +1,6 @@
 {% set name = "gmsh" %}
 {% set version = "4.11.1" %}
-{% set build = 5 %}
+{% set build = 6 %}
 {% set sha256 = "c5fe1b7cbd403888a814929f2fd0f5d69e27600222a18c786db5b76e8005b365" %}
 
 package:
@@ -119,7 +119,7 @@ outputs:
     script: install_python.bat  # [win]
     requirements:
       run:
-        - {{ pin_subpackage("gmsh", max_pin="x.x.x") }}
+        - {{ pin_subpackage("gmsh-cli", max_pin="x.x.x") }}
         - numpy
         - python
     test:
