@@ -16,7 +16,8 @@ cmake -S . -B build \
     -DENABLE_FLTK=$USE_FLTK \
     -DGMSH_RELEASE=1 \
     -DENABLE_TOUCHBAR=OFF \
-    -DENABLE_CAIRO=$USE_CAIRO
+    -DENABLE_CAIRO=$USE_CAIRO \
+    -DENABLE_WRAP_PYTHON=ON
 
 cmake --build build --parallel ${CPU_COUNT} -- install
 
