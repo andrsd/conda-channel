@@ -1,0 +1,42 @@
+{% set version = "5.3.4" %}
+{% set build = 0 %}
+
+package:
+  name: meshio
+  version: {{ version }}
+
+source:
+  url: https://github.com/nschloe/meshio/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 710af6e4fa2daed144f7fd58690fa6cbd476956d02b453ecae45787eb0bef3e3
+
+build:
+  number: {{ build }}
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - python >=3
+    - pip
+  run:
+    - python >=3
+    - numpy >=1.20.0
+    - rich
+
+test:
+  imports:
+    - meshio
+  requires:
+    - pip
+  commands:
+    - pip check
+
+about:
+  home: https://github.com/nschloe/meshio
+  license: GLP-3
+  license_file: LICENSE.txt
+  summary: input/output for many mesh formats
+
+extra:
+  recipe-maintainers:
+    - andrsd
