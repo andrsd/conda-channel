@@ -3,6 +3,7 @@ MACOSX_DEPLOYMENT_TARGET: # [osx]
 
 python:
   - 3.9
+  - 3.10
 
 numpy:
   - 1.26
