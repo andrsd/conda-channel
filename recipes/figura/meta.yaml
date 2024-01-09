@@ -1,4 +1,4 @@
-{% set version = "0.4.2" %}
+{% set version = "0.5.0" %}
 {% set build = "0" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/figura/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7f4b9c9d90966d78c29fbe0c9edde9b43a60b93b519a35bd1670f94490f5de18
+  sha256: e4b41307f54c46ba751b7689e17ba465b4413a2b1a8ef96616562a63d4fc895a
 
 build:
   number: {{ build }}
@@ -19,12 +19,12 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
-    - pythonocc-core 7.6.*
-    - multimethod 1.9.*
+    - pythonocc-core >=7.6.*
+    - multimethod >=1.9.*
   run:
     - python
-    - pythonocc-core 7.6.*
-    - multimethod 1.9.*
+    - pythonocc-core >=7.6.*
+    - multimethod >=1.9.*
 
 about:
   home: https://github.com/andrsd/figura
