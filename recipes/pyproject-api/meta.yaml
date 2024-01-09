@@ -1,0 +1,51 @@
+{% set version = "1.6.1" %}
+{% set build = 0 %}
+
+package:
+  name: pyproject-api
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/p/pyproject-api/pyproject_api-{{ version }}.tar.gz
+  sha256: 1817dc018adc0d1ff9ca1ed8c60e1623d5aaca40814b953af14a9cf9a5cae538
+
+build:
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: {{ build }}
+  noarch: python
+
+requirements:
+  host:
+    - hatch-vcs >=0.3
+    - hatchling >=1.18
+    - pip
+    - python >=3.8
+  run:
+    - python >=3.8
+    - packaging >=23.1
+    - tomli >=2.0.1
+
+test:
+  source_files:
+    - tests
+  imports:
+    - pyproject_api
+  commands:
+    - pip check
+    - pytest -vv --cov=pyproject_api --cov-report=term-missing:skip-covered --no-cov-on-fail --cov-fail-under=76
+  requires:
+    - pip
+    - pytest-cov
+    - pytest-mock
+    - virtualenv
+
+about:
+  home: https://pypi.org/project/pyproject-api
+  summary: API to interact with the python pyproject.toml based projects
+  dev_url: https://github.com/tox-dev/pyproject-api
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - andrsd
