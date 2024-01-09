@@ -13,7 +13,7 @@ source:
 
 build:
   number: {{ build }}
-  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  string: {{ mpi }}_py{{ PY_VER.replace('.', '') }}h{{ PKG_HASH }}_{{ build }}
   skip: true # [win]
 
 requirements:
