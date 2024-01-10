@@ -1,4 +1,4 @@
-{% set version = "5.3.4" %}
+{% set version = "5.4.0" %}
 {% set build = 0 %}
 
 package:
@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/nschloe/meshio/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 710af6e4fa2daed144f7fd58690fa6cbd476956d02b453ecae45787eb0bef3e3
+  url: https://github.com/andrsd/meshio/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7bd8c2f71ec509ee550a1e151f9faa93eab8ad141b542bb4ec0d0213263e5b65
 
 build:
   number: {{ build }}
@@ -32,8 +32,8 @@ test:
     - pip check
 
 about:
-  home: https://github.com/nschloe/meshio
-  license: GLP-3
+  home: https://github.com/andrsd/meshio
+  license: MIT
   license_file: LICENSE.txt
   summary: input/output for many mesh formats
 
