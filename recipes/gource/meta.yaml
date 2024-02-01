@@ -1,0 +1,62 @@
+{% set version = "0.54" %}
+{% set number = 0 %}
+
+package:
+  name: gource
+  version: {{ version }}
+
+source:
+  url: https://github.com/acaudwell/Gource/releases/download/gource-{{ version }}/gource-{{ version }}.tar.gz
+  sha256: 1dcbcedf65d2cf4d69fe0b633e54c202926c08b829bcad0b73eaf9e29cd6fae5
+  patches:
+    - files/config.sub.patch
+
+build:
+  number: {{ number }}
+
+requirements:
+  build:
+    - make
+    - pkgconfig
+    - boost
+    - freetype
+    - glew
+    - glm
+    - sdl2
+    - sdl2_image
+    - pcre2
+    - libpng
+  host:
+  run:
+    - boost
+    - freetype
+    - glew
+    - glm
+    - sdl2
+    - sdl2_image
+    - pcre2
+    - libpng
+
+test:
+  requires:
+    - boost
+    - freetype
+    - glew
+    - glm
+    - sdl2
+    - sdl2_image
+    - pcre2
+    - libpng
+  commands:
+    - gource --help
+
+about:
+  home: https://github.com/acaudwell/Gource
+  summary: Gource is a visualization tool for source control repositories.
+  license: GPL-3.0
+  license_family: GPL-3
+  license_file: COPYING
+
+extra:
+  recipe-maintainers:
+    - andrsd

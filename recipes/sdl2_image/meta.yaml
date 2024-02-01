@@ -1,0 +1,68 @@
+{% set version = "2.8.2" %}
+{% set build = 0 %}
+
+package:
+  name: sdl2_image
+  version: {{ version }}
+
+source:
+  url: https://github.com/libsdl-org/SDL_image/archive/refs/tags/release-{{ version }}.tar.gz
+  sha256: 8fd59b2c17772d7ac1192b11c645be8d7874f595c1714f4b200ee70b7cc38f3e
+  patches:
+    - patches/0001-look-for-conda-forge-variant-of-libwebp.patch                # [win]
+    - patches/0002-BLD-Use-CMake-artifacts-instead-of-custom-findwebp.patch     # [win]
+
+build:
+  number: {{ build }}
+  run_exports:
+    # see https://abi-laboratory.pro/tracker/timeline/sdl_image
+    - {{ pin_subpackage("sdl2_image", max_pin="x") }}
+
+requirements:
+  build:
+    - cmake
+    - ninja
+    - gnuconfig  # [unix]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+    - sdl2
+    - libjpeg-turbo
+    - libavif
+    # not yet in conda-forge
+    # - libjxl
+    - libpng
+    - libtiff
+    - libwebp-base
+    - zlib
+
+test:
+  commands:
+    # shared libraries
+    - test -f $PREFIX/lib/libSDL2_image.dylib               # [osx]
+    - test -f $PREFIX/lib/libSDL2_image.so                  # [linux]
+    - if not exist %LIBRARY_LIB%\\SDL2_image.lib exit 1     # [win]
+    - if not exist %LIBRARY_BIN%\\SDL2_image.dll exit 1     # [win]
+
+    # absence of static libraries
+    - test ! -f $PREFIX/lib/libSDL2_image.a                 # [not win]
+
+    # headers
+    - test -f $PREFIX/include/SDL2/SDL_image.h              # [unix]
+    - if not exist %LIBRARY_INC%\\SDL2\\SDL_image.h exit 1  # [win]
+
+about:
+  home: https://www.libsdl.org/projects/SDL_image/
+  license: Zlib
+  license_file: LICENSE.txt
+  summary: Library for loading images as SDL surfaces and textures
+  description: |
+    Simple DirectMedia Layer is a cross-platform development library designed to
+    provide low level access to audio, keyboard, mouse, joystick, and graphics
+    hardware via OpenGL and Direct3D.
+  doc_url: https://wiki.libsdl.org/SDL_image
+  dev_url: https://github.com/libsdl-org/SDL_image
+
+extra:
+  recipe-maintainers:
+    - andrsd
