@@ -1,0 +1,40 @@
+{% set name = "GLM" %}
+{% set version = "0.9.9.8" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/g-truc/glm/releases/download/{{ version }}/glm-{{ version }}.zip
+  sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
+  patches:
+    - patches/macos_test_errors.patch
+    - patches/cmake_install_target.patch
+
+build:
+  number: 0
+  skip: true  # [win and vc<14]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+    - make  # [unix]
+
+test:
+  commands:
+    - test -r "${PREFIX}/include/glm"  # [unix]
+    - if not exist %LIBRARY_INC%\glm exit 1  # [win]
+
+about:
+  home: https://glm.g-truc.net
+  license: MIT
+  license_family: MIT
+  license_file: manual.md
+  summary: OpenGL Mathematics
+  dev_url: https://github.com/g-truc/glm
+
+extra:
+  recipe-maintainers:
+    - andrsd
