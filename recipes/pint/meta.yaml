@@ -1,0 +1,60 @@
+{% set name = "Pint" %}
+{% set version = "0.23" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: e1509b91606dbc52527c600a4ef74ffac12fff70688aff20e9072409346ec9b4
+
+build:
+  noarch: python
+  script: SETUPTOOLS_SCM_PRETEND_VERSION={{ version }} {{ PYTHON }} -m pip install . -v
+  number: {{ build }}
+
+requirements:
+  host:
+    - pip
+    - python >=3.9
+    - setuptools >=45
+    - setuptools_scm >=3.4
+    - toml
+
+  run:
+    - python >=3.9
+    - typing_extensions
+
+test:
+  imports:
+    - pint
+  commands:
+    - pip check
+    - python -c "import pint; ver = pint.__version__; assert ver != '0.0.0'"
+    - pint-convert --help
+  requires:
+    - pip
+
+about:
+  home: https://github.com/hgrecco/pint
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: Operate and manipulate physical quantities in Python
+  description: |
+    Pint is a Python package to define, operate and manipulate physical
+    quantities: the product of a numerical value and a unit of measurement.
+    It allows arithmetic operations between them and conversions from and to
+    different units. It is distributed with a comprehensive list of physical
+    units, prefixes and constants. Due to its modular design, you can extend
+    (or even rewrite!) the complete list without changing the source code.
+    It supports a lot of numpy mathematical operations without monkey
+    patching or wrapping numpy.
+  doc_url: https://pint.readthedocs.org/
+  dev_url: https://github.com/hgrecco/pint
+
+extra:
+  recipe-maintainers:
+    - andrsd
