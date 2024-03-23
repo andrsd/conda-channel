@@ -3,4 +3,13 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
   - 11.3                                                    # [arm64 and osx]
 
 mpi:
+  - nompi
   - mpich
+
+blas:
+  - libblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+lapack:
+  - liblapack  # [linux]
+  - libaccelerate-osx  # [osx]
