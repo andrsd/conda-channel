@@ -1,0 +1,65 @@
+{% set name = "Ipopt" %}
+{% set version = "3.14.14" %}
+{% set build = 1 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  - url: https://github.com/coin-or/Ipopt/archive/releases/{{ version }}.tar.gz
+    sha256: 264d2d3291cd1cd2d0fa0ad583e0a18199e3b1378c3cb015b6c5600083f1e036
+    patches:
+      - files/pkg-config-do-not-add-requires-private.patch
+
+build:
+  number: {{ build }}
+  run_exports:
+    - {{ pin_subpackage('ipopt', max_pin='x.x.x') }}
+
+requirements:
+  build:
+    - gnuconfig  # [unix]
+    - {{ compiler('fortran') }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake  # [win]
+    - make  # [not win]
+    - wget  # [not win]
+    - pkgconfig
+  host:
+    - {{ blas }}
+    - {{ lapack }}
+    - metis 5.1.0-p*
+    - mumps-seq
+    - libspral  # [linux]
+    - ampl-mp  # [not win]
+  run:
+    - {{ blas }}
+    - {{ lapack }}
+    - metis 5.1.0-p*
+    - mumps-seq
+    - libspral  # [linux]
+    - ampl-mp  # [not win]
+
+test:
+  files:
+    - test
+    - files/mytoy.nl
+
+  requires:
+    - {{ compiler('fortran') }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - pkgconfig
+    - metis 5.1.0-p*
+
+about:
+  home: https://projects.coin-or.org/Ipopt/
+  license: EPL-1.0
+  license_file: LICENSE
+  summary: Software package for large-scale nonlinear optimization
+
+extra:
+  recipe-maintainers:
+    - andrsd
