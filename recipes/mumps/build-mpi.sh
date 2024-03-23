@@ -3,14 +3,13 @@ set -ex
 
 cp $RECIPE_DIR/files/Makefile.conda.PAR ./Makefile.inc
 
-export FFLAGS="${FFLAGS} -fallow-argument-mismatch"
-if [[ "$target_platform" == linux-* || "$target_platform" == "osx-arm64"  ]]
+if [[ "$target_platform" == linux-* || "$target_platform" == "osx-arm64" || "$target_platform" == "osx-64" ]]
  then
    # Workaround for https://github.com/conda-forge/scalapack-feedstock/pull/30#issuecomment-1061196317
-   # As of March 2022, on macOS (Intel) gfortran 9 is still used
+   export FFLAGS="${FFLAGS} -fallow-argument-mismatch"
    export OMPI_FCFLAGS=${FFLAGS}
 fi
-
+ 
 if [[ "$CONDA_BUILD_CROSS_COMPILATION" == "1" ]]; then
   # This is only used by open-mpi's mpicc
   # ignored in other cases
@@ -21,15 +20,18 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" == "1" ]]; then
 fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
-  export SONAME="-Wl,-install_name,@rpath/"
+  export SONAME="-install_name,@rpath/"
   export LDFLAGS="${LDFLAGS} -headerpad_max_install_names"
 else
-  export SONAME="-Wl,-soname,"
+  export SONAME="-soname"
 fi
 
 export CC=mpicc
 export FC=mpifort
 
+export LIBEXT_SHARED=${SHLIB_EXT}
+
 make allshared
 
 cp -av lib/*${SHLIB_EXT} ${PREFIX}/lib
+python3 $RECIPE_DIR/files/make_pkg_config.py

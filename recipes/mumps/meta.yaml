@@ -1,65 +1,186 @@
-{% set version = "5.5.1" %}
-{% set build = 0 %}
+{% set name = "mumps" %}
+{% set version = "5.6.2" %}
+{% set build = 5 %}
 
 package:
   name: mumps
   version: {{ version }}
 
 source:
-  url: http://coin-or-tools.github.io/ThirdParty-Mumps/MUMPS_{{ version }}.tar.gz
-  sha256: 1abff294fa47ee4cfd50dfd5c595942b72ebfcedce08142a75a99ab35014fa15
+  fn: MUMPS_{{ version }}.tar.gz
+  url: https://graal.ens-lyon.fr/MUMPS/MUMPS_{{ version }}.tar.gz
+  sha256: 13a2c1aff2bd1aa92fe84b7b35d88f43434019963ca09ef7e8c90821a8f1d59a
   patches:
-    - files/0001-fixing-shared-build.patch
+    - files/soname_mac.patch  # [osx]
+    - files/soname_linux.patch  # [linux]
+    - files/flang-support.patch
 
 build:
-  number: 1
-  script:
-    - ${RECIPE_DIR}/build-mpi.sh
-    - ${RECIPE_DIR}/build-headers.sh
-  skip: true  # [win]
-  {% set mpi_prefix = "mpi_" + mpi %}
-  string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
-
-  {% set build_pin = '' %}
+  number: {{ build }}
+  skip: true  # [win and vc<14]
 
 requirements:
   build:
+    # dummy unused top-level requirements
+    # needed to construct the right conda-smithy matrix
     - {{ compiler('fortran') }}
     - {{ compiler('c') }}
     - m2-patch  # [win]
-    - make  # [unix]
-    - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
-  host:
-    - libblas
-    - liblapack
-    - {{ mpi }}
-    - metis 5.1.*
-    - parmetis 4.0.* mpi_{{ mpi }}_*
-    - scalapack 2.2.* mpi_{{ mpi }}_*
-  run:
-    - libblas
-    - liblapack
-    - {{ mpi }}
-    - metis 5.1.*
-    - parmetis 4.0.* mpi_{{ mpi }}_*
-    - scalapack 2.2.* mpi_{{ mpi }}_*
+    - {{ mpi }}  # [mpi != 'nompi']
 
-test:
-  commands:
-    {% for lib in [
-      'smumps',
-      'dmumps',
-      'cmumps',
-      'zmumps',
-      'mumps_common',
-      'pord',
-    ] %}
-    - test -f "${PREFIX}/lib/lib{{ lib }}${SHLIB_EXT}"
-    {% endfor %}
-    - test -f "${PREFIX}/include/mumps_compat.h"
+outputs:
+  - name: mumps-include
+    build:
+      script: ${RECIPE_DIR}/build-headers.sh
+      skip: true  # [win]
+    requirements:
+      build: []
+      host: []
+    test:
+      commands:
+        - test -f "${PREFIX}/include/mumps_compat.h"
+        - test -f "${PREFIX}/include/mumps_int_def.h"
+
+  - name: mumps-seq
+    build:
+      script: ${RECIPE_DIR}/build-seq.sh  # [not win]
+      script: "%RECIPE_DIR%\\bld-seq.bat"  # [win]
+      run_exports:
+        - {{ pin_subpackage('mumps-seq', max_pin='x.x.x') }}
+      skip: true  # [(win and vc<14) or mpi != 'nompi']
+    requirements:
+      build:
+        - cmake  # [win]
+        - m2-patch  # [win]
+        - {{ compiler('fortran') }}
+        - {{ compiler('c') }}
+        - make  # [unix]
+        - python
+      host:
+        - {{ blas }}
+        - {{ lapack }}
+        - metis 5.1.0-p*  # [not win]
+        - ptscotch * nompi_*  # [not win]
+      run:
+        - {{ pin_subpackage('mumps-include', max_pin='x.x.x') }}  # [not win]
+        - {{ blas }}
+        - {{ lapack }}
+        - metis 5.1.0-p*   # [not win]
+        - ptscotch * nompi_*  # [not win]
+
+    test:
+      requires:
+        - pkg-config  # [not win]
+      commands:
+        {% if not win %}
+
+        {% for lib in [
+          'smumps',
+          'dmumps',
+          'cmumps',
+          'zmumps',
+          'mumps_common',
+          'pord',
+        ] %}
+        - test -f "${PREFIX}/lib/lib{{ lib }}_seq${SHLIB_EXT}"
+        {% endfor %}
+        - test -f "${PREFIX}/lib/libmpiseq_seq${SHLIB_EXT}"
+        - test -f "${PREFIX}/lib/libmpiseq${SHLIB_EXT}"
+        - test -f "${PREFIX}/include/mumps_seq/mpi.h"
+        - test -f "${PREFIX}/include/mumps_seq/mpif.h"
+        {% for lib in [
+          'smumps_seq',
+          'dmumps_seq',
+          'cmumps_seq',
+          'zmumps_seq',
+        ] %}
+        - test -f "${PREFIX}/lib/pkgconfig/{{ lib }}.pc"
+        - PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --cflags {{ lib }}
+        - PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --libs {{ lib }}
+        {% endfor %}
+        {% else %}
+        {% for lib in [
+          'smumps',
+          'dmumps',
+          'cmumps',
+          'zmumps',
+        ] %}
+        - if not exist "%LIBRARY_PREFIX%\bin\{{ lib }}.dll" exit 1
+        - if not exist "%LIBRARY_PREFIX%\lib\{{ lib }}.lib" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\{{ lib }}_c.h" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\{{ lib }}_struc.h" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\{{ lib }}_root.h" exit 1
+        {% endfor %}
+        - if not exist "%LIBRARY_PREFIX%\lib\mumps_common.lib" exit 1
+        - if not exist "%LIBRARY_PREFIX%\lib\pord.lib" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\mumps_compat.h" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\mumps_int_def.h" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\mumps_seq\mpi.h" exit 1
+        - if not exist "%LIBRARY_PREFIX%\include\mumps_seq\mpif.h" exit 1
+        {% endif %}
+
+  - name: mumps-mpi
+    build:
+      skip: true  # [win or mpi == 'nompi']
+      script: ${RECIPE_DIR}/build-mpi.sh
+      run_exports:
+        - {{ pin_subpackage('mumps-mpi', max_pin='x.x.x') }}  # [not win]
+      features:
+    requirements:
+      build:
+        - {{ compiler('fortran') }}
+        - {{ compiler('c') }}
+        - make  # [unix]
+        - {{ mpi }}
+        - python
+      host:
+        - {{ blas }}
+        - {{ lapack }}
+        - {{ mpi }}
+        - metis 5.1.0-p*
+        - parmetis * {{ mpi }}_*
+        - ptscotch * {{ mpi }}_*
+        - scalapack * {{ mpi }}_*
+      run:
+        - {{ pin_subpackage('mumps-include', exact=True) }}
+        - {{ mpi }}
+        - parmetis * {{ mpi }}_*
+        - ptscotch * {{ mpi }}_*
+        - scalapack * {{ mpi }}_*
+
+    test:
+      requires:
+        - {{ compiler("c") }}
+        - {{ compiler("fortran") }}
+        - make  # [unix]
+        - pkg-config  # [not win]
+      commands:
+        {% for lib in [
+          'smumps',
+          'dmumps',
+          'cmumps',
+          'zmumps',
+          'mumps_common',
+          'pord',
+        ] %}
+        - test -f "${PREFIX}/lib/lib{{ lib }}${SHLIB_EXT}"
+        {% endfor %}
+        - test ! -f "${PREFIX}/lib/libmpiseq*"
+        - test ! -d "${PREFIX}/include/mumps_seq"
+        {% for lib in [
+          'smumps',
+          'dmumps',
+          'cmumps',
+          'zmumps',
+        ] %}
+        - test -f "${PREFIX}/lib/pkgconfig/{{ lib }}.pc"
+        - PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --cflags {{ lib }}
+        - PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --libs {{ lib }}
+        {% endfor %}
+        - bash ${RECIPE_DIR}/parent/run_test-mpi.sh
 
 about:
-  home: http://mumps.enseeiht.fr/
+  home: https://mumps-solver.org
   license: CECILL-C
   license_file: LICENSE
   summary: 'MUMPS: a parallel sparse direct solver'
@@ -70,7 +191,7 @@ about:
     general symmetric, on distributed memory computers. MUMPS implements a
     direct method based on a multifrontal approach which performs a Gaussian
     factorization.
-  doc_url: http://mumps.enseeiht.fr/index.php?page=doc
+  doc_url: https://mumps-solver.org/index.php?page=doc
 
 extra:
   recipe-maintainers:
