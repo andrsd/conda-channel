@@ -1,0 +1,78 @@
+{% set name = "casadi" %}
+{% set version = "3.6.5" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ version }}.zip
+  url: https://github.com/casadi/casadi/releases/download/{{ version }}/casadi-source-v{{ version }}.zip
+  sha256: 358457f533de4be29da52817ac46392ca101d1dac0c587e40f893e46dc5c2b12
+  patches:
+    - files/2965.patch
+    - files/rtld_deepbind_null_environ_workaround.patch
+
+
+build:
+  number: {{ build }}
+  rpaths:
+    - lib/
+    - lib/{{ name }}/
+  run_exports:
+    - {{ pin_subpackage('casadi', max_pin='x.x') }}
+
+requirements:
+  build:
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - numpy                                  # [build_platform != target_platform]
+    - pkg-config
+    - cmake
+    - ninja
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}  # [not win]
+    - clang  # [win]
+  host:
+    - {{ blas }}
+    - {{ cblas }}
+    - python
+    - numpy
+    - libosqp
+    - proxsuite
+    - tinyxml2
+    - ipopt
+  run:
+    - python
+    - {{ pin_compatible('numpy') }}
+    - {{ blas }}
+    - {{ cblas }}
+    - libosqp
+    - proxsuite
+    - tinyxml2
+    - ipopt
+
+test:
+  imports:
+    - casadi
+  files:
+    - files/ipopt_nl.py
+  commands: 
+    - python files/ipopt_nl.py
+    # Regression test for https://github.com/conda-forge/casadi-feedstock/issues/93
+    - OMP_CANCELLATION=true OMP_PROC_BIND=true python files/ipopt_nl.py spral  # [linux]
+    - test $(pip list | grep casadi | tr -s " " | grep $PKG_VERSION | wc -l) -eq 1  # [unix]
+  requires:
+    - pip
+
+about:
+  home: http://casadi.org
+  license: LGPL-3.0-or-later
+  license_file: LICENSE.txt
+  summary: CasADi is a symbolic framework for numeric optimization
+
+extra:
+  recipe-maintainers:
+    - andrsd
