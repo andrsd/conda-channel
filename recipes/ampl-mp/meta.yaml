@@ -30,13 +30,13 @@ requirements:
   host:
     - unixodbc
 
-#test:
-#  requires:
-#    - make  # [not win]
-#    - {{ compiler('c') }}
-#    - {{ compiler('cxx') }}
-#  files:
-#    - miniampl
+test:
+  requires:
+    - make  # [not win]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  files:
+    - miniampl
 
 about:
   home: http://ampl.github.io
