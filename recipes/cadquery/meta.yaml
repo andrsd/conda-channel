@@ -1,0 +1,74 @@
+{% set name = "cadquery" %}
+{% set version = "2.4.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/CadQuery/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 15d98346bbc3aec5b121b49cdfd29a251e419858ff9829a069eaff2c29131e0d
+
+build:
+  number: {{ build }}
+  noarch: python
+  script: python -m pip install -vv --no-deps --ignore-requires-python --ignore-installed .
+
+requirements:
+  host:
+    - python >=3.9
+    - pip
+  run:
+    - python >=3.9
+    - ocp 7.7.2
+    - pyparsing >=2.1.9
+    - ezdxf
+    - ipython
+    - typing_extensions
+    - nptyping >=2.0.1
+    - nlopt
+    - multimethod >=1.7,<=1.9.1
+    - casadi
+
+test:
+  requires:
+    - docutils
+    - mypy
+    - path
+    - pip
+    - pytest
+    - pytest-cov
+  source_files:
+    - tests
+  imports:
+    - cadquery
+  commands:
+    - pip check
+    - mypy -m cadquery
+    - pytest -vv --cov=cadquery --cov-branch --cov-report=term-missing:skip-covered --no-cov-on-fail --cov-fail-under=93
+
+about:
+  home: https://github.com/cadquery/cadquery
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+  summary: |
+    CadQuery is a parametric scripting language for creating and traversing
+    CAD models
+  description: |
+    CadQuery is an intuitive, easy-to-use python library for building
+    parametric 3D CAD models. It has several goals:
+    - Build models with scripts that are as close as possible to how you’d
+      describe the object to a human, using a standard, already established
+      programming language
+    - Create parametric models that can be very easily customized by end users
+    - Output high quality CAD formats like STEP and AMF in addition to
+      traditional STL
+    - Provide a non-proprietary, plain text model format that can be edited and
+      executed with only a web browser
+  doc_url: https://cadquery.readthedocs.io
+
+extra:
+  recipe-maintainers:
+    - andrsd
