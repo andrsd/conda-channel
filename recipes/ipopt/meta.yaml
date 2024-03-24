@@ -32,14 +32,12 @@ requirements:
     - {{ lapack }}
     - metis 5.1.0-p*
     - mumps-seq
-    - libspral  # [linux]
     - ampl-mp  # [not win]
   run:
     - {{ blas }}
     - {{ lapack }}
     - metis 5.1.0-p*
     - mumps-seq
-    - libspral  # [linux]
     - ampl-mp  # [not win]
 
 test:
