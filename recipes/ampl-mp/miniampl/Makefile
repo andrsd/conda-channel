@@ -13,10 +13,10 @@ $(OBJDIR)/%.o: $(SRC)/%.c
 	$(CXX) -c $(CXX_OPTS) $? -o $@
 
 $(OBJDIR):
-	[[ ! -d $(OBJDIR) ]] && mkdir $(OBJDIR)
+	mkdir -p $(OBJDIR)
 
 $(BINDIR):
-	[[ ! -d $(BINDIR) ]] && mkdir $(BINDIR)
+	mkdir -p $(BINDIR)
 
 $(BINDIR)/%: $(OBJDIR)/%.o
 	$(CXX) -o $@ $? $(LIBS)
