@@ -5,5 +5,4 @@ cuda_compiler_version:
   - None
 
 ROCM_COMPILATION:
-  - "enabled"
   - "disabled"
