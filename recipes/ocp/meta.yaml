@@ -1,6 +1,6 @@
 {% set name = "ocp" %}
 {% set version = "7.7.2.0" %}
-{% set build = 2 %}
+{% set build = 3 %}
 
 package:
   name: {{ name }}
@@ -42,7 +42,7 @@ requirements:
     - pybind11
     - pybind11-abi
     - occt {{ occt }} all_*
-    - vtk
+    - vtk {{ vtk }}
   run:
     - python {{ python }}
     - {{ pin_compatible('occt', exact=True) }}
