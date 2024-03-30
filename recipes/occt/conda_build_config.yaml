@@ -1,3 +1,6 @@
 variant:
   - novtk
   - all
+
+vtk:
+  - 9.3.*
