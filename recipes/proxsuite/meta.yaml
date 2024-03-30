@@ -21,18 +21,18 @@ requirements:
     - cmake
     - clang  # [win]
     - make  # [not win]
-    - python                                 # [build_platform != target_platform]
+    - python {{ python }}                    # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - cython                                 # [build_platform != target_platform]
     - simde
     - doxygen
   host:
     - eigen
-    - python
+    - python {{ python }}
     - simde
   run:
     - eigen
-    - python
+    - python {{ python }}
     - scipy
     - numpy
     - simde
