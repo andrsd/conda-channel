@@ -9,3 +9,8 @@ blas:
 cblas:
   - libcblas  # [linux]
   - libaccelerate-osx  # [osx]
+
+python:
+  - 3.9.*
+  - 3.10.*
+  - 3.11.*
