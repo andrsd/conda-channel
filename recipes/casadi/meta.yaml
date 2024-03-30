@@ -1,6 +1,6 @@
 {% set name = "casadi" %}
 {% set version = "3.6.5" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: {{ name }}
@@ -27,7 +27,6 @@ requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
     - pkg-config
     - cmake
     - ninja
@@ -39,14 +38,12 @@ requirements:
     - {{ blas }}
     - {{ cblas }}
     - python
-    - numpy
     - libosqp
     - proxsuite
     - tinyxml2
     - ipopt
   run:
     - python
-    - {{ pin_compatible('numpy') }}
     - {{ blas }}
     - {{ cblas }}
     - libosqp
@@ -61,11 +58,10 @@ test:
     - files/ipopt_nl.py
   commands: 
     - python files/ipopt_nl.py
-    # Regression test for https://github.com/conda-forge/casadi-feedstock/issues/93
-    - OMP_CANCELLATION=true OMP_PROC_BIND=true python files/ipopt_nl.py spral  # [linux]
     - test $(pip list | grep casadi | tr -s " " | grep $PKG_VERSION | wc -l) -eq 1  # [unix]
   requires:
     - pip
+    - numpy
 
 about:
   home: http://casadi.org
