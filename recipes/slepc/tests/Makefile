@@ -1,4 +1,3 @@
-
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_common
 
 test10: test10.o
