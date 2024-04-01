@@ -1,0 +1,28 @@
+MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
+  - 10.15                                                   # [not arm64 and osx]
+  - 11.3                                                    # [arm64 and osx]
+
+mpi:
+  - mpich
+
+scalar:
+  - real
+
+blas:
+  - libblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+lapack:
+  - liblapack  # [linux]
+  - libaccelerate-osx  # [osx]
+
+python:
+  - 3.9
+
+pin_run_as_build:
+  petsc:
+    max_pin: x.x
+  suitesparse:
+    max_pin: x.x  # [linux]
+    # extra pinning due to conda-forge/suitesparse-feedstock#22
+    max_pin: x.x.x  # [osx]
