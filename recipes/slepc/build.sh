@@ -1,4 +1,3 @@
-
 #!/bin/bash
 set -eu
 export PETSC_DIR=$PREFIX
