@@ -1,0 +1,47 @@
+{% set name = "Caliper" %}
+{% set version = "2.10.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/LLNL/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 14c4fb5edd5e67808d581523b4f8f05ace8549698c0e90d84b53171a77f58565
+
+build:
+  number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  skip: true  # [win]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - {{ mpi }}
+    - cmake
+    - make
+  host:
+    - {{ mpi }}
+  run:
+    - {{ mpi }}
+
+test:
+  commands:
+    - test -f $PREFIX/include/caliper/Caliper.h
+    - test -f $PREFIX/lib/libcaliper$SHLIB_EXT
+
+about:
+  home: https://github.com/LLNL/Calliper
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: Caliper is an instrumentation and performance profiling library
+  description: |
+    Caliper is an instrumentation and performance profiling library
+
+extra:
+  recipe-maintainers:
+    - andrsd
