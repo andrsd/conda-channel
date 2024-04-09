@@ -1,0 +1,29 @@
+From b51252da9fefd5d73b381443c3a24e46289304ef Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Thu, 28 Mar 2024 11:17:57 -0600
+Subject: [PATCH] Fixing FindMETAL.cmake
+
+Using `target_link_libraries` instead of `set_target_properties` fixes the link line, so that
+it includes `Metal` and `CoreServices`.
+
+Closes #674
+---
+ cmake/FindMETAL.cmake | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/cmake/FindMETAL.cmake b/cmake/FindMETAL.cmake
+index cfbdcfb3..e1251246 100644
+--- a/cmake/FindMETAL.cmake
++++ b/cmake/FindMETAL.cmake
+@@ -20,7 +20,5 @@ if(METAL_FOUND AND NOT TARGET OCCA::depends::METAL)
+   # Create our wrapper imported target
+   # Put it in the OCCA namespace to make it clear that we created it.
+   add_library(OCCA::depends::METAL INTERFACE IMPORTED)
+-  set_target_properties(OCCA::depends::METAL PROPERTIES
+-    INTERFACE_LINK_LIBRARIES "${METAL_LIBRARY} ${CORE_SERVICES} ${APP_KIT}"
+-  )
++  target_link_libraries(OCCA::depends::METAL INTERFACE ${METAL_LIBRARY} ${CORE_SERVICES} ${APP_KIT})
+ endif()
+-- 
+2.39.3 (Apple Git-146)
+
