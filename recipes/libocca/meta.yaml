@@ -1,0 +1,40 @@
+{% set name = "libocca" %}
+{% set version = "1.6.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/libocca/occa/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: b863a24171000097121aff5c43dadf22416c143824598a51c653689fd917794f
+  patches:
+    - files/0001-Fixing-FindMETAL.cmake.patch
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - make
+    - cmake
+    - {{ compiler('c') }}  # [linux]
+    - {{ compiler('cxx') }}  # [linux]
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/occa.h            # [unix]
+    - test -f ${PREFIX}/lib/libocca${SHLIB_EXT}   # [unix]
+
+about:
+  home: https://github.com/libocca/occa
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: Portable and vendor neutral framework for parallel programming on heterogeneous platforms.
+
+extra:
+  recipe-maintainers:
+    - andrsd
