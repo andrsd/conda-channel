@@ -1,6 +1,6 @@
 {% set name = "lcms2" %}
 {% set version = "2.15" %}
-{% set build = 3 %}
+{% set build = 4 %}
 
 package:
   name: {{ name|lower }}
@@ -24,7 +24,7 @@ requirements:
     - make  # [not win]
   host:
     - libjpeg-turbo
-    - libtiff
+    - libtiff 4.5.1
 
 test:
   commands:

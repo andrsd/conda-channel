@@ -1,0 +1,113 @@
+--- work/wrappers/Python/setup.py.org	2024-04-20 09:20:51
++++ work/wrappers/Python/setup.py	2024-04-20 09:51:56
+@@ -49,47 +49,6 @@
+ 
+ if __name__ == '__main__':
+ 
+-    # #Handling the standard library for C++ on OSX
+-    #
+-    # This is mostly related to the compiler version, but since it is much
+-    # easier to check the OSX version, we are may also use that as an
+-    # indicator. OSX 10.14 and XCode 10 completely dropped support for
+-    # libstdc++ which forces is to manipulate the minimum OSX target
+-    # version when compiling the Cython extensions.
+-    if sys.platform == 'darwin':
+-        osx_target = LooseVersion(get_config_var('MACOSX_DEPLOYMENT_TARGET'))
+-        osx_compiler = LooseVersion('0.0')
+-        osx_version = LooseVersion('0.0')
+-        FORCE_TARGET = None
+-        USE_OSX_VERSION = False
+-        if USE_OSX_VERSION:
+-            osx_version = LooseVersion(platform.mac_ver()[0])
+-            print("OSX build detected, targetting {0} on {1}.".format(osx_target, osx_version))
+-        else:
+-            import subprocess
+-            cmd = subprocess.Popen(r'gcc --version | grep clang | grep -o -E "(\d+\.)+\d+" | uniq | sort', shell=True, stdout=subprocess.PIPE)
+-            for line in cmd.stdout:
+-                # print(line)
+-                try: line = line.decode()
+-                except AttributeError: pass
+-                line = line.strip()
+-                try:
+-                    osx_compiler = LooseVersion(line)
+-                    if osx_compiler > "1.0" and osx_compiler < "100.0": break
+-                except BaseException as be:
+-                    print('Error getting OSX compile version: ', str(be))
+-                    pass
+-            print("OSX build detected, targetting {0} using clang/gcc v{1}.".format(osx_target, osx_compiler))
+-
+-        # allow to override things manually
+-        if 'MACOSX_DEPLOYMENT_TARGET' not in os.environ:
+-            if osx_version >= "10.14":
+-                os.environ['MACOSX_DEPLOYMENT_TARGET'] = "10.9"
+-                print("Assuming that we cannot build for {0} on {1}, resetting target to {2}".format(osx_target, osx_version, os.environ['MACOSX_DEPLOYMENT_TARGET']))
+-            if osx_compiler >= "10":
+-                os.environ['MACOSX_DEPLOYMENT_TARGET'] = "10.9"
+-                print("Assuming that we cannot build for {0} using clang/gcc {1}, resetting target to {2}".format(osx_target, osx_compiler, os.environ['MACOSX_DEPLOYMENT_TARGET']))
+-
+     # ******************************
+     #       CMAKE OPTIONS
+     # ******************************
+@@ -153,7 +112,7 @@
+             if cmake_bitness == '32':
+                 cmake_config_args += ['-G', '"Visual Studio 9 2008"']
+             elif cmake_bitness == '64':
+-                cmake_config_args += ['-G', '"Visual Studio 9 2008 Win64"']
++                cmake_config_args += ['-G', '"NMake Makefiles"']
+             else:
+                 raise ValueError('cmake_bitness must be either 32 or 64; got ' + cmake_bitness)
+         elif cmake_compiler == 'vc10':
+@@ -161,7 +120,7 @@
+             if cmake_bitness == '32':
+                 cmake_config_args += ['-G', '"Visual Studio 10 2010"']
+             elif cmake_bitness == '64':
+-                cmake_config_args += ['-G', '"Visual Studio 10 2010 Win64"']
++                cmake_config_args += ['-G', '"NMake Makefiles"']
+             else:
+                 raise ValueError('cmake_bitness must be either 32 or 64; got ' + cmake_bitness)
+         elif cmake_compiler == 'vc14':
+@@ -169,7 +128,7 @@
+             if cmake_bitness == '32':
+                 cmake_config_args += ['-G', '"Visual Studio 14 2015"']
+             elif cmake_bitness == '64':
+-                cmake_config_args += ['-G', '"Visual Studio 14 2015 Win64"']
++                cmake_config_args += ['-G', '"NMake Makefiles"']
+             else:
+                 raise ValueError('cmake_bitness must be either 32 or 64; got ' + cmake_bitness)
+         elif cmake_compiler == 'vc15':
+@@ -177,7 +136,7 @@
+             if cmake_bitness == '32':
+                 cmake_config_args += ['-G', '"Visual Studio 15 2017"']
+             elif cmake_bitness == '64':
+-                cmake_config_args += ['-G', '"Visual Studio 15 2017 Win64"']
++                cmake_config_args += ['-G', '"NMake Makefiles"']
+             else:
+                 raise ValueError('cmake_bitness must be either 32 or 64; got ' + cmake_bitness)
+         elif cmake_compiler == 'vc16':
+@@ -186,7 +145,7 @@
+                 cmake_config_args += ['-G', '"Visual Studio 16 2019"', '-A',
+                                       'x86']
+             elif cmake_bitness == '64':
+-                cmake_config_args += ['-G', '"Visual Studio 16 2019"', '-A',
++                cmake_config_args += ['-G', '"NMake Makefiles"', '-A',
+                                       'x64']
+             else:
+                 raise ValueError('cmake_bitness must be either 32 or 64; got ' + cmake_bitness)
+@@ -196,7 +155,7 @@
+                 cmake_config_args += ['-G', '"Visual Studio 17 2022"', '-A',
+                                       'x86']
+             elif cmake_bitness == '64':
+-                cmake_config_args += ['-G', '"Visual Studio 17 2022"', '-A',
++                cmake_config_args += ['-G', '"NMake Makefiles"', '-A',
+                                       'x64']
+             else:
+                 raise ValueError('cmake_bitness must be either 32 or 64; got ' + cmake_bitness)
+@@ -214,7 +173,7 @@
+                 cmake_build_args = ['--config', '"Release"']
+             if cmake_bitness == '32':
+                 cmake_config_args += ['-DFORCE_BITNESS_32=ON']
+-            elif cmake_bitness == '64':
++            elif cmake_bitness in ['64', 'arm64']:
+                 cmake_config_args += ['-DFORCE_BITNESS_64=ON']
+             elif cmake_bitness == 'NATIVE':
+                 cmake_config_args += ['-DFORCE_BITNESS_NATIVE=ON']

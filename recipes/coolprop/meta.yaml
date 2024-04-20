@@ -1,0 +1,88 @@
+{% set name = "CoolProp" %}
+{% set version = "6.6.0" %}
+{% set build  = 0 %}
+# WARNING external resources may need update as well
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  - url: https://github.com/CoolProp/{{ name }}/archive/v{{ version }}.tar.gz
+    sha256: 20b94ca42ca5339641163b4a55e2affb95e1c9dcb1f6169a6970cd8fbfb63490
+    patches:
+      - files/setup.patch
+      - files/CMakeLists.patch
+  # External dependencies
+  # See https://github.com/CoolProp/CoolProp/tree/master/externals
+  - url: https://github.com/catchorg/Catch2/archive/v1.12.2.tar.gz
+    sha256: 27bf01d20692e534a8963f96c6ca797df2b4ba6551db0379510c376558d75e3c
+    folder: externals/Catch
+  - url: https://github.com/eigenteam/eigen-git-mirror/archive/3.3.5.tar.gz
+    sha256: 992855522dfdd0dea74d903dcd082cdb01c1ae72be5145e2fe646a0892989e43
+    folder: externals/Eigen
+  - url: https://github.com/CoolProp/IF97/archive/c9b34e0da8dcda9d4b60be5d20e7c3200bc0b169.zip
+    sha256: da5be718b9e331c221d88e0d5b4662c49e08acd44e6be9ce7f3eb1bb7d2c3238
+    folder: externals/IF97
+  - url: https://github.com/CoolProp/REFPROP-headers/archive/8df35c7cb557d385bb66431e92e836104a63a33c.zip
+    sha256: 2c3c8759351f8dcde4fac92fa1501fadcd23c01f4d91d80f89ab67ce6c025e3d
+    folder: externals/REFPROP-headers
+  - url: https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz
+    sha256: 5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2
+    folder: externals/fmtlib
+  - url: https://github.com/msgpack/msgpack-c/archive/cpp-3.0.1.tar.gz
+    sha256: 1b834ab0b5b41da1dbfb96dd4a673f6de7e79dbd7f212f45a553ff9cc54abf3b
+    folder: externals/msgpack-c
+  - url: https://github.com/pybind/pybind11/archive/v2.2.3.tar.gz
+    sha256: 3a3b7b651afab1c5ba557f4c37d785a522b8030dfc765da26adc2ecd1de940ea
+    folder: externals/pybind11
+  - url: https://github.com/Tencent/rapidjson/archive/73063f5002612c6bf64fe24f851cd5cc0d83eef9.zip
+    sha256: 013edcc40afd7a550899e443ac70bc16b6a36867393be50f1def35674e2be08c
+    folder: externals/rapidjson
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - python {{ python }}                    # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - cython                                 # [build_platform != target_platform]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake
+    - make   # [not win]
+    - ninja  # [win]
+  host:
+    - python {{ python }}
+    - cython
+    - setuptools
+  run:
+    - python {{ python }}
+    - numpy
+    - matplotlib-base 3.8.0
+
+test:
+  requires:
+    - matplotlib-base 3.8.0
+  imports:
+    - CoolProp
+    - CoolProp.tests
+    - CoolProp.Plots  # [not py2k or not linux]
+    - CoolProp.GUI
+
+about:
+  home: https://github.com/CoolProp/CoolProp
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: Open-source thermodynamic and transport properties database
+
+  description: |
+    Open-source thermodynamic and transport properties database
+  doc_url: http://www.coolprop.org/
+  dev_url: https://github.com/CoolProp/CoolProp
+
+extra:
+  recipe-maintainers:
+    - andrsd

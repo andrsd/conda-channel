@@ -1,4 +1,5 @@
 {% set version = "10.0.1" %}
+{% set build = 1 %}
 
 package:
   name: pillow
@@ -15,7 +16,7 @@ source:
     - patches/0003-add-WEBP_ROOT-XCB_ROOT.patch
 
 build:
-  number: 0
+  number: {{ build }}
   skip: true # [win or linux]
 
 requirements:
@@ -38,7 +39,7 @@ requirements:
     # currently disabled on windows due to libimagequant depending on llvm-openmp, see
     # https://github.com/pytorch/pytorch/issues/72293
     # - libimagequant  # [x86_64 and not win]
-    - libtiff
+    - libtiff 4.5.1
     - libwebp
     - libxcb
     - tk
