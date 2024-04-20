@@ -1,6 +1,6 @@
 {% set name = 'freeimage' %}
 {% set version = "3.18.0" %}
-{% set build = 18 %}
+{% set build = 19 %}
 
 package:
     name: {{ name }}
@@ -46,7 +46,7 @@ requirements:
     - libjpeg-turbo
     - openjpeg
     - jxrlib
-    - libtiff
+    - libtiff 4.5.1
     - imath
     - openexr
     - libpng
