@@ -1,4 +1,4 @@
-{% set version = "5.4.0" %}
+{% set version = "5.4.1" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/meshio/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7bd8c2f71ec509ee550a1e151f9faa93eab8ad141b542bb4ec0d0213263e5b65
+  sha256: a3d9e506640acef31594b032e003330504b604b9aaa6ae06fadc363edb8774c3
 
 build:
   number: {{ build }}
