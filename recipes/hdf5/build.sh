@@ -22,7 +22,9 @@ export FC=mpifort
             --enable-shared=yes \
             --enable-static=no \
             --enable-ros3-vfd \
-            --enable-tests=no
+            --enable-tests=no \
+            --enable-cxx \
+            --enable-unsupported
 
 make -j "${CPU_COUNT}" ${VERBOSE_AT}
 make install
