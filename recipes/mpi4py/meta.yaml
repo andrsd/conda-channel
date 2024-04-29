@@ -1,5 +1,5 @@
 {% set version = "3.1.4" %}
-{% set build = 0 %}
+{% set build = 1 %}
 {% set mpi = mpi or 'mpich' %}
 
 package:
@@ -13,7 +13,7 @@ source:
 
 build:
   number: {{ build }}
-  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  string: {{ mpi }}_py{{ PY_VER.replace('.', '') }}h{{ PKG_HASH }}_{{ build }}
   script:
     - {{ PYTHON }} conf/cythonize.py
     - export OPAL_PREFIX=$PREFIX   # [mpi == "openmpi"]
@@ -31,18 +31,18 @@ build:
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
+    - python {{ python }}                    # [build_platform != target_platform]
     - cython 0.29.32                         # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ mpi }}                              # [build_platform != target_platform and mpi == "openmpi"]
   host:
-    - python
+    - python {{ python }}
     - pip
     - cython 0.29.32
     - {{ mpi }}
   run:
-    - python
+    - python {{ python }}
     - {{ mpi }}
 
 about:
