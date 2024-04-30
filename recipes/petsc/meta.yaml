@@ -1,5 +1,5 @@
 {% set version = "3.19.6" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: petsc
@@ -32,7 +32,7 @@ requirements:
     - zlib
     - hdf5 1.12.* {{ mpi }}_*
     - scalapack 2.2.* {{ mpi }}_*
-    - exodusii 2022.08.* {{ mpi }}_*
+    - exodusii 2022.10.* {{ mpi }}_*
     - ptscotch 7.0.* {{ mpi }}_*
     - metis 5.1.0.p11
     - parmetis 4.0.* {{ mpi }}_*
