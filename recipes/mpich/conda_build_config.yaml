@@ -1,5 +1,5 @@
 MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
-  - 10.15                                                   # [not arm64 and osx]
+  - 10.15                                                   # [x86_64 and osx]
   - 11.3                                                    # [arm64 and osx]
 
 c_compiler:
