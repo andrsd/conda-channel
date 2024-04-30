@@ -2,6 +2,10 @@
 
 set -x
 
+export CC=mpicc
+export CXX=mpic++
+export FC=mpifort
+
 CMAKE_BUILD_TYPE=Release
 
 mkdir build
@@ -20,7 +24,7 @@ cmake ${CMAKE_ARGS} \
   -DSeacas_ENABLE_TESTS=OFF \
   -DTPL_ENABLE_HDF5=ON \
   -DTPL_ENABLE_Netcdf=ON \
-  -DTPL_ENABLE_MPI=OFF \
+  -DTPL_ENABLE_MPI=ON \
   -DTPL_ENABLE_Pamgen=OFF \
   -DTPL_ENABLE_CGNS=OFF \
   -DTPL_ENABLE_Matio=OFF \
