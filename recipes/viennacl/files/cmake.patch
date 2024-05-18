@@ -1,0 +1,130 @@
+Only in viennacl-dev-release-1.7.1: .DS_Store
+diff -ur --color viennacl-dev-release-1.7.1.org/CMakeLists.txt viennacl-dev-release-1.7.1/CMakeLists.txt
+--- viennacl-dev-release-1.7.1.org/CMakeLists.txt	2016-01-20 12:31:03
++++ viennacl-dev-release-1.7.1/CMakeLists.txt	2024-05-18 14:47:59
+@@ -1,7 +1,7 @@
+ # Project setup
+ ###############
+ 
+-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+ if(COMMAND cmake_policy)
+   cmake_policy(SET CMP0003 NEW)
+ endif(COMMAND cmake_policy)
+@@ -84,7 +84,7 @@
+ #########
+ 
+ install(DIRECTORY viennacl "${CMAKE_CURRENT_BINARY_DIR}/viennacl"
+-   DESTINATION "${INSTALL_INCLUDE_DIR}" COMPONENT dev
++   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" COMPONENT dev
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+ 
+ # Dist target
+Only in viennacl-dev-release-1.7.1: build
+diff -ur --color viennacl-dev-release-1.7.1.org/cmake/FindOpenCL.cmake viennacl-dev-release-1.7.1/cmake/FindOpenCL.cmake
+--- viennacl-dev-release-1.7.1.org/cmake/FindOpenCL.cmake	2016-01-20 12:31:03
++++ viennacl-dev-release-1.7.1/cmake/FindOpenCL.cmake	2024-05-18 15:19:38
+@@ -85,4 +85,3 @@
+   OPENCL_INCLUDE_DIR
+   OPENCL_LIBRARY
+   )
+-
+diff -ur --color viennacl-dev-release-1.7.1.org/cmake/ViennaCLCommon.cmake viennacl-dev-release-1.7.1/cmake/ViennaCLCommon.cmake
+--- viennacl-dev-release-1.7.1.org/cmake/ViennaCLCommon.cmake	2016-01-20 12:31:03
++++ viennacl-dev-release-1.7.1/cmake/ViennaCLCommon.cmake	2024-05-18 15:21:20
+@@ -3,6 +3,8 @@
+ include(CMakeDependentOption)
+ include(AddCCompilerFlagIfSupported)
+ include(AddCLinkerFlagIfSupported)
++include(CMakePackageConfigHelpers)
++include(GNUInstallDirs)
+ 
+ # Installation directories
+ ##########################
+@@ -162,12 +164,6 @@
+ configure_file(cmake/FindOpenCL.cmake
+    "${PROJECT_BINARY_DIR}/FindOpenCL.cmake" COPYONLY)
+ 
+-configure_file(cmake/ViennaCLConfig.cmake.in
+-   "${PROJECT_BINARY_DIR}/ViennaCLConfig.cmake" @ONLY)
+-
+-configure_file(cmake/ViennaCLConfigVersion.cmake.in
+-   "${PROJECT_BINARY_DIR}/ViennaCLConfigVersion.cmake" @ONLY)
+-
+ if (CMAKE_MINOR_VERSION GREATER 6)  # export(PACKAGE ...) introduced with CMake 2.8.0
+   export(PACKAGE ViennaCL)
+ endif()
+@@ -175,11 +171,22 @@
+ # Install
+ #########
+ 
++configure_package_config_file(
++    ${PROJECT_SOURCE_DIR}/cmake/ViennaCLConfig.cmake.in
++    ViennaCLConfig.cmake
++    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/viennacl
++    NO_SET_AND_CHECK_MACRO
++)
++write_basic_package_version_file(
++    ViennaCLConfigVersion.cmake
++    VERSION ${VERSION}
++    COMPATIBILITY AnyNewerVersion
++)
++
+ install(FILES
+-   "${PROJECT_BINARY_DIR}/FindOpenCL.cmake"
+    "${PROJECT_BINARY_DIR}/ViennaCLConfig.cmake"
+    "${PROJECT_BINARY_DIR}/ViennaCLConfigVersion.cmake"
+-   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
++   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/viennacl" COMPONENT dev)
+ 
+ 
+ # For out-of-the-box support on MacOS:
+diff -ur --color viennacl-dev-release-1.7.1.org/cmake/ViennaCLConfig.cmake.in viennacl-dev-release-1.7.1/cmake/ViennaCLConfig.cmake.in
+--- viennacl-dev-release-1.7.1.org/cmake/ViennaCLConfig.cmake.in	2016-01-20 12:31:03
++++ viennacl-dev-release-1.7.1/cmake/ViennaCLConfig.cmake.in	2024-05-18 15:15:44
+@@ -6,27 +6,22 @@
+ # Although ViennaCL is a headers-only library, it still requires an OpenCL
+ # implementation, which is why it is necessary to link against a library.
+ 
+-# Compute paths
+-get_filename_component(VIENNACL_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+-if(EXISTS "${VIENNACL_CMAKE_DIR}/CMakeCache.txt")
+-   # in build tree
+-   get_filename_component(VIENNACL_INSTALL_PREFIX "${VIENNACL_CMAKE_DIR}" PATH)
+-   set(VIENNACL_INCLUDE_DIR "${_VIENNACL_PREFIX}")
+-else()
+-   set(VIENNACL_INSTALL_PREFIX "${VIENNACL_CMAKE_DIR}/@CONF_REL_INSTALL_PREFIX@")
+-   set(VIENNACL_INCLUDE_DIR "${VIENNACL_CMAKE_DIR}/@CONF_REL_INCLUDE_DIR@")
+-endif()
++set(VIENNACL_VERSION @VERSION@)
+ 
+-# Find OpenCL
+-set(_VIENNACL_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
+-list(INSERT CMAKE_MODULE_PATH 0 "${VIENNACL_CMAKE_DIR}")
+-if(ViennaCL_FIND_REQUIRED)
+-   find_package(OpenCL QUIET REQUIRED)
+-else()
+-   find_package(OpenCL QUIET)
+-endif()
+-set(CMAKE_MODULE_PATH "${_VIENNACL_CMAKE_MODULE_PATH}")
++@PACKAGE_INIT@
+ 
++include(FindPackageHandleStandardArgs)
++
++find_package(OpenCL QUIET)
++
++find_path(VIENNACL_INCLUDE_DIR forwards.h HINTS ${PACKAGE_PREFIX_DIR}/include/viennacl)
++
++find_package_handle_standard_args(
++    ViennaCL
++    REQUIRED_VARS VIENNACL_INCLUDE_DIR
++    VERSION_VAR VIENNACL_VERSION
++)
++
+ # Set up variables
+-set(VIENNACL_INCLUDE_DIRS "${VIENNACL_INCLUDE_DIR}" ${OPENCL_INCLUDE_DIRS})
+-set(VIENNACL_LIBRARIES ${OPENCL_LIBRARIES})
++set(VIENNACL_INCLUDE_DIRS "${VIENNACL_INCLUDE_DIR}" ${OpenCL_INCLUDE_DIRS})
++set(VIENNACL_LIBRARIES ${OpenCL_LIBRARIES})
+Only in viennacl-dev-release-1.7.1/libviennacl: .DS_Store
+Only in viennacl-dev-release-1.7.1/viennacl: .DS_Store
