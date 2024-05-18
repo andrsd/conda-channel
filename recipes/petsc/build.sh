@@ -80,6 +80,8 @@ python ./configure \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
+  --with-viennacl=1 \
+  --with-viennacl-dir=${PREFIX} \
   $extra_opts \
   --prefix=$PREFIX || (cat configure.log && exit 1)
 
