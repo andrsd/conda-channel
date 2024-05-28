@@ -10,13 +10,12 @@ export FC=mpifort
   --enable-static=yes \
   --enable-netcdf-4 \
   --enable-pnetcdf \
-  --enable-erange-fill \
-  --enable-zero-length-coord-bound \
+  --disable-dap \
+  --disable-dynamic-loading \
+  --disable-libxml2 \
   --disable-byterange \
   --disable-hdf4 \
-  --disable-dap \
   --disable-dap-remote-tests \
-  --disable-dynamic-loading \
   --disable-testsets \
   --disable-examples
 

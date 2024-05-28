@@ -5,6 +5,9 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
 mpi:
   - mpich
 
+scalar:
+  - real
+
 blas:
   - libblas  # [linux]
   - libaccelerate-osx  # [osx]
@@ -17,16 +20,9 @@ python:
   - 3.9
 
 pin_run_as_build:
-  hypre:
-    max_pin: x.x.x
-  metis:
-    max_pin: x.x
-  parmetis:
-    max_pin: x.x
-  scalapack:
+  petsc:
     max_pin: x.x
   suitesparse:
-    max_pin: x.x  # [not osx]
+    max_pin: x.x  # [linux]
+    # extra pinning due to conda-forge/suitesparse-feedstock#22
     max_pin: x.x.x  # [osx]
-  exodusii:
-    max_pin: x.x.x

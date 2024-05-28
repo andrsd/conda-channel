@@ -1,5 +1,5 @@
-{% set version = "5.1.0-p10" %}
-{% set build = 2 %}
+{% set version = "5.1.0-p11" %}
+{% set build = 0 %}
 
 package:
   name: metis
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://bitbucket.org/petsc/pkg-metis/get/v{{ version }}.tar.gz
-  sha256: 7f318541d87e05a6c279d48830c3456e1f55fefc36edda1a797e6d2eedfb5c54
+  sha256: 03603ca191669364c8a41e9b2b995226e160fe2aca2633e6fcd2a7602ef8411f
 
 build:
   number: {{ build }}

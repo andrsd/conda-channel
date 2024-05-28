@@ -1,5 +1,5 @@
 {% set version = "7.0.3" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: ptscotch
@@ -11,6 +11,7 @@ source:
 
 build:
   number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   skip: true  # [win]
 
 requirements:
@@ -20,18 +21,18 @@ requirements:
     - {{ mpi }}
     - bison
     - flex
-    - parmetis
+    - parmetis 4.0.* {{ mpi }}_*
   host:
-    - libblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
-    - parmetis
+    - parmetis 4.0.* {{ mpi }}_*
     - zlib
   run:
-    - libblas
-    - liblapack
+    - {{ blas }}
+    - {{ lapack }}
     - {{ mpi }}
-    - parmetis
+    - parmetis 4.0.* {{ mpi }}_*
     - zlib
 
 test:
