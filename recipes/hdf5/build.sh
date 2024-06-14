@@ -28,3 +28,15 @@ export FC=mpifort
 
 make -j "${CPU_COUNT}" ${VERBOSE_AT}
 make install
+
+sedinplace() {
+  if [[ $(uname) == Darwin ]]; then
+    sed -i "" "$@"
+  else
+    sed -i"" "$@"
+  fi
+}
+
+
+sedinplace "s%${BUILD_PREFIX}%\${prefix}%g" $PREFIX/bin/h5c++
+sedinplace "s%${BUILD_PREFIX}%\${prefix}%g" $PREFIX/bin/h5pcc
