@@ -1,5 +1,5 @@
 {% set version = "9.3.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: vtk
@@ -10,6 +10,7 @@ source:
   sha256: fdc7b9295225b34e4fdddc49cd06e66e94260cb00efee456e0f66568c9681be9
   patches:
     - files/liblzma-fix.patch
+    - files/exodusii-ex-utils.patch
 
 build:
   number: {{ build }}
@@ -24,10 +25,68 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ mpi }}
+    - mpi4py
+
+  host:
+    - python {{ python }}
+    - zlib
+    - freetype
+    - hdf5 1.12.* {{ mpi }}_*
+    - libxml2
+    - libpng
+    - libjpeg-turbo
+    - libtiff
+    - jsoncpp
+    - expat
+    - tbb
+    - tbb-devel
+    - libnetcdf 4.9.* {{ mpi }}_*
+    - lz4-c
+    - xorg-libxt  # [linux]
+    - ffmpeg
+    - utfcpp
+    - eigen 3.4.*
+    - double-conversion
+    - pugixml
+    - glew
+    - libogg
+    - libtheora
+    - nlohmann_json
+    - proj
+    - loguru
+    - gl2ps
+    - pugixml
+    - mpi4py
     - mesalib  # [linux]
   run:
     - {{ mpi }}
-    - python
+    - python {{ python }}
+    - zlib
+    - freetype
+    - hdf5 1.12.* {{ mpi }}_*
+    - libxml2
+    - libpng
+    - libjpeg-turbo
+    - libtiff
+    - jsoncpp
+    - expat
+    - tbb
+    - libnetcdf 4.9.* {{ mpi }}_*
+    - lz4-c
+    - utfcpp
+    - eigen 3.4.*
+    - double-conversion
+    - pugixml
+    - glew
+    - libogg
+    - libtheora
+    - nlohmann_json
+    - proj
+    - loguru
+    - gl2ps
+    - tbb-devel
+    - numpy
+    - mpi4py
     - mesalib  # [linux]
 
 about:
