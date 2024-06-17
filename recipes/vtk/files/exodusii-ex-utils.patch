@@ -1,0 +1,27 @@
+--- ./ThirdParty/exodusII/vtkexodusII/src/ex_utils.c.org	2024-06-14 09:16:47
++++ ./ThirdParty/exodusII/vtkexodusII/src/ex_utils.c	2024-06-14 09:17:59
+@@ -56,9 +56,11 @@
+ #endif
+ #endif
+ 
++#if 0
+ #if NC_HAS_PNETCDF
+ extern char *ncmpi_inq_libvers();
+ #endif
++#endif
+ 
+ /*!
+   \ingroup Utilities
+@@ -124,8 +126,12 @@
+ #endif
+ #if NC_HAS_PNETCDF
+   {
++#if 0
+     char *libver = ncmpi_inq_libvers();
+     j += sprintf(buffer + j, "\t\tParallel IO enabled via PnetCDF (%s)\n", libver);
++#else
++    j += sprintf(buffer + j, "\t\tParallel IO enabled via PnetCDF.\n");
++#endif
+   }
+ #else
+   j += sprintf(buffer + j, "\t\tParallel IO *NOT* enabled via PnetCDF\n");
