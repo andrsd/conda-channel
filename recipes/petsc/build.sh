@@ -82,6 +82,7 @@ python ./configure \
   --with-pic=1 \
   --with-viennacl=1 \
   --with-viennacl-dir=${PREFIX} \
+  --with-opencl=1 \
   $extra_opts \
   --prefix=$PREFIX || (cat configure.log && exit 1)
 
