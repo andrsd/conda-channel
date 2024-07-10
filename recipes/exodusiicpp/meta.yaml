@@ -1,4 +1,4 @@
-{% set version = "1.10" %}
+{% set version = "2.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 352a98553457ebbbb95bad6588689953639c0be696f05cacc0723c5c69a5abc7
+  sha256: b622b0b3634bae680a1acc880089724b2a399b0ae941cb8f2c9733ce314f3eda
 
 build:
   number: {{ build }}
