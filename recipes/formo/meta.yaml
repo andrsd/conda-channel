@@ -1,0 +1,41 @@
+{% set version = "24.06.0" %}
+{% set build = "0" %}
+
+package:
+  name: formo
+  version: {{ version }}
+
+source:
+  url: https://github.com/andrsd/formo/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: d32a42b6f431e7ca51d91733e8ebd573e312c4c2ade7a93f99f3e54691ece473
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ cdt('mesa-libGL-devel') }}  # [linux]
+    - {{ compiler('cxx') }}
+    - cmake
+    - make
+  host:
+    - python {{ python }}
+    - setuptools
+    - occt >=7.7.*
+    - fmt >=9
+    - pybind11
+  run:
+    - python
+    - occt >=7.7.*
+    - fmt >=9
+
+about:
+  home: https://github.com/andrsd/formo
+  license: MIT
+  license_file: LICENSE
+  summary: User-friendly python scripting for creating parametrical 3D models
+  doc_url: https://andrsd.github.io/formo
+
+extra:
+  recipe-maintainers:
+    - andrsd
