@@ -1,4 +1,4 @@
-{% set version = "3.6.00" %}
+{% set version = "4.1.00" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/kokkos/kokkos/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 53b11fffb53c5d48da5418893ac7bc814ca2fde9c86074bdfeaa967598c918f4
+  sha256: cf725ea34ba766fdaf29c884cfe2daacfdc6dc2d6af84042d1c78d0f16866275
 
 build:
   number: {{ build }}

@@ -14,7 +14,7 @@ cmake ${CMAKE_ARGS} \
     -DKokkos_ENABLE_SERIAL=ON \
     -DKokkos_ENABLE_LIBDL=OFF \
     -DKokkos_ENABLE_OPENMP=ON \
-    -DCMAKE_CXX_STANDARD=14 \
+    -DCMAKE_CXX_STANDARD=17 \
     ${SRC_DIR}
 
 make -j${CPU_COUNT}
