@@ -12,13 +12,14 @@ unset F77
 # unset CC
 unset CXX
 if [[ "$target_platform" == linux-* ]]; then
-    export LDFLAGS="-pthread -fopenmp $LDFLAGS"
+    export LDFLAGS="-fopenmp $LDFLAGS"
     export LDFLAGS="$LDFLAGS -Wl,-rpath-link,$PREFIX/lib"
     # --as-needed appears to cause problems with fortran compiler detection
     # due to missing libquadmath
     # unclear why required libs are stripped but still linked
     export FFLAGS="${FFLAGS:-} -Wl,--no-as-needed"
 fi
+export CXXFLAGS="${CXXFLAGS} -fopenmp"
 
 # scrub debug-prefix-map args, which cause problems in pkg-config
 export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
@@ -66,7 +67,6 @@ python ./configure \
   --with-hdf5=1 \
   --with-hwloc=0 \
   --with-mpi=1 \
-  --with-pthread=1 \
   --with-shared-libraries \
   --with-ssl=0 \
   --with-scalapack=1 \
@@ -82,8 +82,11 @@ python ./configure \
   --with-pic=1 \
   --with-viennacl=1 \
   --with-viennacl-dir=${PREFIX} \
+  --with-kokkos=1 \
+  --with-kokkos-include=${PREFIX}/include/kokkos \
+  --with-kokkos-lib=${PREFIX}/lib/libkokkoscore.a \
   $extra_opts \
-  --prefix=$PREFIX || (cat configure.log && exit 1)
+  --prefix=$PREFIX || (exit 1)
 
 # Verify that gcc_ext isn't linked
 for f in $PETSC_ARCH/lib/petsc/conf/petscvariables $PETSC_ARCH/lib/pkgconfig/PETSc.pc; do
