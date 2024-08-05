@@ -1,0 +1,25 @@
+From 1c200171c607089a18b89cde05385520325e8933 Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Sun, 4 Aug 2024 19:13:56 -0600
+Subject: [PATCH] Install headers into ${PREFIX}/include/kokkos-kernels
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fa666ab33..904e14406 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -43,7 +43,7 @@ IF (KOKKOSKERNELS_HAS_TRILINOS)
+ ELSEIF(KOKKOSKERNELS_HAS_PARENT)
+  SET(KOKKOSKERNELS_HEADER_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}/kokkos-kernels")
+ ELSE()
+- SET(KOKKOSKERNELS_HEADER_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
++ SET(KOKKOSKERNELS_HEADER_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}/kokkos-kernels")
+ ENDIF()
+ INCLUDE(cmake/fake_tribits.cmake)
+ INCLUDE(cmake/kokkoskernels_tribits.cmake)
+-- 
+2.39.3 (Apple Git-146)
+
