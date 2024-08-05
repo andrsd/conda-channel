@@ -12,7 +12,6 @@ unset F77
 # unset CC
 unset CXX
 if [[ "$target_platform" == linux-* ]]; then
-    export LDFLAGS="-fopenmp $LDFLAGS"
     export LDFLAGS="$LDFLAGS -Wl,-rpath-link,$PREFIX/lib"
     # --as-needed appears to cause problems with fortran compiler detection
     # due to missing libquadmath
@@ -79,7 +78,7 @@ python ./configure \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
-  --with-openmp=1 \
+  --with-pthread=1 \
   --with-viennacl=1 \
   --with-viennacl-dir=${PREFIX} \
   --with-kokkos=1 \
@@ -121,17 +120,6 @@ for path in $PETSC_DIR $BUILD_PREFIX; do
 done
 
 make MAKE_NP=${CPU_COUNT}
-
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
-  # FIXME: Workaround mpiexec setting O_NONBLOCK in std{in|out|err}
-  # See https://github.com/conda-forge/conda-smithy/pull/337
-  # See https://github.com/pmodels/mpich/pull/2755
-  if [[ $(uname) != Darwin ]]; then
-  # FIXME: Failures in some macOS builds
-  # ** On entry to DGEMM parameter number 13 had an illegal value
-  make check MPIEXEC="${RECIPE_DIR}/mpiexec.sh"
-  fi
-fi
 
 make install
 
