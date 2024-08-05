@@ -1,0 +1,50 @@
+{% set version = "4.1.00" %}
+{% set build = 1 %}
+
+package:
+  name: kokkos-kernels
+  version: {{ version }}
+
+source:
+  url: https://github.com/kokkos/kokkos-kernels/archive/refs/tags/{{ version }}.tar.gz
+  sha256: d6a4108444ea226e43bf6a9c0dfc557f223a72b1142bf81aa78dd60e16ac2d56
+  patches:
+    - files/0001-Install-headers-into-PREFIX-include-kokkos-kernels.patch
+
+build:
+  number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  skip: true  # [win]
+
+requirements:
+  build:
+    - cmake
+    - {{ compiler('cxx') }}
+    - make
+    - {{ mpi }}
+  host:
+    - {{ mpi }}
+    - kokkos 4.1.* {{ mpi }}_*
+  run:
+    - {{ mpi }}
+    - kokkos 4.1.* {{ mpi }}_*
+
+test:
+  commands:
+    - test -f $PREFIX/include/kokkos-kernels/KokkosKernels_config.h
+    - test -f $PREFIX/lib/libkokkoskernels.dylib  # [osx]
+    - test -f $PREFIX/lib/libkokkoskernels.so  # [linux]
+
+about:
+  home: https://kokkos.org
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+  summary: |
+    Kokkos C++ Performance Portability Programming Ecosystem: Math Kernels -
+    Provides BLAS, Sparse BLAS and Graph Kernels
+  dev_url: https://github.com/kokkos/kokkos-kernels
+
+extra:
+  recipe-maintainers:
+    - andrsd
