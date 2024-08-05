@@ -19,7 +19,6 @@ if [[ "$target_platform" == linux-* ]]; then
     # unclear why required libs are stripped but still linked
     export FFLAGS="${FFLAGS:-} -Wl,--no-as-needed"
 fi
-export CXXFLAGS="${CXXFLAGS} -fopenmp"
 
 # scrub debug-prefix-map args, which cause problems in pkg-config
 export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
@@ -80,11 +79,15 @@ python ./configure \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
+  --with-openmp=1 \
   --with-viennacl=1 \
   --with-viennacl-dir=${PREFIX} \
   --with-kokkos=1 \
   --with-kokkos-include=${PREFIX}/include/kokkos \
   --with-kokkos-lib=${PREFIX}/lib/libkokkoscore.a \
+  --with-kokkos-kernels=1 \
+  --with-kokkos-kernels-include=${PREFIX}/include/kokkos-kernels \
+  --with-kokkos-kernels-lib=${PREFIX}/lib/libkokkoskernels.a \
   $extra_opts \
   --prefix=$PREFIX || (exit 1)
 
