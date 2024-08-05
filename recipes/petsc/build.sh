@@ -65,7 +65,7 @@ python ./configure \
   --with-64-bit-indices \
   --with-yaml=0 \
   --with-hdf5=1 \
-  --with-hwloc=0 \
+  --with-hwloc=1 \
   --with-mpi=1 \
   --with-shared-libraries \
   --with-ssl=0 \
