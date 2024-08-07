@@ -9,15 +9,7 @@ export PETSC_ARCH=arch-conda-c-opt
 
 unset F90
 unset F77
-# unset CC
 unset CXX
-if [[ "$target_platform" == linux-* ]]; then
-    export LDFLAGS="$LDFLAGS -Wl,-rpath-link,$PREFIX/lib"
-    # --as-needed appears to cause problems with fortran compiler detection
-    # due to missing libquadmath
-    # unclear why required libs are stripped but still linked
-    export FFLAGS="${FFLAGS:-} -Wl,--no-as-needed"
-fi
 
 # scrub debug-prefix-map args, which cause problems in pkg-config
 export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
@@ -26,11 +18,6 @@ export FFLAGS=$(echo ${FFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
 
 if [[ $mpi == "openmpi" ]]; then
   export LIBS="-Wl,-rpath,$PREFIX/lib -lmpi_mpifh -lgfortran"
-elif [[ $mpi == "mpich" ]]; then
-  export LIBS="-lmpifort -lgfortran"
-fi
-
-if [[ $mpi == "openmpi" ]]; then
   export OMPI_MCA_plm=isolated
   export OMPI_MCA_rmaps_base_oversubscribe=yes
   export OMPI_MCA_btl_vader_single_copy_mechanism=none
@@ -49,16 +36,14 @@ python ./configure \
   AR="${AR:-ar}" \
   CC="mpicc" \
   CXX="mpicxx" \
-  FC="mpifort" \
   CFLAGS="$CFLAGS" \
   CPPFLAGS="$CPPFLAGS" \
   CXXFLAGS="$CXXFLAGS" \
-  FFLAGS="$FFLAGS" \
   LDFLAGS="$LDFLAGS" \
   LIBS="$LIBS" \
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
-  --FOPTFLAGS=-O3 \
+  --with-fc=0 \
   --with-debugging=0 \
   --with-64-bit-indices \
   --with-yaml=0 \
@@ -67,7 +52,6 @@ python ./configure \
   --with-mpi=1 \
   --with-shared-libraries \
   --with-ssl=0 \
-  --with-scalapack=1 \
   --with-exodusii=1 \
   --with-netcdf=1 \
   --with-pnetcdf=1 \
@@ -78,7 +62,7 @@ python ./configure \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
-  --with-pthread=1 \
+  --with-openmp=1 \
   --with-viennacl=1 \
   --with-viennacl-dir=${PREFIX} \
   --with-kokkos=1 \
