@@ -67,7 +67,7 @@ python ./configure \
   --with-viennacl-dir=${PREFIX} \
   --with-kokkos=1 \
   --with-kokkos-include=${PREFIX}/include/kokkos \
-  --with-kokkos-lib=${PREFIX}/lib/libkokkoscore.a \
+  --with-kokkos-lib=[${PREFIX}/lib/libkokkoscore.a,${PREFIX}/lib/libkokkoscontainers.a,${PREFIX}/lib/libkokkossimd.a] \
   --with-kokkos-kernels=1 \
   --with-kokkos-kernels-include=${PREFIX}/include/kokkos-kernels \
   --with-kokkos-kernels-lib=${PREFIX}/lib/libkokkoskernels.a \

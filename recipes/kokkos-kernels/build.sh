@@ -1,6 +1,8 @@
 #!/bin/bash
 set -x
 
+export CXXFLAGS="`echo $CXXFLAGS | sed 's/-fvisibility-inlines-hidden//'`"
+
 mkdir build
 cd build
 cmake ${CMAKE_ARGS} \
