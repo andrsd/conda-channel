@@ -1,4 +1,4 @@
-{% set version = "5.2" %}
+{% set version = "6.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 2daa420e1bf3a5ad1b19c5b03f2b236dd958688e29c41068870bad770744cbe8
+  sha256: 1ab0293971925ce547f6a329baa00c765fdaf7054ff28edbd644baf39bfeff39
 
 build:
   number: {{ build }}
@@ -36,7 +36,7 @@ requirements:
 test:
   commands:
     - test -f $PREFIX/lib/libfprops$SHLIB_EXT # [unix]
-    - test -f $PREFIX/include/fprops/SinglePhaseFluidProperties.h
+    - test -f $PREFIX/include/fprops/fprops.h
   imports:
     - fprops
   requires:
