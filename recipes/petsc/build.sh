@@ -63,6 +63,7 @@ python ./configure \
   --with-x=0 \
   --with-pic=1 \
   --with-openmp=1 \
+  --with-threadsafety=1 \
   --with-viennacl=1 \
   --with-viennacl-dir=${PREFIX} \
   --with-kokkos=1 \
