@@ -1,0 +1,42 @@
+{% set version = "1.2.1" %}
+{% set build = 0 %}
+
+package:
+  name: mpicpp-lite
+  version: {{ version }}
+
+source:
+  url: https://github.com/andrsd/mpicpp-lite/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 3a9c83fde8490fd45351821049a84af2696a30b9c27c278bdb7518559526bb2b
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+    - make
+    - fmt 9.*
+    - {{ mpi }}
+  host:
+    - fmt 9.*
+    - {{ mpi }}
+  run:
+    - fmt 9.*
+    - {{ mpi }}
+
+test:
+  commands:
+    - test -f $PREFIX/include/mpicpp-lite/mpicpp-lite.h
+
+about:
+  home: data['url']
+  license: MIT
+  summary: Light C++ wrapper around MPI
+  doc_url: https://andrsd.github.io/mpicpp-lite/
+
+extra:
+  recipe-maintainers:
+    - andrsd
