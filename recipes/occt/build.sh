@@ -15,4 +15,4 @@ cmake -S . -B build \
       -D USE_RAPIDJSON:BOOL=ON \
       -D BUILD_RELEASE_DISABLE_EXCEPTIONS:BOOL=OFF
 
-cmake --build build --parallel 3 -- install
+cmake --build build --parallel ${CPU_COUNT} -- install
