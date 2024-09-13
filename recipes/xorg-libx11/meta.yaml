@@ -63,6 +63,7 @@ requirements:
     - xorg-xextproto
     - xorg-xproto
     - xorg-xtrans
+    - xorg-libxau
   run:
     - xorg-kbproto
     - xorg-xproto
