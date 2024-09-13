@@ -22,8 +22,6 @@ requirements:
     - {{ mpi }}
     - cmake
     - make
-  host:
-    - {{ mpi }}
     - libnetcdf 4.9.* {{ mpi }}_*
     - libpnetcdf 1.12.* {{ mpi }}_*
     - hdf5 1.12.* {{ mpi }}_*
