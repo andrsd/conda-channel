@@ -1,0 +1,76 @@
+{% set version = "0.16.0" %}
+{% set cov_fail_under = "87" %}
+{% set min_sphinx = "6.1" %}
+
+package:
+  name: pydata-sphinx-theme
+  version: {{ version }}
+
+source:
+  - url: https://pypi.io/packages/py3/p/pydata-sphinx-theme/pydata_sphinx_theme-{{ version }}-py3-none-any.whl
+    sha256: 18c810ee4e67e05281e371e156c1fb5bb0fa1f2747240461b225272f7d8d57d8
+  - folder: src
+    url: https://github.com/pydata/pydata-sphinx-theme/archive/refs/tags/v{{ version }}.tar.gz
+    sha256: 891f14fb1f6232769fac2205f2a6b3876601f9a7c08e56d5d975789546bc9e36
+
+build:
+  number: 0
+  noarch: python
+  script:
+    - {{ PYTHON }} -m pip install --find-links . --no-index --ignore-installed --no-deps pydata-sphinx-theme
+    - cd {{ RECIPE_DIR }} && {{ PYTHON }} collect_licenses.py
+
+requirements:
+  host:
+    - pip
+    - python >=3.9
+    - setuptools
+    - sphinx-theme-builder >=0.2.0a7
+  run:
+    - accessible-pygments
+    - babel
+    - beautifulsoup4
+    - docutils !=0.17.0
+    - packaging
+    - pygments >=2.7
+    - python >=3.9
+    - sphinx >={{ min_sphinx }}
+    - typing_extensions
+
+test:
+  source_files:
+    - src/tests
+  imports:
+    - pydata_sphinx_theme
+  commands:
+    - pip check
+    - cd src/tests
+    - coverage run -m --source=pydata_sphinx_theme --branch pytest -vv --color=yes --tb=long -k "not (pygments_fallbacks or translations)"
+    - coverage report --show-missing --skip-covered --fail-under={{ cov_fail_under }}
+  requires:
+    - jupyter_sphinx
+    - numpydoc
+    - pandas
+    - pip
+    - plotly
+    - pytest-cov
+    - pytest-regressions
+    - recommonmark
+    - sphinx >={{ min_sphinx }}.*
+    - sphinx-thebe
+    - xarray
+
+about:
+  home: https://github.com/pydata/pydata-sphinx-theme
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file:
+    - src/LICENSE
+    - third-party-licenses/
+  summary: Bootstrap-based Sphinx theme from the PyData community
+  doc_url: https://pydata-sphinx-theme.readthedocs.io/
+  dev_url: https://github.com/pydata/pydata-sphinx-theme
+
+extra:
+  recipe-maintainers:
+    - andrsd
