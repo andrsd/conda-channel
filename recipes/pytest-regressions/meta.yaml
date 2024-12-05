@@ -1,0 +1,53 @@
+{% set name = "pytest-regressions" %}
+{% set version = "2.5.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 818c7884c1cff3babf89eebb02cbc27b307856b1985427c24d52cb812a106fd9
+
+build:
+  noarch: python
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps -vv
+
+requirements:
+  host:
+    - pip
+    - python >=3.8
+    - setuptools
+    - setuptools_scm
+
+  run:
+    - pytest >=6.2.0
+    - pytest-datadir >=1.2.0
+    - python >=3.8
+    - pyyaml
+
+test:
+  requires:
+    - matplotlib-base
+    - {{ pin_compatible('numpy') }}
+    - pandas
+    - pillow
+  source_files:
+    - tests
+  imports:
+    - pytest_regressions
+  commands:
+    - pytest tests
+
+about:
+  home: https://github.com/ESSS/pytest-regressions
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: Easy to use fixtures to write regression tests.
+  description: Easy to use fixtures to write regression tests.
+
+extra:
+  recipe-maintainers:
+    - andrsd
