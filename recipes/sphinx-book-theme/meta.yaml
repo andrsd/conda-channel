@@ -1,0 +1,56 @@
+{% set version = "1.1.3" %}
+
+package:
+  name: sphinx-book-theme
+  version: {{ version }}
+
+source:
+  - url: https://pypi.io/packages/py3/s/sphinx-book-theme/sphinx_book_theme-{{ version }}-py3-none-any.whl
+    sha256: a554a9a7ac3881979a87a2b10f633aa2a5706e72218a10f71be38b3c9e831ae9
+  - folder: src
+    url: https://github.com/executablebooks/sphinx-book-theme/archive/refs/tags/v{{ version }}.tar.gz
+    sha256: 5f4d7ed67ce681b5732f35b218ea566df4a0d5b683791333207d1c094cbe335f
+
+build:
+  number: 0
+  noarch: python
+  script:
+    - {{ PYTHON }} -m pip install --find-links . --no-index --ignore-installed --no-deps sphinx-book-theme
+
+requirements:
+  host:
+    - pip
+    - python >=3.9
+  run:
+    - pydata-sphinx-theme >=0.15.2
+    - python >=3.9
+    - sphinx >=5
+
+test:
+  source_files:
+    - src/tests
+  imports:
+    - sphinx_book_theme
+  commands:
+    - pip check
+    - cd src
+  requires:
+    - beautifulsoup4
+    - coverage
+    - defusedxml
+    - myst-nb
+    - pip
+    - pytest
+    - pytest-regressions
+    - sphinx-thebe >=0.2
+
+about:
+  home: https://sphinx-book-theme.readthedocs.org
+  summary: A clean book theme for scientific explanations and documentation with Sphinx
+  dev_url: https://github.com/executablebooks/sphinx-book-theme
+  license: BSD-3-Clause
+  license_file: src/LICENSE
+
+extra:
+  recipe-maintainers:
+    - andrsd
