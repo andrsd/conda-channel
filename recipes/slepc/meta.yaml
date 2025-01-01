@@ -38,11 +38,13 @@ requirements:
     - {{ lapack }}
     - {{ mpi }}
     - petsc {{ version_xy }}.* {{ mpi }}_*
+    - scalapack 2.2.* {{ mpi }}_*
   run:
     - {{ mpi }}
     - {{ blas }}
     - {{ lapack }}
     - petsc {{ version_xy }}.* {{ mpi }}_*
+    - scalapack 2.2.* {{ mpi }}_*
 
 test:
   requires:
