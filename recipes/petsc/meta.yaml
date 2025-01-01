@@ -1,5 +1,5 @@
-{% set version = "3.20.6" %}
-{% set build = 9 %}
+{% set version = "3.21.6" %}
+{% set build = 0 %}
 
 package:
   name: petsc
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-{{ version }}.tar.gz
-  sha256: 20e6c260765f9593924bc5b1783bd152ec5c47246b47ce516cded7b505b34795
+  sha256: cb2dc00742a89cf8acf9ff8aae189e6864e8b90f4997f087be6e54ff39c30d74
 
 build:
   skip: true  # [win]
@@ -28,8 +28,6 @@ requirements:
     - {{ blas }}
     - {{ lapack }}
     - {{ mpi }}
-    - llvm-openmp  # [osx]
-    - libgomp      # [linux]
     - libhwloc
     - zlib
     - hdf5 1.12.* {{ mpi }}_*
@@ -38,15 +36,10 @@ requirements:
     - metis 5.1.0.p11
     - parmetis 4.0.* {{ mpi }}_*
     - hypre 2.28.* {{ mpi }}_*
-    - viennacl 1.7.*
-    - kokkos 4.1.* {{ mpi }}_*
-    - kokkos-kernels 4.1.* {{ mpi }}_*
   run:
     - {{ blas }}
     - {{ lapack }}
     - {{ mpi }}
-    - llvm-openmp  # [osx]
-    - libgomp      # [linux]
     - libhwloc
     - zlib
     - hdf5 1.12.* {{ mpi }}_*
@@ -55,9 +48,6 @@ requirements:
     - metis 5.1.0.p11
     - parmetis 4.0.* {{ mpi }}_*
     - hypre 2.28.* {{ mpi }}_*
-    - viennacl 1.7.*
-    - kokkos 4.1.* {{ mpi }}_*
-    - kokkos-kernels 4.1.* {{ mpi }}_*
 
 test:
   requires:

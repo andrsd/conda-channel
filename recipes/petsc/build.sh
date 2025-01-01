@@ -62,16 +62,7 @@ python ./configure \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
-  --with-openmp=1 \
-  --with-threadsafety=1 \
-  --with-viennacl=1 \
-  --with-viennacl-dir=${PREFIX} \
-  --with-kokkos=1 \
-  --with-kokkos-include=${PREFIX}/include/kokkos \
-  --with-kokkos-lib=[${PREFIX}/lib/libkokkoscore.a,${PREFIX}/lib/libkokkoscontainers.a,${PREFIX}/lib/libkokkossimd.a] \
-  --with-kokkos-kernels=1 \
-  --with-kokkos-kernels-include=${PREFIX}/include/kokkos-kernels \
-  --with-kokkos-kernels-lib=${PREFIX}/lib/libkokkoskernels.a \
+  --with-openmp=0 \
   $extra_opts \
   --prefix=$PREFIX || (exit 1)
 
