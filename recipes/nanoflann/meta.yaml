@@ -1,0 +1,36 @@
+{% set version = "1.6.3" %}
+{% set build = 0 %}
+
+package:
+  name: nanoflann
+  version: {{ version }}
+
+source:
+  url: https://github.com/jlblancoc/nanoflann/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 6140542c30b4abd6a6ffe52c591afaae5748f011c65682d1cae6c501e7e6710a
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - eigen 3.4
+  run:
+    - eigen 3.4
+
+test:
+  commands:
+    - test -f $PREFIX/include/nanoflann.hpp # [unix]
+
+about:
+  summary: |
+    a C++11 header-only library for Nearest Neighbor (NN) search with KD-trees
+
+extra:
+  recipe-maintainers:
+    - andrsd
