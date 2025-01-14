@@ -1,0 +1,32 @@
+{% set version = "2022.03.23" %}
+{% set commit = "529470f1d079c2526576d5ee9ab9e6783ae5758c" %}
+{% set build = 0 %}
+
+package:
+  name: poly2tri
+  version: {{ version }}
+
+source:
+  url: https://github.com/jhasse/poly2tri/archive/{{ commit }}.zip
+  sha256: 376f74aa2db892f5a4ea8507e020c2080ad06a2a3b0d6cd889cc8e972c9185cc
+  patches:
+    - files/0001-Adding-install-target.patch
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+
+about:
+  summary: |
+    2D constrained Delaunay triangulation library.
+
+extra:
+  recipe-maintainers:
+    - andrsd
