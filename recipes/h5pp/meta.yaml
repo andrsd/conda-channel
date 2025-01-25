@@ -1,0 +1,41 @@
+{% set version = "1.11.2" %}
+{% set build = 0 %}
+
+package:
+  name: h5pp
+  version: {{ version }}
+
+source:
+  url: https://github.com/DavidAce/h5pp/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 5638bf699a92049910c80a7af3d6c8495f02253dd32ee0000bc35a29a9e61e9c
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - {{ mpi }}
+    - cmake
+    - make
+  host:
+    - fmt 9.*
+    - hdf5 1.12.* {{ mpi }}_*
+  run:
+    - fmt 9.*
+    - hdf5 1.12.* {{ mpi }}_*
+
+test:
+  commands:
+    - test -f $PREFIX/include/h5pp/h5pp.h
+
+about:
+  home: data['url']
+  license: MIT
+  summary: A C++17 interface for HDF5
+  doc_url: https://h5pp.readthedocs.io/en/latest/index.html
+
+extra:
+  recipe-maintainers:
+    - andrsd
