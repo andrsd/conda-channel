@@ -1,0 +1,40 @@
+{% set name = "libceed" %}
+{% set version = "0.11.1" %}
+{% set commit = "1ca28fe18cd782d43097b3f85452a07ecf3c15e6" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/CEED/libCEED/archive/{{ commit }}.tar.gz
+  sha256: 0653fbf7bb7feda51bc04699e3772ef89aed2b52adb31159b38c91dffd14761c
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - make
+    - cmake
+    - {{ compiler('c') }}  # [linux]
+    - {{ compiler('cxx') }}  # [linux]
+    - {{ compiler('fortran') }}  # [linux]
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/ceed.h            # [unix]
+    - test -f ${PREFIX}/lib/libceed${SHLIB_EXT}   # [unix]
+
+about:
+  home: https://github.com/CEED/libCEED/
+  license: BSD-2-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: Code for Efficient Extensible Discretizations
+
+extra:
+  recipe-maintainers:
+    - andrsd
