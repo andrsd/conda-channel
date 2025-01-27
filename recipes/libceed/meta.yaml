@@ -1,6 +1,6 @@
 {% set name = "libceed" %}
-{% set version = "0.11.1" %}
-{% set commit = "1ca28fe18cd782d43097b3f85452a07ecf3c15e6" %}
+{% set version = "0.12.0" %}
+{% set commit = "4018a20a98d451fac24765d3ddb936861647ce8d" %}
 {% set build = 0 %}
 
 package:
@@ -9,7 +9,7 @@ package:
 
 source:
   url: https://github.com/CEED/libCEED/archive/{{ commit }}.tar.gz
-  sha256: 0653fbf7bb7feda51bc04699e3772ef89aed2b52adb31159b38c91dffd14761c
+  sha256: 4c642ae1563e0363aa48f5d794832ad6e9716789405e33511213b837d1528a23
 
 build:
   number: {{ build }}
