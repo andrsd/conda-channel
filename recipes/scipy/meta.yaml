@@ -43,7 +43,8 @@ requirements:
   build:
     - python {{ python }}                    # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - cython 0.29.35                         # [build_platform != target_platform]
+    - cython 0.29.35                         # [build_platform != target_platform and py<312]
+    - cython                                 # [build_platform != target_platform and py>=312]
     - numpy                                  # [build_platform != target_platform]
     - pybind11                               # [build_platform != target_platform]
     - meson-python                           # [build_platform != target_platform]
@@ -65,7 +66,8 @@ requirements:
     - libcblas
     - liblapack
     - python {{ python }}
-    - cython 0.29.35
+    - cython 0.29.35                         # [py<312]
+    - cython                                 # [py>=312]
     - meson-python
     - ninja
     - pkg-config
@@ -95,7 +97,8 @@ outputs:
         - libcblas
         - liblapack
         - python {{ python }}
-        - cython 0.29.35
+        - cython 0.29.35                         # [py<312]
+        - cython                                 # [py>=312]
         - meson-python
         - ninja
         - pkg-config
