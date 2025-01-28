@@ -1,0 +1,19 @@
+MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
+  - 10.15                                                   # [x86_64 and osx]
+  - 11.3                                                    # [arm64 and osx]
+
+python:
+  - 3.10
+  - 3.11
+  - 3.12
+
+blas:
+  - libblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+lapack:
+  - liblapack  # [linux]
+  - libaccelerate-osx  # [osx]
+
+numpy:
+  - 1.26
