@@ -1,5 +1,5 @@
 {% set name = "libocca" %}
-{% set version = "1.6.0" %}
+{% set version = "2.0.0" %}
 {% set build = 0 %}
 
 package:
@@ -8,9 +8,7 @@ package:
 
 source:
   url: https://github.com/libocca/occa/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: b863a24171000097121aff5c43dadf22416c143824598a51c653689fd917794f
-  patches:
-    - files/0001-Fixing-FindMETAL.cmake.patch
+  sha256: f2521901fed5d199193d54c7db4186479a974bdae92ac97779c47fa2bb68badd
 
 build:
   number: {{ build }}
@@ -22,6 +20,12 @@ requirements:
     - cmake
     - {{ compiler('c') }}  # [linux]
     - {{ compiler('cxx') }}  # [linux]
+  host:
+    - llvm-openmp  # [osx]
+    - libgomp      # [linux]
+  run:
+    - llvm-openmp  # [osx]
+    - libgomp      # [linux]
 
 test:
   commands:
