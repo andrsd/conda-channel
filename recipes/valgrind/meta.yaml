@@ -1,0 +1,65 @@
+{% set name = "valgrind" %}
+{% set version = "3.24.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://sourceware.org/pub/{{ name }}/{{ name }}-{{ version }}.tar.bz2
+  sha256: 71aee202bdef1ae73898ccf7e9c315134fa7db6c246063afc503aef702ec03bd
+  patches:
+    - files/0001-Do-not-use-build-time-perl-for-installed-helper-scri.patch
+    - files/0001-added-mach_voucher_types-include.patch  # [osx]
+
+build:
+  number: {{ build }}
+  skip: true  # [not linux]
+
+requirements:
+  build:
+    - {{ compiler("cxx") }}
+    - make
+    - pkg-config
+    - perl
+  host:
+    - zlib
+  run:
+    - zlib
+    # utilities such as ms_print, cg_annotate, cg_diff require perl or python.
+    # valgrind users wanting to use them need to install perl/python explicitly.
+
+test:
+  requires:
+    - perl
+  files:
+    - massif.out
+  commands:
+    - valgrind --help
+    - valgrind ls -l
+    # Verify that #10 has been resolved
+    - ms_print massif.out
+
+about:
+  home: http://valgrind.org
+  license: GPL-2.0-or-later
+  license_family: GPL
+  license_file: COPYING
+  summary: A tool for detecting memory errors, and an instrumentation framework for building dynamic analysis tools.
+
+  description: |
+    Valgrind is an instrumentation framework for building dynamic analysis tools. There are Valgrind tools that can
+    automatically detect many memory management and threading bugs, and profile your programs in detail. You can also use
+    Valgrind to build new tools.  The Valgrind distribution currently includes six production-quality tools: a memory
+    error detector, two thread error detectors, a cache and branch-prediction profiler, a call-graph generating cache and
+    branch-prediction profiler, and a heap profiler. It also includes three experimental tools: a stack/global array
+    overrun detector, a second heap profiler that examines how heap blocks are used, and a SimPoint basic block vector
+    generator.
+  doc_url: http://valgrind.org/docs/manual/manual.html
+  dev_url: http://valgrind.org/downloads/repository.html
+
+extra:
+  recipe-maintainers:
+    - andrsd
