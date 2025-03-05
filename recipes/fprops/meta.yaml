@@ -1,4 +1,4 @@
-{% set version = "6.0.2" %}
+{% set version = "7.0.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 0fbe16dc5422bb98a5854f7c6fbee61c857a65e3049f565413e5b7361a5508eb
+  sha256: f3e02d972290f990621f95e8023dec7a72f874c34c4ca9078fd55caa2382f441
 
 build:
   number: {{ build }}
