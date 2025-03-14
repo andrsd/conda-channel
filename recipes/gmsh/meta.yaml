@@ -1,6 +1,6 @@
 {% set name = "gmsh" %}
 {% set version = "4.12.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 {% set sha256 = "2a6007872ba85abd9901914826f6986a2437ab7104f564ccefa1b7a3de742c17" %}
 
 package:
@@ -18,64 +18,6 @@ build:
   number: {{ build }}
 
 outputs:
-  - name: gmsh
-    build:
-      skip: true  # [win and vc<14]
-      script_env:
-        - USE_FLTK=ON
-        - USE_CAIRO=ON
-    script: build_gmsh.sh  # [not win]
-    script: bld_gmsh.bat  # [win]
-    requirements:
-      build:
-        - cmake
-        - make  # [unix]
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - {{ cdt('libselinux') }}        # [linux]
-        - {{ cdt('libxcb') }}            # [linux]
-        - {{ cdt('libxau') }}            # [linux]
-        - {{ cdt('libxdamage') }}        # [linux]
-        - {{ cdt('libxxf86vm') }}        # [linux]
-        - {{ cdt('mesa-libgl-devel') }}  # [linux]
-        - {{ cdt('mesa-dri-drivers') }}  # [linux]
-        - python *
-
-      host:
-        - {{ blas }}
-        - {{ lapack }}
-        - gmp  # [not win]
-        - occt
-        - fltk
-        - libpng
-        - libjpeg-turbo
-        - libglu  # [linux]
-        - zlib
-        - xorg-libxfixes     # [linux]
-        - xorg-libxext       # [linux]
-        - xorg-libxrender    # [linux]
-        - xorg-libx11        # [linux]
-        - xorg-libxmu        # [linux]
-        - cairo
-
-      run:
-        - gmp  # [not win]
-        - {{ pin_compatible('occt', max_pin='x.x.x') }}
-        - libpng
-        - libjpeg-turbo
-        - zlib
-        - libglu  # [linux]
-        - xorg-libxfixes     # [linux]
-        - xorg-libxext       # [linux]
-        - xorg-libxrender    # [linux]
-        - xorg-libx11        # [linux]
-        - xorg-libxmu        # [linux]
-
-    test:
-      commands:
-        - gmsh -help
-        - test "$(gmsh --version 2>&1)" == "{{ version }}"   # [unix]
-
   - name: gmsh-cli
     build:
       skip: true  # [win and vc<14]
@@ -96,7 +38,7 @@ outputs:
         - {{ blas }}
         - {{ lapack }}
         - gmp  # [not win]
-        - occt
+        - occt 7.9
         - zlib
 
       run:
