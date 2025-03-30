@@ -34,7 +34,6 @@ MAKEFLAGS=(
     "USE_SYSTEM_P7ZIP=1"
 )
 
-export EXTRA_MAKEFLAGS=""
 if [[ "${target_platform}" == osx-* ]]; then
     MAKEFLAGS+=(
         "LIBBLAS=-lblas"
