@@ -1,0 +1,41 @@
+{% set name = "libosxunwind" %}
+{% set version = "0.0.6" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://github.com/JuliaLang/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: c3943fdd063c2c8c249778326cbfecdc62c804a0509c4ae4799604e1817f9058
+
+build:
+  number: {{ build }}
+  skip: true  # [not osx]
+
+requirements:
+  build:
+    - {{ compiler("cxx") }}
+  host:
+
+test:
+  commands:
+    - test -f "${PREFIX}/include/libunwind.h"
+    - test -f "${PREFIX}/include/unwind.h"
+    - test -d "${PREFIX}/include/mach-o"
+    - test -f "${PREFIX}/lib/libosxunwind.a"
+    - test -f "${PREFIX}/lib/libosxunwind.dylib"
+
+about:
+  home: https://github.com/JuliaLang/libosxunwind
+  license: APSL-2.0
+  license_file: LICENSE
+  license_url: https://opensource.apple.com/apsl
+  summary: Clone of Apple's libunwind, enhanced for the Julia Profiler
+  dev_url: https://github.com/JuliaLang/libosxunwind
+
+extra:
+  recipe-maintainers:
+    - andrsd
