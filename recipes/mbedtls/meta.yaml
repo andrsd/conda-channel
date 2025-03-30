@@ -1,0 +1,52 @@
+{% set name = "mbedtls" %}
+{% set version = "3.5.1" %}
+{% set build = 1 %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 2597419f1a4a79dd28e6f5edc5180aff7e83bd85548437e07dcf9f808ceccb76
+  patches:
+    - files/fix_missing_clock_boottime.patch  # [linux]
+
+build:
+  number: {{ build }}
+  run_exports:
+    # mbedtls has an ABI versions that seems to change per minor release:
+    # https://github.com/Mbed-TLS/mbedtls/blob/f3720c7ca9f0f7dff39a38c7d779d493e4acee4e/library/CMakeLists.txt#L179C1-L180C1
+    - {{ pin_subpackage('mbedtls', max_pin='x.x') }}
+
+requirements:
+  build:
+    - cmake
+    - make  # [not win]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+
+test:
+  commands:
+    - if not exist %LIBRARY_INC%\\mbedtls\\md5.h exit 1  # [win]
+    - test -f ${PREFIX}/include/mbedtls/md5.h  # [not win]
+    - if not exist %LIBRARY_LIB%\\mbedcrypto.lib exit 1  # [win]
+    - test -f ${PREFIX}/lib/libmbedcrypto.so  # [linux]
+    - test -f ${PREFIX}/lib/libmbedcrypto.dylib  # [osx]
+    - if not exist %LIBRARY_BIN%\\mbedcrypto.dll exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\\mbedtls.lib exit 1  # [win]
+    - test -f ${PREFIX}/lib/libmbedtls.so  # [linux]
+    - test -f ${PREFIX}/lib/libmbedtls.dylib  # [osx]
+    - if not exist %LIBRARY_BIN%\\mbedtls.dll exit 1  # [win]
+
+about:
+  home: https://tls.mbed.org/
+  dev_url: https://github.com/Mbed-TLS/mbedtls
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: An open source, portable, easy to use, readable and flexible SSL library
+
+extra:
+  recipe-maintainers:
+    - andrsd
