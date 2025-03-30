@@ -1,0 +1,12 @@
+blas:
+  - openblas-ilp64     # [linux]
+  - libaccelerate-osx  # [osx]
+unwind:                                                     
+  - libosxunwind                                            # [osx]
+  - libunwind                                               # [linux]
+pin_run_as_build:                                           # [linux]
+    libunwind:                                              # [linux]
+      max_pin: x.x                                          # [linux]
+MACOSX_SDK_VERSION:                                         # [osx]
+  - 10.15                                                   # [x86_64 and osx]
+  - 11.3                                                    # [arm64 and osx]
