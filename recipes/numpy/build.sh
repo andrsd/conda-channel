@@ -39,8 +39,8 @@ if [[ "$target_platform" == osx-* ]]; then
 else
   $PYTHON -m build -w -n -x \
       -Cbuilddir=builddir \
-      -Csetup-args=-Dblas=blas \
-      -Csetup-args=-Dlapack=lapack \
+      -Csetup-args=-Dblas=openblas \
+      -Csetup-args=-Dlapack=openblas \
       -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=} \
       || (cat builddir/meson-logs/meson-log.txt && exit 1)
 fi

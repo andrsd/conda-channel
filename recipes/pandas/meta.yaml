@@ -1,5 +1,6 @@
 {% set tests_to_skip = "_not_a_real_test" %}
 {% set version = "2.2.3" %}
+{% set build = 3 %}
 
 package:
   name: pandas
@@ -10,7 +11,7 @@ source:
   sha256: 4f18ba62b61d7e192368b84517265a99b4d7ee8912f8708660fb4a366cc82667
 
 build:
-  number: 2
+  number: {{ build }}
   skip: true  # [py<39]
 
 requirements:

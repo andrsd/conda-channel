@@ -9,11 +9,11 @@ scalar:
   - real
 
 blas:
-  - libblas  # [linux]
+  - openblas  # [linux]
   - libaccelerate-osx  # [osx]
 
 lapack:
-  - liblapack  # [linux]
+  - openblas  # [linux]
   - libaccelerate-osx  # [osx]
 
 python:

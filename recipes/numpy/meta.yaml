@@ -1,5 +1,5 @@
 {% set version = "1.26.0" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: numpy
@@ -56,10 +56,10 @@ requirements:
     - python-build
     - cython
     - {{ blas }}
-    - libcblas  # [linux]
     - {{ lapack }}
   run:
     - python {{ python }}
+    - {{ blas }}
   run_constrained:
     # enforce eviction of package from anaconda defaults
     - numpy-base <0a0
@@ -92,6 +92,7 @@ test:
     - {{ compiler('c') }}        # [linux]
     - {{ compiler('cxx') }}      # [linux]
     - {{ compiler('fortran') }}  # [linux]
+    - {{ blas }}
   commands:
     - f2py -h
     # numpy.test will show SIMD features of agent (in the past, there have been

@@ -3,9 +3,9 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
   - 11.3                                                    # [arm64 and osx]
 
 blas:
-  - libblas  # [linux]
+  - openblas  # [linux]
   - libaccelerate-osx  # [osx]
 
 lapack:
-  - liblapack  # [linux]
+  - openblas  # [linux]
   - libaccelerate-osx  # [osx]
