@@ -1,6 +1,14 @@
 #!/bin/bash
 set -xe
 
+sedinplace() {
+  if [[ $(uname) == Darwin ]]; then
+    sed -i "" "$@"
+  else
+    sed -i"" "$@"
+  fi
+}
+
 cmake ${CMAKE_ARGS} \
   -DCMAKE_FIND_ROOT_PATH="${PREFIX};${BUILD_PREFIX};${BUILD_PREFIX}/${HOST}/sysroot" \
   -DCMAKE_PREFIX_PATH=${BUILD_PREFIX} \
@@ -15,3 +23,8 @@ cmake ${CMAKE_ARGS} \
 
 make -j${CPU_COUNT}
 make install
+
+sedinplace s%${BUILD_PREFIX}%${PREFIX}%g ${PREFIX}/lib/cmake/MOAB/MOABConfig.cmake
+sedinplace s%${BUILD_PREFIX}%${PREFIX}%g ${PREFIX}/lib/cmake/MOAB/MOABTargets.cmake
+
+sedinplace s%${SRC_DIR}%%g ${PREFIX}/lib/cmake/MOAB/MOABConfig.cmake
