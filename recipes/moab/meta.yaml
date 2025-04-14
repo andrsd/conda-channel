@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://bitbucket.org/fathomteam/moab/get/{{ commit }}.tar.bz2
-  sha256: 598a9e72b0d03cf487c49aee2defb60ab5c19bd9194de9a3134f0fd04d376f13
+  sha256: a9db86416d17d9d2b0a14f1df091494a621bec44edc6b3e7aed168ebcfd64613
 
 build:
   number: {{ build }}
