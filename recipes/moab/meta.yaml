@@ -1,0 +1,43 @@
+{% set version = "5.5.1" %}
+{% set build = 0 %}
+{% set commit = "0c84f0d50f3f891c78debf1f22f575f5bb5e4401" %}
+
+package:
+  name: moab
+  version: {{ version }}
+
+source:
+  url: https://bitbucket.org/fathomteam/moab/get/{{ commit }}.tar.bz2
+  sha256: a9db86416d17d9d2b0a14f1df091494a621bec44edc6b3e7aed168ebcfd64613
+
+build:
+  number: {{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - {{ mpi }}
+    - hdf5 1.12.* {{ mpi }}_*
+    - eigen 3.4.*
+  run:
+    - {{ mpi }}
+    - hdf5 1.12.* {{ mpi }}_*
+    - eigen 3.4.*
+
+about:
+  summary: |
+    The Mesh-Oriented datABase MOAB is a component for representing and evaluating mesh data. MOAB can store structured
+    and unstructured mesh, consisting of elements in the finite element “zoo” plus polygons and polyhedra. The
+    functional interface to MOAB is simple yet powerful, allowing the representation of many types of metadata commonly
+    found on the mesh. MOAB is optimized for efficiency in space and time, based on access to mesh in chunks rather
+    than through individual entities, while also versatile enough to support individual entity access.
+
+extra:
+  recipe-maintainers:
+    - andrsd
