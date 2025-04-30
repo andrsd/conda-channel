@@ -1,0 +1,86 @@
+From 267dfad563ad320d3dadb9febb16b19f5d542f38 Mon Sep 17 00:00:00 2001
+From: Isuru Fernando <isuruf@gmail.com>
+Date: Fri, 14 Jan 2022 19:37:41 +0200
+Subject: [PATCH] find codesign_allocate next to it
+
+---
+ commands.cpp | 49 ++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 42 insertions(+), 7 deletions(-)
+
+diff --git a/commands.cpp b/commands.cpp
+index 5dbdfb4..827588f 100644
+--- a/commands.cpp
++++ b/commands.cpp
+@@ -9,6 +9,12 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
++#if defined(__APPLE__)
++#define _DARWIN_C_SOURCE
++#endif
++#include <dlfcn.h>
++#include <dirent.h>
++
+ #include "commands.h"
+ #include "macho.h"
+ #include "signature.h"
+@@ -254,6 +260,39 @@ static std::string inferIdentifier(const std::string& filename) {
+     return basename;
+ }
+ 
++static std::string get_codesign_allocate_executable() {
++    const char *codesign_allocate = getenv("CODESIGN_ALLOCATE");
++    if (codesign_allocate) {
++        return std::string(codesign_allocate);
++    }
++#if defined(__APPLE__) || defined(__linux__)
++    Dl_info info;
++    if (dladdr((void*)get_codesign_allocate_executable, &info)) {
++        char const * soname = info.dli_fname;
++        std::string result = std::string(soname);
++        size_t last_slash = result.rfind('/');
++        result = result.substr(0, last_slash+1) + "../bin/";
++        if (result.size() > 0) {
++            std::string file_name;
++            DIR *d;
++            struct dirent *dir;
++            d = opendir(result.c_str());
++            if (d) {
++              while ((dir = readdir(d)) != NULL) {
++                file_name = std::string(dir->d_name);
++                if (file_name.size() >= 17 && file_name.substr(file_name.size() - 17) == "codesign_allocate") {
++                    closedir(d);
++                    return result + file_name;
++                }
++              }
++              closedir(d);
++            }
++        }
++    }
++#endif
++    return std::string("codesign_allocate");
++}
++
+ int Commands::codesign(const CodesignOptions &options, const std::string &filename) {
+     std::string identifier = options.identifier;
+     if (identifier.empty()) {
+@@ -310,14 +349,10 @@ int Commands::codesign(const CodesignOptions &options, const std::string &filena
+     pid_t pid;
+     char **spawnArgs = toSpawnArgs(arguments);
+ 
+-    const char *codesign_allocate = getenv("CODESIGN_ALLOCATE");
+-    if (!codesign_allocate) {
+-        codesign_allocate = "codesign_allocate";
+-    }
+-
++    std::string codesign_allocate = get_codesign_allocate_executable();
+     int spawn_result;
+-    if ((spawn_result = posix_spawnp(&pid, codesign_allocate, nullptr, nullptr, spawnArgs, environ)) != 0) {
+-        throw std::runtime_error{std::string{"Failed to spawn codesign_allocate: "} + strerror(spawn_result)};
++    if ((spawn_result = posix_spawnp(&pid, codesign_allocate.c_str(), nullptr, nullptr, spawnArgs, environ)) != 0) {
++        throw std::runtime_error{std::string{"Failed to spawn "} + codesign_allocate + std::string{": "} + strerror(spawn_result)};
+     };
+ 
+     int codesign_status;
+-- 
+2.34.1
