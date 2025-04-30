@@ -1,0 +1,99 @@
+{% set version = "16.0.6" %}
+{% set prod_ver = '.'.join(version.split('.')[:3]) %}
+
+package:
+  name: compiler-rt-packages
+  version: {{ version }}
+
+source:
+  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+  sha256: ce5e71081d17ce9e86d7cbcfa28c4b04b9300f8fb7e78422b1feb6bc52c3028e
+  patches:
+    - files/0001-no-code-sign.patch
+    - files/0002-compiler-rt-Make-7.0.0-compatible-with-10.9-SDK.patch
+    - files/fix-sanitizer_mac.patch
+    - files/fix-sanitizer_platform.patch
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - cmake >=3.4.3
+    - {{ compiler('cxx') }}
+    - python *
+    - ninja
+    - llvmdev {{ version }}  # [build_platform != target_platform]
+  host:
+    - clangdev {{ version }}
+    - llvmdev {{ version }}
+    - libcxx   # [osx]
+    - zlib
+    - libxml2
+
+outputs:
+  - name: compiler-rt_{{ target_platform }}
+    build:
+      noarch: generic
+      ignore_run_exports_from:
+        - {{ compiler('cxx') }}
+      detect_binary_files_with_prefix: false  # [win]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+      host:
+      run:
+        - clang {{ version }}
+        - clangxx {{ version }}
+      run_constrained:
+        - compiler-rt {{ version }}
+    files:
+      - lib/clang/{{ prod_ver }}/lib
+    test:
+      commands:
+        - echo {{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}
+        - test -f $PREFIX/lib/clang/{{ prod_ver }}/lib/darwin/libclang_rt.osx.a  # [osx]
+
+  - name: compiler-rt
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+      host:
+      run:
+        - clang {{ version }}
+        - clangxx {{ version }}
+        - compiler-rt_{{ target_platform }} {{ version }}
+    files:
+      - lib/clang/{{ prod_ver }}/share             # [unix]
+      - lib/clang/{{ prod_ver }}/include           # [unix]
+      - Library/lib/clang/{{ version }}/share     # [win]
+      - Library/lib/clang/{{ version }}/include   # [win]
+      - Library/lib/clang/{{ version }}/lib       # [win]
+    test:
+      # files:
+      #   - test.c.in
+      commands:
+        # {% set NEW_TARGET="10." ~ (((MACOSX_DEPLOYMENT_TARGET|default("10.13")).split(".")[1])|int + 1) %}
+        # - sed "s/@MACOSX_DEPLOYMENT_TARGET@/{{ NEW_TARGET }}/g" test.c.in > test.c
+        # - clang -mmacosx-version-min={{ MACOSX_DEPLOYMENT_TARGET }} test.c  # [osx]
+        - test -f $PREFIX/lib/clang/{{ prod_ver }}/include/sanitizer/asan_interface.h  # [unix]
+
+about:
+  home: http://llvm.org/
+  license: Apache-2.0 WITH LLVM-exception
+  license_file: compiler-rt/LICENSE.TXT
+  summary: compiler-rt runtime libraries
+  dev_url: https://github.com/llvm/llvm-project
+  description: |
+    builtins - low-level target-specific hooks required by code generation and other
+      runtime components
+    sanitizer runtimes - AddressSanitizer, ThreadSanitizer, UndefinedBehaviorSanitizer,
+      MemorySanitizer, LeakSanitizer, DataFlowSanitizer
+    profile - library which is used to collect coverage information
+    BlocksRuntime - target-independent implementation of Apple "Blocks" runtime
+      interfaces
+
+extra:
+  recipe-maintainers:
+    - andrsd
+  feedstock-name: compiler-rt
