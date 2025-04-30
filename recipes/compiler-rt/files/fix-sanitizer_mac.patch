@@ -1,0 +1,21 @@
+--- compiler-rt/lib/sanitizer_common/sanitizer_mac.cpp.org	2025-04-30 10:49:01
++++ compiler-rt/lib/sanitizer_common/sanitizer_mac.cpp	2025-04-30 10:55:12
+@@ -628,9 +628,15 @@
+ // Offset example:
+ // XNU 17 -- macOS 10.13 -- iOS 11 -- tvOS 11 -- watchOS 4
+ constexpr u16 GetOSMajorKernelOffset() {
+-  if (TARGET_OS_OSX) return 4;
+-  if (TARGET_OS_IOS || TARGET_OS_TV) return 6;
+-  if (TARGET_OS_WATCH) return 13;
++#if defined (TARGET_OS_OSX)
++  return 4;
++#elif defined (TARGET_OS_IOS || TARGET_OS_TV)
++  return 6;
++#elif defined (TARGET_OS_WATCH)
++  return 13;
++#else
++  return 0;
++#endif
+ }
+ 
+ using VersStr = char[64];

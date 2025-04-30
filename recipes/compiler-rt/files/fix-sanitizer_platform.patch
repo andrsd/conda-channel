@@ -1,0 +1,35 @@
+--- compiler-rt/lib/sanitizer_common/sanitizer_platform.h.org	2025-04-30 11:18:30
++++ compiler-rt/lib/sanitizer_common/sanitizer_platform.h	2025-04-30 11:22:51
+@@ -65,27 +65,27 @@
+ #if defined(__APPLE__)
+ #  define SANITIZER_APPLE 1
+ #  include <TargetConditionals.h>
+-#  if TARGET_OS_OSX
++#  if defined TARGET_OS_OSX
+ #    define SANITIZER_OSX 1
+ #  else
+ #    define SANITIZER_OSX 0
+ #  endif
+-#  if TARGET_OS_IPHONE
++#  if defined TARGET_OS_IPHONE
+ #    define SANITIZER_IOS 1
+ #  else
+ #    define SANITIZER_IOS 0
+ #  endif
+-#  if TARGET_OS_WATCH
++#  if defined TARGET_OS_WATCH
+ #    define SANITIZER_WATCHOS 1
+ #  else
+ #    define SANITIZER_WATCHOS 0
+ #  endif
+-#  if TARGET_OS_TV
++#  if defined TARGET_OS_TV
+ #    define SANITIZER_TVOS 1
+ #  else
+ #    define SANITIZER_TVOS 0
+ #  endif
+-#  if TARGET_OS_SIMULATOR
++#  if defined TARGET_OS_SIMULATOR
+ #    define SANITIZER_IOSSIM 1
+ #  else
+ #    define SANITIZER_IOSSIM 0
