@@ -15,8 +15,17 @@ rm -rf llvm-project
 cd clang
 
 IFS='.' read -r -a PKG_VER_ARRAY <<< "${PKG_VERSION}"
+# default SOVER for tagged releases is major.minor since LLVM 18
+SOVER_EXT="${PKG_VER_ARRAY[0]}.${PKG_VER_ARRAY[1]}"
+if [[ "${PKG_VERSION}" == *dev0 ]]; then
+    # otherwise with git suffix
+    SOVER_EXT="${SOVER_EXT}git"
+fi
 
-sed -i.bak "s/libLTO.dylib/libLTO.${PKG_VER_ARRAY[0]}.dylib/g" lib/Driver/ToolChains/Darwin.cpp
+# link to versioned libLTO.dylib (which is present in libllvm<major> that
+# libclang<sover> depends on), as the unversioned symlink is only present
+# in llvmdev, which may not be present when using clang.
+sed -i.bak "s/libLTO.dylib/libLTO.${SOVER_EXT}.dylib/g" lib/Driver/ToolChains/Darwin.cpp
 
 if [[ "$variant" == "hcc" ]]; then
   CMAKE_ARGS="$CMAKE_ARGS -DKALMAR_BACKEND=HCC_BACKEND_AMDGPU -DHCC_VERSION_STRING=2.7-19365-24e69cd8-24e69cd8-24e69cd8"
@@ -36,6 +45,7 @@ fi
 
 if [[ "$target_platform" == osx* ]]; then
   export CXXFLAGS="$CXXFLAGS -DTARGET_OS_OSX=1"
+  CMAKE_ARGS="$CMAKE_ARGS -DLLVM_ENABLE_LIBCXX=ON"
 fi
 
 # disable -fno-plt due to some GCC bug causing linker errors, see
@@ -55,6 +65,7 @@ cmake \
   -DCLANG_FORCE_MATCHING_LIBCLANG_SOVERSION=OFF \
   -DCLANG_INCLUDE_TESTS=OFF \
   -DCLANG_INCLUDE_DOCS=OFF \
+  -DCLANG_DEFAULT_PIE_ON_LINUX=ON \
   -DLLVM_INCLUDE_TESTS=OFF \
   -DLLVM_INCLUDE_DOCS=OFF \
   -DLLVM_ENABLE_LIBXML2=FORCE_ON \
