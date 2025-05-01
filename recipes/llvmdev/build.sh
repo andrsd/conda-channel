@@ -1,4 +1,5 @@
-set -x
+#!/bin/bash
+set -ex
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
@@ -9,6 +10,12 @@ cd build
 
 if [[ "$target_platform" == "linux-64" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
+elif [[ "$target_platform" == osx-* ]]; then
+  # only supported on osx, see
+  # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
+  # currently off though, because it doesn't build yet
+  # CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_BUILD_LLVM_C_DYLIB=ON"
+  true
 fi
 
 if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
@@ -17,7 +24,6 @@ if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
   NATIVE_FLAGS="${NATIVE_FLAGS};-DCMAKE_STATIC_LINKER_FLAGS=;-DLLVM_INCLUDE_BENCHMARKS=OFF"
   NATIVE_FLAGS="${NATIVE_FLAGS};-DLLVM_ENABLE_ZSTD=OFF;-DLLVM_ENABLE_LIBXML2=OFF;-DLLVM_ENABLE_ZLIB=OFF;"
   CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=${NATIVE_FLAGS}"
-  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=$(echo $HOST | sed s/conda/unknown/g) -DLLVM_DEFAULT_TARGET_TRIPLE=$(echo $HOST | sed s/conda/unknown/g)"
 fi
 
 # disable -fno-plt due to https://bugs.llvm.org/show_bug.cgi?id=51863 due to some GCC bug
@@ -30,12 +36,15 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_LIBRARY_PATH="${PREFIX}" \
       -DLLVM_ENABLE_BACKTRACES=ON \
+      -DLLVM_ENABLE_DUMP=ON \
       -DLLVM_ENABLE_LIBEDIT=OFF \
       -DLLVM_ENABLE_LIBXML2=FORCE_ON \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_ENABLE_TERMINFO=OFF \
       -DLLVM_ENABLE_ZLIB=FORCE_ON \
       -DLLVM_ENABLE_ZSTD=FORCE_ON \
+      -DLLVM_DEFAULT_TARGET_TRIPLE=${CONDA_TOOLCHAIN_HOST} \
+      -DLLVM_HOST_TRIPLE=${CONDA_TOOLCHAIN_HOST} \
       -DLLVM_INCLUDE_BENCHMARKS=OFF \
       -DLLVM_INCLUDE_DOCS=OFF \
       -DLLVM_INCLUDE_EXAMPLES=OFF \
@@ -64,12 +73,10 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
-  fi
-
-  if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
+    # check-llvm takes >1.5h to build & run on osx
     ninja -j${CPU_COUNT} check-llvm
-
-    cd ../llvm/test
-    python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
   fi
+
+  cd ../llvm/test
+  python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi

@@ -6,7 +6,7 @@ c_compiler:             # [osx]
 cxx_compiler:           # [osx]
   - clang_bootstrap     # [osx]
 cxx_compiler_version:
-  - '14'
+  - '16'
 python_min:
   - '3.9'
   
