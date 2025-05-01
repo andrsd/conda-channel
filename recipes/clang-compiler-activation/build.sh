@@ -3,19 +3,16 @@
 CHOST=${macos_machine}
 
 FINAL_CPPFLAGS="-D_FORTIFY_SOURCE=2"
-FINAL_CFLAGS="-ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe"
-FINAL_CXXFLAGS="-ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0"
-if [[ "${version}" == "11.1.0" ]]; then
-  FINAL_CXXFLAGS="${FINAL_CXXFLAGS} -std=c++14"
-fi
+FINAL_CFLAGS="-ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe"
+FINAL_CXXFLAGS="-ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0"
 if [[ "${uname_machine}" == "x86_64" ]]; then
   FINAL_CFLAGS="-march=core2 -mtune=haswell -mssse3 $FINAL_CFLAGS"
   FINAL_CXXFLAGS="-march=core2 -mtune=haswell -mssse3 $FINAL_CXXFLAGS"
 fi
 # These are the LDFLAGS for when the linker is being driven by a compiler, i.e. with -Wl,
-FINAL_LDFLAGS="-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs"
+FINAL_LDFLAGS="-Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs"
 # These are the LDFLAGS for when the linker is being called directly, i.e. without -Wl,
-FINAL_LDFLAGS_LD="-pie -headerpad_max_install_names -dead_strip_dylibs"
+FINAL_LDFLAGS_LD="-headerpad_max_install_names -dead_strip_dylibs"
 FINAL_DEBUG_CFLAGS="-Og -g -Wall -Wextra"
 FINAL_DEBUG_CXXFLAGS="-Og -g -Wall -Wextra"
 
@@ -51,6 +48,7 @@ find . -name "*activate*.sh" -exec sed -i.bak "s|@CONDA_BUILD_CROSS_COMPILATION@
 find . -name "*activate*.sh" -exec sed -i.bak "s|@_PYTHON_SYSCONFIGDATA_NAME@|${FINAL_PYTHON_SYSCONFIGDATA_NAME}|g"  "{}" \;
 find . -name "*activate*.sh" -exec sed -i.bak "s|@UNAME_MACHINE@|${uname_machine}|g"         "{}" \;
 find . -name "*activate*.sh" -exec sed -i.bak "s|@MESON_CPU_FAMILY@|${meson_cpu_family}|g"         "{}" \;
-find . -name "*activate*.sh" -exec sed -i.bak "s|@UNAME_KERNEL_RELEASE@|${uname_kernel_release}|g"         "{}" \;
-find . -name "*activate*.sh" -exec sed -i.bak "s|@TARGET_PLATFORM@|${cross_target_platform}|g"         "{}" \;
+find . -name "*activate*.sh" -exec sed -i.bak "s|@MESON_RELEASE_FLAG@|${meson_release_flag}|g"     "{}" \;
+find . -name "*activate*.sh" -exec sed -i.bak "s|@UNAME_KERNEL_RELEASE@|${uname_kernel_release}|g" "{}" \;
+find . -name "*activate*.sh" -exec sed -i.bak "s|@TARGET_PLATFORM@|${cross_target_platform}|g"     "{}" \;
 find . -name "*activate*.sh.bak" -exec rm "{}" \;

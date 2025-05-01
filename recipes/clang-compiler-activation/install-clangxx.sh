@@ -5,13 +5,11 @@ set -e -x
 CHOST=${macos_machine}
 echo CHOST is ${CHOST}
 
-mkdir -p "${PREFIX}"/etc/conda/{de,}activate.d/
-cp "${SRC_DIR}"/activate-clang++.sh "${PREFIX}"/etc/conda/activate.d/activate_"${PKG_NAME}".sh
-cp "${SRC_DIR}"/deactivate-clang++.sh "${PREFIX}"/etc/conda/deactivate.d/deactivate_"${PKG_NAME}".sh
-
 pushd "${PREFIX}"/bin
   ln -s clang++ ${CHOST}-clang++
-  if [[ "${CHOST}" != "${CBUILD}" ]]; then
+  if [[ "${CHOST}" != "${CBUILD}" ]] && [[ "${target_platform}" != linux-* ]]; then
+    # on linux, the `clangxx` package already has a $TRIPLE-clang++, see
+    # https://github.com/conda-forge/clangdev-feedstock/pull/251
     ln -s clang++ ${CBUILD}-clang++
   fi
 popd

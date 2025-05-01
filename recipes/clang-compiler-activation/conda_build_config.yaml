@@ -7,8 +7,14 @@ MACOSX_DEPLOYMENT_TARGET:  # [osx]
   - 11.0                   # [osx and arm64]
 
 version:
-  - 16.0.6
+  - 18.1.8
 
+# switch over release flag style cleanly across compiler versions, see #112
+meson_release_flag:
+  - "--buildtype release"
+  - "-Dbuildtype=release"
+  - "-Dbuildtype=release"
+  
 # everything below is zipped
 cross_target_platform:
   - osx-arm64

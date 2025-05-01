@@ -1,15 +1,13 @@
 {% if version is not defined %}
-{% set version = "16.0.6" %}
+{% set version = "18.1.8" %}
 {% endif %}
 {% set major_ver = version.split(".")[0] %}
+{% set libcxx_major = 16 %}
 
-{% set build_number = 0 %}
-# keep build number increments for old compiler versions as necessary
-{% if major_ver | int <= 15 %}
-{% set build_number = build_number + 3 %}
-{% elif major_ver | int <= 14 %}
-{% set build_number = build_number + 7 %}
-{% endif %}
+{% set build_number = 18 %}
+
+# pretend this variable is used, so that smithy populates the variant configs
+# [meson_release_flag]
 
 package:
   name: clang-compiler-activation
@@ -28,12 +26,12 @@ build:
 requirements:
   build:
     - cctools_{{ target_platform }}  # [osx]
-    - libcxx {{ version }}
+    - libcxx {{ libcxx_major }}
     - gcc_{{ target_platform }}      # [linux]
     - clang {{ version }}            # [osx]
 
 outputs:
-  - name: clang_{{ cross_target_platform }}
+  - name: clang_impl_{{ cross_target_platform }}
     script: install-clang.sh
     requirements:
       - clang {{ version }}
@@ -56,31 +54,40 @@ outputs:
     test:
       commands:
         - {{ CBUILD }}-clang --version
+        - {{ CBUILD }}-clang-cpp --version
         - {{ macos_machine }}-clang --version
+        - {{ macos_machine }}-clang-cpp --version
 
-  - name: clangxx_{{ cross_target_platform }}
+  - name: clang_{{ cross_target_platform }}
+    script: install-clang-scripts.sh
+    requirements:
+      run:
+        - {{ pin_subpackage("clang_impl_" ~ cross_target_platform, exact=True) }}
+    test:
+      commands:
+        - {{ CBUILD }}-clang --version
+        - {{ CBUILD }}-clang-cpp --version
+        - {{ macos_machine }}-clang --version
+        - {{ macos_machine }}-clang-cpp --version
+
+  - name: clangxx_impl_{{ cross_target_platform }}
     script: install-clangxx.sh
     requirements:
       build:
         - cctools_{{ target_platform }}   # [osx]
       host:
         - clangxx {{ version }}
-        - libcxx {{ version }}            # [osx]
-        - {{ pin_subpackage('clang_' ~ cross_target_platform, exact=True) }}
+        - libcxx {{ libcxx_major }}       # [osx]
+        - {{ pin_subpackage('clang_impl_' ~ cross_target_platform, exact=True) }}
         - gxx_impl_{{ target_platform }}  # [linux]
         # hack to force the solver to work
         - libllvm{{ major_ver }} {{ version }}
       run:
         - clangxx {{ version }}
         # This is not needed in Linux for cross-compiling in a conda-build env, but is needed outside
-        - libcxx >={{ version }}
+        - libcxx >={{ libcxx_major }}
         - {{ pin_subpackage('clang_' ~ cross_target_platform, exact=True) }}
-        - gxx_impl_{{ target_platform }}  # [linux]
-    # Since transitive run_exports are not currently possible
-    # (here I would like the run dependency on clangxx to pull in the run_exports from it).
-    run_exports:
-      strong:
-        - libcxx >={{ version }}
+        - gxx_impl_{{ target_platform }}            # [linux]
     test:
       commands:
         - echo {{ MACOSX_DEPLOYMENT_TARGET }}  # [linux]
@@ -92,6 +99,23 @@ outputs:
         - {{ CBUILD }}-clang++ --version
         - {{ macos_machine }}-clang++ --version
 
+  - name: clangxx_{{ cross_target_platform }}
+    script: install-clangxx-scripts.sh
+    build:
+      # Since transitive run_exports are not currently possible
+      # (here I would like the run dependency on clangxx to pull in the run_exports from it).
+      run_exports:
+        strong:
+          - libcxx >={{ libcxx_major }}
+    requirements:
+      run:
+        - {{ pin_subpackage("clangxx_impl_" ~ cross_target_platform, exact=True) }}
+        - {{ pin_subpackage("clang_" ~ cross_target_platform, exact=True) }}
+    test:
+      commands:
+        - {{ CBUILD }}-clang++ --version
+        - {{ macos_machine }}-clang++ --version
+
   - name: clang_bootstrap_{{ cross_target_platform }}
     script: install-clang-bootstrap.sh
     requirements:
@@ -99,7 +123,7 @@ outputs:
         - cctools_{{ target_platform }}  # [osx]
       host:
         - clangxx {{ version }}
-        - libcxx {{ version }}           # [cross_target_platform in ("osx-64", "osx-arm64")]
+        - libcxx {{ libcxx_major }}      # [cross_target_platform in ("osx-64", "osx-arm64")]
         - cctools_{{ cross_target_platform }}
         - ld64_{{ cross_target_platform }}
         - {{ pin_subpackage('clang_' ~ cross_target_platform, exact=True) }}
@@ -122,6 +146,7 @@ outputs:
     test:
       commands:
         - {{ macos_machine }}-clang --version
+        - {{ macos_machine }}-clang-cpp --version
         - {{ macos_machine }}-clang++ --version
     about:
       home: https://llvm.org
