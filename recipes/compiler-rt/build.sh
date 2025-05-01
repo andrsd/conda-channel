@@ -3,7 +3,7 @@ set -ex
 
 if [[ "$target_platform" == osx-* ]]; then
     ls -al ${CONDA_BUILD_SYSROOT}
-    CMAKE_ARGS="$CMAKE_ARGS -DDARWIN_osx_ARCHS=arm64 -DCOMPILER_RT_ENABLE_IOS=Off"
+    CMAKE_ARGS="$CMAKE_ARGS -DDARWIN_osx_ARCHS=x86_64;arm64 -DCOMPILER_RT_ENABLE_IOS=Off"
     CMAKE_ARGS="$CMAKE_ARGS -DDARWIN_macosx_CACHED_SYSROOT=${CONDA_BUILD_SYSROOT} -DDARWIN_macosx_OVERRIDE_SDK_VERSION=${MACOSX_SDK_VERSION}"
     unset CFLAGS
     unset CXXFLAGS
@@ -34,7 +34,9 @@ if [[ "${PKG_VERSION}" == *rc* ]]; then
   export PKG_VERSION=${PKG_VERSION::${#PKG_VERSION}-4}
 fi
 
-INSTALL_PREFIX=${PREFIX}/lib/clang/${PKG_VERSION}
+MAJOR_VER=$(echo ${PKG_VERSION} | cut -d "." -f1)
+
+INSTALL_PREFIX=${PREFIX}/lib/clang/${MAJOR_VER}
 
 # make sure we use our pre-built libcxx, see
 # https://github.com/llvm/llvm-project/blame/llvmorg-14.0.0/compiler-rt/CMakeLists.txt#L178-L181
@@ -73,3 +75,11 @@ cmake --install .
 
 # Clean up after build
 rm -rf "${PREFIX}/lib/libc++.tbd"
+
+if [[ "$target_platform" == "$build_platform" ]]; then
+  RESOURCE_DIR=$(${PREFIX}/bin/clang -print-resource-dir)
+  if [[ "${RESOURCE_DIR}" != "${INSTALL_PREFIX}" ]]; then
+    echo "Wrong install prefix (${INSTALL_PREFIX}). Should match ${RESOURCE_DIR}"
+    exit 1
+  fi
+fi
