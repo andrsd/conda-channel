@@ -7,10 +7,10 @@ cxx_compiler:        # [osx]
 # https://libcxx.llvm.org/index.html#platform-and-compiler-support
 c_compiler_version:     # [unix]
   - 13                  # [linux]
-  - 16                  # [osx]
+  - 18                  # [osx]
 cxx_compiler_version:   # [unix]
   - 13                  # [linux]
-  - 16                  # [osx]
+  - 18                  # [osx]
   
 MACOSX_SDK_VERSION:  # [osx]
   - 10.14            # [osx and x86_64]
@@ -19,3 +19,6 @@ MACOSX_SDK_VERSION:  # [osx]
 dummy_var:              # [osx]
   - 0                   # [osx and x86_64]
   - 1                   # [osx and arm64]
+
+hardening:
+  - none

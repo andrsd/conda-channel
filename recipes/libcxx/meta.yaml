@@ -1,5 +1,4 @@
-{% set version = "18.1.8" %}
-{% set major = version.split(".")[0] %}
+{% set version = "20.1.3" %}
 
 {% if sys_abi is undefined %}
 {% set sys_abi = "dummy" %}
@@ -12,18 +11,17 @@ package:
 
 source:
   - url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-    sha256: 09c08693a9afd6236f27a2ebae62cda656eba19021ef3f94d59e931d662d4856
+    sha256: b40c0d185b98c2ee3c0cb2f14cde65a06008b33dfb471cc7ad868f8ca3f7f897
     patches:
-      # See https://discourse.llvm.org/t/shipping-custom-libc-on-macos/58606
-      - files/0001-Fix-ABI-compatibility-with-system.patch    # [sys_abi == "pre-12"]
-      - files/0002-custom-error-message-for-old-sdk.patch
       # disable feature that requires up-to-date libcxxabi, which we don't ship
-      - files/0003-disable-_LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPT.patch
+      - files/0002-disable-_LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPT.patch
       # work around https://github.com/llvm/llvm-project/issues/90332
-      - files/0004-Work-around-stray-nostdlib-flags-causing-errors-with.patch
+      - files/0003-Work-around-stray-nostdlib-flags-causing-errors-with.patch
+      # allow chrono implementation to work on osx
+      - files/0004-patch-__libcpp_tzdb_directory-to-allow-use-on-osx.patch
 
 build:
-  number: 8
+  number: 0
   skip: true  # [win]
   skip: true  # [ppc64le or aarch64]
 
@@ -34,9 +32,6 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('c') }}
     - python >3               # [not osx]
-  host:
-    # - clangdev {{ version }}  # [not osx]
-    - llvmdev {{ version }}   # [not osx]
 
 outputs:
   - name: libcxx-devel
@@ -48,14 +43,16 @@ outputs:
         - libcxx =*=debug*                              # [hardening == "debug"]
     files:
       - include/c++                 # [unix]
+      # for C++20 modules, which are installed into $PREFIX/share/libc++
+      - share/libc++/*              # [unix]
       - Library/include/c++         # [win]
     requirements:
       host:
         - {{ pin_subpackage("libcxx", exact=True) }}
       run:
+        # re-enable this for osx once chrono implementation is in shared library
+        - tzdata  # [linux]
         - {{ pin_subpackage("libcxx", max_pin=None) }}
-      run_constrained:
-        - __osx <12     # [osx and (sys_abi == "pre-12")]
 
     test:
       requires:
@@ -74,17 +71,21 @@ outputs:
         - echo {{ dummy_var }}                                    # [osx]
         - if not exist %LIBRARY_INC%\\c++\\v1\\iterator exit 1    # [win]
         - test -f $PREFIX/include/c++/v1/iterator                 # [unix]
-        - bash compile_test.sh                                    # [unix]
-        - compile_test.bat                                        # [win]
-        # make sure we inserted link to our docs wherever it is necessary;
-        # i.e. everywhere there's a string "availability(macos,...,introduced=<ver>)" for osx version >10.13;
-        # 'grep -v' inverts the match but returns non-zero exit code if no lines are returned; so we use 'wc -l';
-        # we want to have zero lines that don't either: contain our link or are for <=10.13 (lowest occurring in that file is 10.9)
-        - if [ 0 -eq $(cat ${PREFIX}/include/c++/v1/__availability | grep "availability(macos" | grep -vE "(conda-forge|10.9|10.1[0-3])" | wc -l) ]; then exit 0; else exit 1; fi  # [osx]
+
         # !!!!!!!!!!!! README !!!!!!!!!!!!!!!!!!
         # we do not ship libcxxabi on OSX - this breaks exception passing
         - if [ -f $PREFIX/lib/libc++abi.dylib ]; then exit 1; fi  # [osx]
         - test -f $PREFIX/lib/libc++abi.so                        # [linux]
+
+        # for full chrono support, libcxx needs leap-seconds.list, which
+        # isn't shipped macos-14 image
+        - ls -lL /usr/share/zoneinfo
+        # This check is intended to start failing once an image starts shipping
+        # that file, so we can re-enable the leapsecond portion of the tzdb-tests
+        - if [ 0 -ne $(ls -lL /usr/share/zoneinfo | grep leap-seconds.list | wc -l) ]; then exit 1; fi  # [osx]
+
+        - bash compile_test.sh                                    # [unix]
+        - compile_test.bat                                        # [win]
 
   - name: libcxx
     build:
@@ -103,6 +104,7 @@ outputs:
       - lib/libc++.dylib            # [osx]
       - lib/libc++.*.dylib          # [osx]
       - Library/bin/c++*.dll        # [win]
+      # static libs for cross-compilation, due to lack of host-exports
       - lib/libc++.a                # [unix]
       - lib/libc++experimental.*    # [unix]
       - Library/lib/c++*.lib        # [win]
