@@ -1,13 +1,12 @@
 {% if version is not defined %}
-{% set version = "18.1.8" %}
+{% set version = "20.1.3" %}
 {% endif %}
 {% set major_ver = version.split(".")[0] %}
-{% set libcxx_major = 16 %}
+# in the past we've had to uncouple the compiler version from the version
+# of the C++ stdlib; keep the variable in case this happens again
+{% set libcxx_major = major_ver %}
 
-{% set build_number = 18 %}
-
-# pretend this variable is used, so that smithy populates the variant configs
-# [meson_release_flag]
+{% set build_number = 24 %}
 
 package:
   name: clang-compiler-activation
@@ -32,7 +31,7 @@ requirements:
 
 outputs:
   - name: clang_impl_{{ cross_target_platform }}
-    script: install-clang.sh
+    script: install-clang_impl.sh
     requirements:
       - clang {{ version }}
       - llvm-tools {{ version }}
@@ -59,19 +58,19 @@ outputs:
         - {{ macos_machine }}-clang-cpp --version
 
   - name: clang_{{ cross_target_platform }}
-    script: install-clang-scripts.sh
+    script: install-clang.sh
     requirements:
       run:
         - {{ pin_subpackage("clang_impl_" ~ cross_target_platform, exact=True) }}
     test:
       commands:
-        - {{ CBUILD }}-clang --version
-        - {{ CBUILD }}-clang-cpp --version
-        - {{ macos_machine }}-clang --version
-        - {{ macos_machine }}-clang-cpp --version
+        - ${CC} --version
+        - ${CPP} --version
+        - ${CC_FOR_BUILD} --version
+        - ${CPP_FOR_BUILD} --version
 
   - name: clangxx_impl_{{ cross_target_platform }}
-    script: install-clangxx.sh
+    script: install-clangxx_impl.sh
     requirements:
       build:
         - cctools_{{ target_platform }}   # [osx]
@@ -100,7 +99,7 @@ outputs:
         - {{ macos_machine }}-clang++ --version
 
   - name: clangxx_{{ cross_target_platform }}
-    script: install-clangxx-scripts.sh
+    script: install-clangxx.sh
     build:
       # Since transitive run_exports are not currently possible
       # (here I would like the run dependency on clangxx to pull in the run_exports from it).
@@ -113,8 +112,8 @@ outputs:
         - {{ pin_subpackage("clang_" ~ cross_target_platform, exact=True) }}
     test:
       commands:
-        - {{ CBUILD }}-clang++ --version
-        - {{ macos_machine }}-clang++ --version
+        - ${CXX} --version
+        - ${CXX_FOR_BUILD} --version
 
   - name: clang_bootstrap_{{ cross_target_platform }}
     script: install-clang-bootstrap.sh

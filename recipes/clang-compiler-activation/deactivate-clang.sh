@@ -49,8 +49,8 @@ function _tc_activation() {
     for thing in "$@"; do
       case "${thing}" in
         *,*)
-          newval=$(echo "${thing}" | sed "s,^[^\,]*\,\(.*\),\1,")
-          thing=$(echo "${thing}" | sed "s,^\([^\,]*\)\,.*,\1,")
+          newval="${thing#*,}"
+          thing="${thing%%,*}"
           ;;
         *)
           newval="${tc_prefix}${thing}"
@@ -127,18 +127,37 @@ _tc_activation \
   deactivate @CHOST@- "HOST,@CHOST@" \
   "CONDA_TOOLCHAIN_HOST,@CHOST@" \
   "CONDA_TOOLCHAIN_BUILD,@CBUILD@" \
-  ar as checksyms install_name_tool libtool lipo nm nmedit otool \
-  pagestuff ranlib redo_prebinding seg_addr_table seg_hack segedit size strings strip \
-  clang ld \
+  "AR,${AR:-@CHOST@-ar}" \
+  "AS,${AS:-@CHOST@-as}" \
+  "CHECKSYMS,${CHECKSYMS:-@CHOST@-checksyms}" \
+  "INSTALL_NAME_TOOL,${INSTALL_NAME_TOOL:-@CHOST@-install_name_tool}" \
+  "LIBTOOL,${LIBTOOL:-@CHOST@-libtool}" \
+  "LIPO,${LIPO:-@CHOST@-lipo}" \
+  "NM,${NM:-@CHOST@-nm}" \
+  "NMEDIT,${NMEDIT:-@CHOST@-nmedit}" \
+  "OTOOL,${OTOOL:-@CHOST@-otool}" \
+  "PAGESTUFF,${PAGESTUFF:-@CHOST@-pagestuff}" \
+  "RANLIB,${RANLIB:-@CHOST@-ranlib}" \
+  "REDO_PREBINDING,${REDO_PREBINDING:-@CHOST@-redo_prebinding}" \
+  "SEG_ADDR_TABLE,${SEG_ADDR_TABLE:-@CHOST@-seg_addr_table}" \
+  "SEG_HACK,${SEG_HACK:-@CHOST@-seg_hack}" \
+  "SEGEDIT,${SEGEDIT:-@CHOST@-segedit}" \
+  "SIZE,${SIZE:-@CHOST@-size}" \
+  "STRINGS,${STRINGS:-@CHOST@-strings}" \
+  "STRIP,${STRIP:-@CHOST@-strip}" \
+  "CLANG,${CLANG:-@CHOST@-clang}" \
+  "LD,${LD:-@CHOST@-ld}" \
   "CC,${CC:-@CHOST@-clang}" \
   "OBJC,${OBJC:-@CHOST@-clang}" \
+  "CPP,${CPP:-@CHOST@-clang-cpp}" \
   "CC_FOR_BUILD,${CONDA_PREFIX}/bin/@CC_FOR_BUILD@" \
   "OBJC_FOR_BUILD,${CONDA_PREFIX}/bin/@OBJC_FOR_BUILD@" \
-  "CPPFLAGS,${CPPFLAGS:-${CPPFLAGS_USED}}" \
-  "CFLAGS,${CFLAGS:-${CFLAGS_USED}}" \
-  "LDFLAGS,${LDFLAGS:-${LDFLAGS_USED}}" \
-  "LDFLAGS_LD,${LDFLAGS_LD:-${LDFLAGS_LD_USED}}" \
-  "DEBUG_CFLAGS,${DEBUG_CFLAGS:-${DEBUG_CFLAGS_USED}}" \
+  "CPP_FOR_BUILD,${CONDA_PREFIX}/bin/@CPP_FOR_BUILD@" \
+  "CPPFLAGS,${CPPFLAGS_USED}${CPPFLAGS:+ }${CPPFLAGS:-}" \
+  "CFLAGS,${CFLAGS_USED}${CFLAGS:+ }${CFLAGS:-}" \
+  "LDFLAGS,${LDFLAGS_USED}${LDFLAGS:+ }${LDFLAGS:-}" \
+  "LDFLAGS_LD,${LDFLAGS_LD_USED}${LDFLAGS_LD:+ }${LDFLAGS_LD:-}" \
+  "DEBUG_CFLAGS,${DEBUG_CFLAGS_USED}${DEBUG_CFLAGS:+ }${DEBUG_CFLAGS:-}" \
   "_CONDA_PYTHON_SYSCONFIGDATA_NAME,${_CONDA_PYTHON_SYSCONFIGDATA_NAME:-@_PYTHON_SYSCONFIGDATA_NAME@}" \
   "CMAKE_PREFIX_PATH,${CMAKE_PREFIX_PATH:-${CMAKE_PREFIX_PATH_USED}}" \
   "CONDA_BUILD_CROSS_COMPILATION,@CONDA_BUILD_CROSS_COMPILATION@" \
