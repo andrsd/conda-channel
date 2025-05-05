@@ -1,4 +1,10 @@
 {% set version = "18.1.8" %}
+{% set major = version.split(".")[0] %}
+
+{% if sys_abi is undefined %}
+{% set sys_abi = "dummy" %}
+{% set hardening = "dummy" %}
+{% endif %}
 
 package:
   name: libcxx_and_libcxxabi
@@ -17,47 +23,43 @@ source:
       - files/0004-Work-around-stray-nostdlib-flags-causing-errors-with.patch
 
 build:
-  number: 1
+  number: 8
   skip: true  # [win]
   skip: true  # [ppc64le or aarch64]
-  ignore_run_exports:
-    - libstdcxx-ng
-  missing_dso_whitelist:
-    - /usr/lib/libc++abi.dylib
 
 requirements:
   build:
     - cmake
     - ninja
     - {{ compiler('cxx') }}
+    - {{ compiler('c') }}
     - python >3               # [not osx]
   host:
-    - clangdev {{ version }}  # [not osx]
+    # - clangdev {{ version }}  # [not osx]
     - llvmdev {{ version }}   # [not osx]
 
 outputs:
-  - name: libcxx
+  - name: libcxx-devel
+    build:
+      string: h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}        # [hardening == "none"]
+      string: debug_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [hardening == "debug"]
+      run_exports:                                      # [hardening == "debug"]
+        # packages built with hardened lib must not be installable without extra label
+        - libcxx =*=debug*                              # [hardening == "debug"]
     files:
-      - include/c++
-      - Library/include/c++
-      - lib/libc++.*
-      - lib/libc++fs.*
-      - lib/libc++experimental.*
-      - Library/bin/c++*.dll
-      - Library/lib/c++*.lib
-      - Library/lib/libc++*.lib
+      - include/c++                 # [unix]
+      - Library/include/c++         # [win]
     requirements:
-      build:
-        - {{ compiler('cxx') }}
       host:
+        - {{ pin_subpackage("libcxx", exact=True) }}
       run:
-        - {{ pin_subpackage("libcxxabi", exact=True) }}    # [linux]
+        - {{ pin_subpackage("libcxx", max_pin=None) }}
       run_constrained:
-        - sysroot_{{ target_platform }} >={{ c_stdlib_version }}    # [linux]
+        - __osx <12     # [osx and (sys_abi == "pre-12")]
 
     test:
       requires:
-        - clang                                     # [osx]
+        - clang                  # [osx]
         - clangxx
         - ld64                                      # [osx]
         - cctools                                   # [osx]
@@ -84,14 +86,61 @@ outputs:
         - if [ -f $PREFIX/lib/libc++abi.dylib ]; then exit 1; fi  # [osx]
         - test -f $PREFIX/lib/libc++abi.so                        # [linux]
 
+  - name: libcxx
+    build:
+      string: h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}        # [hardening == "none"]
+      string: debug_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [hardening == "debug"]
+      run_exports:                                      # [hardening == "debug"]
+        # packages built with hardened lib must not be installable without extra label
+        - libcxx =*=debug*                              # [hardening == "debug"]
+      ignore_run_exports_from:
+        # we want to ignore libstdcxx, but not libgcc; the latter also comes in through
+        # compiler('c'), and conda keeps that despite ignoring the cxx run-exports
+        - {{ compiler('cxx') }}
+    files:
+      - lib/libc++.so               # [linux]
+      - lib/libc++.so.*             # [linux]
+      - lib/libc++.dylib            # [osx]
+      - lib/libc++.*.dylib          # [osx]
+      - Library/bin/c++*.dll        # [win]
+      - lib/libc++.a                # [unix]
+      - lib/libc++experimental.*    # [unix]
+      - Library/lib/c++*.lib        # [win]
+      - Library/lib/libc++*.lib     # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+      host:
+        - {{ pin_subpackage("libcxxabi", exact=True) }}    # [linux]
+      run:
+        - {{ pin_subpackage("libcxxabi", exact=True) }}    # [linux]
+      run_constrained:
+        - sysroot_{{ target_platform }} >={{ c_stdlib_version }}    # [linux]
+    test:
+      commands:
+        # presence of shared & static libraries
+        - test -f $PREFIX/lib/libc++.so                 # [linux]
+        - test -f $PREFIX/lib/libc++.dylib              # [osx]
+        - test -f $PREFIX/lib/libc++.a                  # [unix]
+        - test -f $PREFIX/lib/libc++experimental.a      # [unix]
+        # absence of headers
+        - test ! -d $PREFIX/include/c++                 # [unix]
+
   - name: libcxxabi
     build:
       skip: true  # [not linux]
+      # even though libcxxabi shouldn't be affected, distinguish builds
+      string: h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}        # [hardening == "none"]
+      string: debug_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [hardening == "debug"]
     files:
       - lib/libc++abi.*
     requirements:
       build:
         # for run-exports
+        - {{ compiler('c') }}
+      run_constrained:
+        - libcxx {{ version }}.*
     test:
       commands:
         - test -f $PREFIX/lib/libc++abi.so  # [linux]
