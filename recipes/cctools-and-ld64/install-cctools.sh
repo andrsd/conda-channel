@@ -9,7 +9,7 @@ pushd cctools_build_final
   make install
 popd
 
-pushd "${PREFIX}"
+pushd "${BUILD_PREFIX}"
   # This is packaged in ld64
   rm bin/*-ld
 popd

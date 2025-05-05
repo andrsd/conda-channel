@@ -1,0 +1,140 @@
+--- ./cctools/ld64/src/ld/OutputFile.cpp.org	2025-05-05 13:49:33
++++ ./cctools/ld64/src/ld/OutputFile.cpp	2025-05-05 14:22:14
+@@ -23,6 +23,7 @@
+  */
+  
+ 
++#include <cstddef>
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+--- ./cctools/ld64/src/ld/parsers/textstub_dylib_file.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/ld/parsers/textstub_dylib_file.cpp	2025-05-05 14:17:13
+@@ -24,6 +24,7 @@
+ 
+ #ifdef TAPI_SUPPORT
+ 
++#include <cstddef>
+ #include <sys/param.h>
+ #include <sys/mman.h>
+ #include <tapi/tapi.h>
+--- ./cctools/ld64/src/ld/parsers/lto_file.cpp.org	2025-05-05 13:49:35
++++ ./cctools/ld64/src/ld/parsers/lto_file.cpp	2025-05-05 14:16:18
+@@ -27,6 +27,7 @@
+ #ifndef __LTO_READER_H__
+ #define __LTO_READER_H__
+ 
++#include <cstddef>
+ #include <stdlib.h>
+ #include <pthread.h>
+ #include <sys/param.h>
+--- ./cctools/ld64/src/ld/parsers/macho_relocatable_file.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/ld/parsers/macho_relocatable_file.cpp	2025-05-05 14:15:37
+@@ -23,6 +23,7 @@
+  */
+  
+ 
++#include <cstddef>
+ #include <stdint.h>
+ #include <stdlib.h>
+ #include <math.h>
+--- ./cctools/ld64/src/ld/parsers/generic_dylib_file.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/ld/parsers/generic_dylib_file.cpp	2025-05-05 14:17:44
+@@ -22,6 +22,7 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ 
++#include <cstddef>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ 
+--- ./cctools/ld64/src/ld/Options.cpp.org	2025-05-05 13:49:33
++++ ./cctools/ld64/src/ld/Options.cpp	2025-05-05 14:21:08
+@@ -23,6 +23,7 @@
+  */
+ 
+ 
++#include <cstddef>
+ #include <ctype.h> // ld64-port
+ #include <sys/types.h>
+ #include <sys/stat.h>
+--- ./cctools/ld64/src/ld/code-sign-blobs/blob.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/ld/code-sign-blobs/blob.cpp	2025-05-05 14:24:19
+@@ -21,6 +21,7 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ 
++#include <cstddef>
+ #include <unistd.h>
+ 
+ //
+--- ./cctools/ld64/src/ld/InputFiles.cpp.org	2025-05-05 13:49:35
++++ ./cctools/ld64/src/ld/InputFiles.cpp	2025-05-05 14:20:23
+@@ -25,6 +25,7 @@
+  
+ #define HAVE_LIBDISPATCH 1
+ 
++#include <cstddef>
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+--- ./cctools/ld64/src/ld/SymbolTable.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/ld/SymbolTable.cpp	2025-05-05 14:23:38
+@@ -23,6 +23,7 @@
+  */
+  
+ 
++#include <cstddef>
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+--- ./cctools/ld64/src/ld/Resolver.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/ld/Resolver.cpp	2025-05-05 14:23:00
+@@ -23,6 +23,7 @@
+  */
+  
+ 
++#include <cstddef>
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+--- ./cctools/ld64/src/other/ObjectDump.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/other/ObjectDump.cpp	2025-05-05 14:24:51
+@@ -22,6 +22,7 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ 
++#include <cstddef>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/mman.h>
+--- ./cctools/ld64/src/other/unwinddump.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/other/unwinddump.cpp	2025-05-05 14:25:18
+@@ -22,6 +22,7 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ 
++#include <cstddef>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/mman.h>
+--- ./cctools/ld64/src/other/machochecker.cpp.org	2024-11-14 11:17:42
++++ ./cctools/ld64/src/other/machochecker.cpp	2025-05-05 14:25:47
+@@ -22,6 +22,7 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ 
++#include <cstddef>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/mman.h>
+--- ./cctools/ld64/src/mach_o/ExportsTrie.cpp.org	2025-05-05 13:55:36
++++ ./cctools/ld64/src/mach_o/ExportsTrie.cpp	2025-05-05 14:13:35
+@@ -21,6 +21,7 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ 
++#include <cstddef>
+ #include <sys/types.h>
+ #include <assert.h>
+ #include <limits.h>
