@@ -9,6 +9,8 @@ c_compiler:             # [osx]
   - clang_bootstrap     # [osx]
 cxx_compiler:           # [osx]
   - clang_bootstrap     # [osx]
+cxx_compiler_version:
+  - '16'
 
 MACOSX_SDK_VERSION:     # [osx]
   - 10.14               # [osx and x86_64]

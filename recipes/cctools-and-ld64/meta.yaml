@@ -70,15 +70,15 @@ outputs:
         - llvmdev {{ llvm_version }}.*
         - llvm {{ llvm_version }}.*
         - tapi
-        - libcxx  # [osx]
+        - {{ pin_compatible("libcxx", max_pin="x") }}  # [osx]
         - {{ pin_subpackage("ld64_" + cross_platform, max_pin="x.x") }}
       run:
-        - libcxx  # [osx]
+        - {{ pin_compatible("libcxx", max_pin="x") }}  # [osx]
         - {{ pin_subpackage("ld64_" + cross_platform, max_pin="x.x") }}
         - sigtool
       run_constrained:
-        - ld64 {{ ld64_version }}.*
-        - cctools {{ cctools_version }}.*
+        - ld64 {{ ld64_version }}
+        - cctools {{ cctools_version }}
         # clang might pull in the wrong cctools otherwise
         - clang {{ llvm_version }}.*
     test:
@@ -118,17 +118,17 @@ outputs:
         - llvm  {{ llvm_version }}.*
         - clang {{ llvm_version }}.*
         - tapi
-        - libcxx  # [osx]
+        - {{ pin_compatible("libcxx", max_pin="x") }}  # [osx]
         - libuuid  # [linux]
       run:
         - {{ pin_compatible("tapi") }}
-        - libcxx  # [osx]
+        - {{ pin_compatible("libcxx", max_pin="x") }}  # [osx]
         - sigtool
       run_constrained:
         - {{ pin_compatible("clang") }}
-        - ld {{ ld64_version }}.*
-        - cctools {{ cctools_version }}.*
-        - cctools_{{ cross_platform }} {{ cctools_version }}.*
+        - ld {{ ld64_version }}
+        - cctools {{ cctools_version }}
+        - cctools_{{ cross_platform }} {{ cctools_version }}
     test:
       requires:
         - clang {{ llvm_version }}.*
@@ -149,8 +149,6 @@ outputs:
 
   - name: ld64
     version: {{ ld64_version }}
-    build:
-      skip: True
     script: install-ld64-symlinks.sh
     requirements:
       host:
@@ -160,8 +158,8 @@ outputs:
       run:
         - {{ pin_subpackage("ld64_" + cross_platform, exact=True) }}
       run_constrained:
-        - cctools {{ cctools_version }}.*
-        - cctools_{{ cross_platform }} {{ cctools_version }}.*
+        - cctools {{ cctools_version }}
+        - cctools_{{ cross_platform }} {{ cctools_version }}
     test:
       commands:
         - test -f $PREFIX/bin/ld
@@ -175,8 +173,6 @@ outputs:
   - name: cctools
     version: {{ cctools_version }}
     script: install-cctools-symlinks.sh
-    build:
-      skip: True
     requirements:
       host:
         - llvm  {{ llvm_version }}.*
