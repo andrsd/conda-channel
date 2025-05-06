@@ -1,34 +1,118 @@
-{% set version = "4.1.1" %}
+{% set version = "4.3.0" %}
 {% set build = 0 %}
 
+# give conda package a higher build number
+{% if mpi_type == 'conda' %}
+{% set build = build + 100 %}
+{% endif %}
+
 package:
-  name: mpich
+  # must not match any outputs for requirements to be handled correctly
+  name: mpich-mpi
   version: {{ version }}
 
 source:
-  url: http://www.mpich.org/static/downloads/{{ version }}/mpich-{{ version }}.tar.gz
-  sha256: ee30471b35ef87f4c88f871a5e2ad3811cd9c4df32fd4f138443072ff4284ca2
+  fn: mpich-{{ version }}.tar.gz
+  url: https://www.mpich.org/static/downloads/{{ version }}/mpich-{{ version }}.tar.gz
+  sha256: 5e04132984ad83cab9cc53f76072d2b5ef5a6d24b0a9ff9047a8ff96121bcc63
 
 build:
   number: {{ build }}
-  skip: true # [win]
-  pin_depends: strict
+  skip: true  # [win]
 
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
-    - autoconf
-    - automake
-    - libtool
-    - make
-    - gnuconfig  # [arm64]
-  run:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
-    - mpi 1.0 mpich
+outputs:
+  - name: mpich
+    {% if mpi_type == 'conda' %}
+    script: build-mpi.sh
+    {% endif %}
+    build:
+      {% if mpi_type == 'conda' %}
+      run_exports:
+        - {{ pin_subpackage('mpich', max_pin='x') }}
+      {% else %}
+      string: {{ mpi_type }}_h{{ PKG_HASH }}_{{ build }}
+      track_features:
+        - mpich_{{ mpi_type }}
+      {% endif %}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('fortran') }}
+        - make
+        # FIXME: autoconf/automake/libtool required to apply PR 6932 patch
+        - autoconf
+        - automake
+        - libtool
+        - gnuconfig  # [osx and arm64]
+      host:
+        - libfabric-devel {{ libfabric }}.*
+        - libhwloc
+        - ucx  # [linux and not ppc64le]
+      run:
+        - mpi 1.0.* mpich
+    test:
+      {% if mpi_type == 'conda' %}
+      script: run_test.sh
+      files:
+        - mpiexec.sh
+        - tests/helloworld.sh
+      {% endif %}
+      commands:
+      {% if mpi_type == 'conda' %}
+        - test ! -f $PREFIX/doc/mpich
+        - test ! -f $PREFIX/share/man/man3/MPI_Barrier.3
+      {% else %}
+        - echo "It works!"
+      {% endif %}
+
+  {% if mpi_type == 'conda' %}
+  - name: mpich-mpicc
+    build:
+      script:
+        - echo 'ok'
+    requirements:
+      run:
+        - {{ pin_subpackage('mpich', exact=True) }}
+        # host C compilers work fine (better) on mac
+        - {{ compiler('c') }}
+    test:
+      script: run_test.sh
+      files:
+        - mpiexec.sh
+        - tests/helloworld.c
+
+  - name: mpich-mpicxx
+    build:
+      script:
+        - echo 'ok'
+    requirements:
+      run:
+        - {{ pin_subpackage('mpich', exact=True) }}
+        # host C compilers work fine (better) on mac
+        - {{ compiler('cxx') }}
+    test:
+      script: run_test.sh
+      files:
+        - mpiexec.sh
+        - tests/helloworld.cxx
+
+  - name: mpich-mpifort
+    build:
+      script:
+        - echo 'ok'
+    requirements:
+      run:
+        - {{ pin_subpackage('mpich', exact=True) }}
+        - {{ compiler('fortran') }}
+    test:
+      script: run_test.sh
+      files:
+        - mpiexec.sh
+        - tests/helloworld.f
+        - tests/helloworld.f90
+        - tests/helloworld.f08
+  {% endif %}
 
 about:
   home: https://www.mpich.org/
@@ -39,6 +123,8 @@ about:
   description: |
     MPICH is a high performance and widely portable implementation of the
     Message Passing Interface (MPI) standard.
+  doc_url: https://www.mpich.org/documentation/guides
+  dev_url: https://github.com/pmodels/mpich
 
 extra:
   recipe-maintainers:
