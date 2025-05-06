@@ -4,6 +4,21 @@ cuda_compiler:
 cuda_compiler_version:
   - None
 
+cxx_compiler_version:  # [osx]
+  - 16                 # [osx]
+  - 18                 # [osx]
+  - 20                 # [osx]
+
+libcxx_version:        # [osx]
+  - 16                 # [osx]
+  - 16                 # [osx]
+  - 20                 # [osx]
+
 ROCM_COMPILATION:
   - "enabled"
   - "disabled"
+
+zip_keys:
+  -
+    - cxx_compiler_version
+    - libcxx_version

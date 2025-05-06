@@ -40,6 +40,6 @@ esac
 
 make -j${CPU_COUNT} V=1
 if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]] && [[ ${cuda_compiler_version} == "None" ]]; then
-  make check -j${CPU_COUNT} V=1 -k
+  make check -j${CPU_COUNT} V=1
 fi
 make install V=1

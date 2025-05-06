@@ -1,23 +1,26 @@
 {% set name = "libhwloc" %}
 {% set pname = "hwloc" %}
-{% set version = "2.9.3" %}
-{% set build = 9 %}
+{% set version = "2.11.2" %}
+{% set sha256 = "866ac8ef07b350a6a2ba0c6826c37d78e8994dcbcd443bdd2b436350de19d540" %}
+{% set build = 1 %}
 
 {% if cuda_compiler_version == "None" and ROCM_COMPILATION == "disabled" %}
 {% set build = build + 1000 %}
 {% endif %}
 
 package:
-  name: {{ name }}
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
   url: https://www.open-mpi.org/software/hwloc/v{{ '.'.join(version.split('.')[:2]) }}/downloads/{{ pname }}-{{ version }}.tar.gz
-  sha256: 5985db3a30bbe51234c2cd26ebe4ae9b4c3352ab788b1a464c40c0483bf4de59
+  sha256: {{ sha256 }}
+  patches:
+    # backport https://github.com/open-mpi/hwloc/pull/632
+    - files/0001-utils-lstopo-don-t-build-lstopo-win-with-MSVC.patch
 
 build:
   number: {{ build }}
-  skip: true  # [win and vc<14]
   skip: true  # [cuda_compiler_version != "None" and win]
   skip: true  # [cuda_compiler_version != "None" and ROCM_COMPILATION == "enabled"]
   skip: true  # [not linux64 and ROCM_COMPILATION == "enabled"]
@@ -35,23 +38,20 @@ requirements:
   build:
     - {{ compiler('cxx') }}
     - {{ compiler('cuda') }}    # [cuda_compiler_version != "None"]
+    - libcxx {{ libcxx_version }}.*   # [osx]
     - pkg-config                # [unix]
     - autotools_clang_conda     # [win]
-    # Workaround for https://github.com/conda-forge/libhwloc-feedstock/pull/69#issuecomment-1739406306
-    - clang 16.*                # [win]
     - make                      # [unix]
     - automake                  # [unix]
     - libtool                   # [unix]
     - autoconf                  # [unix]
   host:
     - libxml2
-    - pthreads-win32            # [win]
+    - winpthreads-devel         # [win]
     - rocm-smi                  # [linux and cuda_compiler_version == "None" and ROCM_COMPILATION == "enabled"]
+    - libcxx {{ libcxx_version }}.*   # [osx]
   run:
-    - libxml2
-    - pthreads-win32            # [win]
     - __cuda                    # [cuda_compiler_version != "None"]
-    - rocm-smi                  # [linux and cuda_compiler_version == "None" and ROCM_COMPILATION == "enabled"]
 
 test:
   commands:
@@ -61,6 +61,7 @@ test:
 
 about:
   home: https://www.open-mpi.org/projects/hwloc/
+  dev_url: https://github.com/open-mpi/hwloc
   license: BSD-3-Clause
   license_file: COPYING
   summary: Portable Hardware Locality (hwloc)
