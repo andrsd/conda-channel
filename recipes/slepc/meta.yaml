@@ -1,5 +1,5 @@
 {% set version = "3.21.2" %}
-{% set build = 2 %}
+{% set build = 3 %}
 
 {% set version_xy = version.rsplit(".", 1)[0] %}
 {% set mpi = mpi or 'mpich' %}
