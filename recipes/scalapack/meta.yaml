@@ -1,5 +1,5 @@
 {% set version = "2.2.1" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: scalapack
@@ -10,6 +10,8 @@ source:
   sha256: 4aede775fdb28fa44b331875730bcd5bab130caaec225fadeccf424c8fcb55aa
   patches:
     - files/0001-Use-C90-standard.patch
+    - files/fortran_mangling_cross.patch
+    - files/high_mem_32bits.patch
 
 build:
   number: {{ build }}
