@@ -2,6 +2,14 @@ mpi:
   - mpich  # [not win]
   - openmpi  # [not win]
 
+blas:
+  - openblas              # [linux]
+  - libaccelerate-osx     # [osx]
+
+lapack:
+  - openblas              # [linux]
+  - libaccelerate-osx     # [osx]
+
 pin_run_as_build:
   parmetis:
     min_pin: x.x.x

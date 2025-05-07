@@ -44,11 +44,12 @@ RANLIB = ranlib
 INCSEQ  = -I$(topdir)/libseq
 LIBSEQ  = -L$(topdir)/libseq -lmpiseq
 
+BLAS    = -lblas
 LAPACK  = -llapack
 SCALAP  = -lscalapack
 
 INCPAR  = -I$(PREFIX)/include
-LIBPAR  = -L$(PREFIX)/lib $(SCALAP) $(LAPACK)
+LIBPAR  = -L$(PREFIX)/lib $(SCALAP) $(LAPACK) $(BLAS)
 
 LIBBLAS = -Wl,-rpath,$(PREFIX)/lib -L$(PREFIX)/lib -llapack -lblas
 LIBOTHERS = -lpthread

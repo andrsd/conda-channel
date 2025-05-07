@@ -5,7 +5,7 @@ cp $RECIPE_DIR/files/Makefile.conda.PAR ./Makefile.inc
 
 export FFLAGS="${FFLAGS} -fallow-argument-mismatch"
 if [[ "$target_platform" == linux-* || "$target_platform" == "osx-arm64"  ]]
- then
+then
    # Workaround for https://github.com/conda-forge/scalapack-feedstock/pull/30#issuecomment-1061196317
    # As of March 2022, on macOS (Intel) gfortran 9 is still used
    export OMPI_FCFLAGS=${FFLAGS}
