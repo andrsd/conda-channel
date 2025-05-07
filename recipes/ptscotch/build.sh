@@ -4,6 +4,7 @@ set -ex
 cp $RECIPE_DIR/files/Makefile.inc ${SRC_DIR}/src/Makefile.inc
 
 export CFLAGS="${CFLAGS} -O3 -fPIC -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -Drestrict=\"restrict\" -DINTSIZE64 -DSCOTCH_METIS_PREFIX -DSCOTCH_RENAME -DINTSIZE64 -DSCOTCH_METIS_PREFIX"
+export CFLAGS="${CFLAGS} -lz -std=c11"
 
 if [[ "$(uname)" == "Darwin" ]] ; then
   export CFLAGS="${CFLAGS} -DCOMMON_TIMING_OLD -DCOMMON_OS_MACOS"
