@@ -4,4 +4,5 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
 
 mpi:
   - mpich  # [not win]
+  - openmpi
  
