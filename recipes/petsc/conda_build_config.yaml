@@ -4,6 +4,7 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
 
 mpi:
   - mpich
+  - openmpi
 
 blas:
   - openblas  # [linux]
