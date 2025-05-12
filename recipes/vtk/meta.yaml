@@ -1,5 +1,5 @@
 {% set version = "9.3.0" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: vtk
@@ -57,6 +57,7 @@ requirements:
     - gl2ps
     - pugixml
     - mpi4py
+    - fmt 9.*
     - mesalib  # [linux]
   run:
     - {{ mpi }}
