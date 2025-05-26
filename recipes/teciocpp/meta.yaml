@@ -1,0 +1,43 @@
+{% set version = "0.1.0" %}
+{% set build = 0 %}
+
+package:
+  name: teciocpp
+  version: {{ version }}
+
+source:
+  url: https://github.com/andrsd/teciocpp/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: da723f058067c175981e46f16a8ffd073a9a4e389f7d6e34dbcad27996008581
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+    - make
+    - fmt 9.*
+    - {{ mpi }}
+  host:
+    - boost
+    - fmt 9.*
+    - {{ mpi }}
+  run:
+    - fmt 9.*
+    - {{ mpi }}
+
+test:
+  commands:
+    - test -f $PREFIX/include/teciocpp/teciocpp.h
+
+about:
+  home: data['url']
+  license: MIT
+  summary: C++ wrapper around TecIO
+  doc_url: https://andrsd.github.io/teciocpp/
+
+extra:
+  recipe-maintainers:
+    - andrsd
