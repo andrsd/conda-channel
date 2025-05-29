@@ -1,13 +1,13 @@
-{% set version = "7.0.3" %}
-{% set build = 3 %}
+{% set version = "7.0.5" %}
+{% set build = 0 %}
 
 package:
   name: ptscotch
   version: {{ version }}
 
 source:
-  url: http://ftp.mcs.anl.gov/pub/petsc/externalpackages/scotch-v{{ version }}.tar.gz
-  sha256: 5b5351f0ffd6fcae9ae7eafeccaa5a25602845b9ffd1afb104db932dd4d4f3c5
+  url: https://web.cels.anl.gov/projects/petsc/download/externalpackages/scotch-v{{ version }}.tar.gz
+  sha256: 385507a9712bb9057497b9ac3f24ad2132bd3f3f8c7a62e78324fc58f2a0079b
   patches:
     - files/c99-forward-declaration-fix.patch
 
@@ -52,10 +52,10 @@ about:
   license: CECILL-C
   license_file: doc/CeCILL-C_V1-en.txt
   summary: |
-    SCOTCH: Static Mapping, Graph, Mesh and Hypergraph Partitioning, and Parallel and Sequential Sparse Matrix Ordering 
+    SCOTCH: Static Mapping, Graph, Mesh and Hypergraph Partitioning, and Parallel and Sequential Sparse Matrix Ordering
     Package
   description: |
-    Software package and libraries for sequential and parallel graph partitioning, static mapping and clustering, 
+    Software package and libraries for sequential and parallel graph partitioning, static mapping and clustering,
     sequential mesh and hypergraph partitioning, and sequential and parallel sparse matrix block ordering.
   doc_url: http://gforge.inria.fr/docman/?group_id=248&dirid=326
   dev_url: https://gitlab.inria.fr/scotch/scotch
