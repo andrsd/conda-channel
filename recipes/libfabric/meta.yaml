@@ -29,7 +29,6 @@ requirements:
     - pkg-config
   host:
     - libnl  # [linux]
-    - rdma-core  # [linux]
 
 outputs:
   - name: libfabric{{ soversion }}
@@ -43,13 +42,12 @@ outputs:
         - {{ compiler("c") }}
       host:
         - libnl  # [linux]
-        - rdma-core  # [linux]
     test:
       commands:
         - test -f $PREFIX/lib/libfabric.so.{{ soversion }}  # [linux]
         - test -f $PREFIX/lib/libfabric.{{ soversion }}.dylib  # [osx]
         - test ! -f $PREFIX/lib/libfabric${SHLIB_EXT}
-  
+
   - name: libfabric
     # empty metapackage for mutual exclusivity and backward-compatiblity
     # ensures only one libfabric{so} per env
@@ -59,7 +57,7 @@ outputs:
     test:
       commands:
         - "true"
-    
+
   - name: libfabric-bin
     files:
       include:
