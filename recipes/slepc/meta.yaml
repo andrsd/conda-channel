@@ -1,5 +1,5 @@
-{% set version = "3.21.2" %}
-{% set build = 3 %}
+{% set version = "3.22.2" %}
+{% set build = 0 %}
 
 {% set version_xy = version.rsplit(".", 1)[0] %}
 {% set mpi = mpi or 'mpich' %}
@@ -13,7 +13,7 @@ package:
 
 source:
   url: http://slepc.upv.es/download/distrib/slepc-{{ version }}.tar.gz
-  sha256: 306fa649750509b3957b9f9311bff5dc1d20be5c5d494dd6472584c439b931f6
+  sha256: b60e58b2fa5eb7db05ce5e3a585811b43b1cc7cf89c32266e37b05f0cefd8899
 
 build:
   skip: true  # [win]
