@@ -48,7 +48,6 @@ outputs:
       host:
         - libfabric-devel {{ libfabric }}.*
         - libhwloc
-        - ucx  # [linux and not ppc64le]
       run:
         - mpi 1.0.* mpich
     test:

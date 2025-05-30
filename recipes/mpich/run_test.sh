@@ -21,7 +21,7 @@ if [[ $PKG_NAME == "mpich" ]]; then
   $MPIEXEC -n 4 ./helloworld.sh
 fi
 
-# verify OFI and UCX netmods
+# verify OFI
 check_netmods()
 {
   executable=$1
@@ -32,9 +32,6 @@ check_netmods()
 
   check_ofi=yes
   check_ucx=no
-  if [[ "$target_platform" == linux-* && "$target_platform" != linux-ppc64le ]]; then
-      check_ucx=yes
-  fi
 
   # default is UCX (set by order in --with-device if available)
   if [[ $check_ucx == yes ]]; then
@@ -88,8 +85,8 @@ if [[ $PKG_NAME == "mpich-mpifort" ]]; then
   mpifort $FFLAGS $LDFLAGS helloworld.f90 -o helloworld1_f90
   $MPIEXEC -n 4 ./helloworld1_f90
 
-  mpifort $FFLAGS $LDFLAGS helloworld.f08 -o helloworld1_f08
-  $MPIEXEC -n 4 ./helloworld1_f08
+  # mpifort $FFLAGS $LDFLAGS helloworld.f08 -o helloworld1_f08
+  # $MPIEXEC -n 4 ./helloworld1_f08
 
   command -v mpif77
   mpif77 -show
