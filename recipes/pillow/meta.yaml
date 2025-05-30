@@ -1,5 +1,5 @@
-{% set version = "10.0.1" %}
-{% set build = 1 %}
+{% set version = "11.2.1" %}
+{% set build = "0" %}
 
 package:
   name: pillow
@@ -7,21 +7,22 @@ package:
 
 source:
   url: https://github.com/python-pillow/Pillow/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 5df55f87434f1b42d9ebe4247ed50a0f0742cd1ad5be2820e3d1b1f4b4bc696f
+  sha256: 67dd6d40e282fd3b50189bd7f68a6e9b8e59b297d3684cb35ab107e7aec8379e
   patches:
     - patches/0001-Build-without-USE_WIN32_FILEIO.patch
     # fix provided by upstream maintainer for failing test
     - patches/0002-Added-patch-to-fix-failing-Windows-test.patch
     # windows needs help detecting webpmux & xcb
-    - patches/0003-add-WEBP_ROOT-XCB_ROOT.patch
+    - patches/0003-add-XCB_ROOT.patch
 
 build:
   number: {{ build }}
-  skip: true # [win or linux]
+  skip: true  # [py<38]
 
 requirements:
   build:
-    - python {{ python }}                    # [build_platform != target_platform]
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
   host:
     - python
@@ -39,7 +40,7 @@ requirements:
     # currently disabled on windows due to libimagequant depending on llvm-openmp, see
     # https://github.com/pytorch/pytorch/issues/72293
     # - libimagequant  # [x86_64 and not win]
-    - libtiff 4.5.1
+    - libtiff
     - libwebp
     - libxcb
     - tk
@@ -47,16 +48,21 @@ requirements:
   run:
     - python
 
-  {% set tests_to_skip = "_not_a_real_test" %}
+{% set tests_to_skip = "_not_a_real_test" %}
 # compile smoke test failing to link python3x.lib
-  {% set tests_to_skip = tests_to_skip + " or test_embeddable" %}                     # [win]
+{% set tests_to_skip = tests_to_skip + " or test_embeddable" %}                     # [win]
 # the following needs a viewer which we don't have
-  {% set tests_to_skip = tests_to_skip + " or (test_imageshow and test_show)" %}      # [linux]
+{% set tests_to_skip = tests_to_skip + " or (test_imageshow and test_show)" %}      # [linux]
 # this test is a known failure with libjpeg_turbo, but only marked as such for 2.0 upstream, not 2.x, see
 # https://github.com/python-pillow/Pillow/blob/9.3.0/Tests/test_file_libtiff.py#L885-L891
-  {% set tests_to_skip = tests_to_skip + " or test_strip_ycbcr_jpeg_2x2_sampling" %}  # [not osx]
+{% set tests_to_skip = tests_to_skip + " or test_strip_ycbcr_jpeg_2x2_sampling" %}  # [not osx]
 # skip test that requires an image incorrectly flagged by AV
-  {% set tests_to_skip = tests_to_skip + " or test_tiff_crashes[Tests/images/crash-81154a65438ba5aaeca73fd502fa4850fbde60f8.tif]" %}
+{% set tests_to_skip = tests_to_skip + " or test_tiff_crashes[Tests/images/crash-81154a65438ba5aaeca73fd502fa4850fbde60f8.tif]" %}
+# skip tests that run into troubles on win+pypy
+{% if win and python_impl == "pypy" %}
+    {% set tests_to_skip = tests_to_skip + " or test_grabclipboard" %}
+    {% set tests_to_skip = tests_to_skip + " or test_main" %}
+{% endif %}
 
 test:
   imports:
@@ -77,16 +83,13 @@ test:
     - {{ compiler('c') }}
     # for run_test.py
     - fsspec
-    - aiohttp
     - requests
   commands:
-    - pytest -v -k "not ({{ tests_to_skip }})"  # [not ppc64le]
-    # NOTE: test suite is skipped on ppc due to bugs in QEMU code that cause
-    # CI to fail, even though the tests should run through on native hardware
+    - pytest -k "not ({{ tests_to_skip }})" --durations=50
 
 about:
   home: https://pillow.readthedocs.io
-  license: LicenseRef-PIL
+  license: HPND
   license_file: LICENSE
   summary: Pillow is the friendly PIL fork by Alex Clark and Contributors
   dev_url: https://github.com/python-pillow/Pillow/
