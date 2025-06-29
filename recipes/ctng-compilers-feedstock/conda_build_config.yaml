@@ -1,9 +1,9 @@
 triplet:
   - x86_64-conda-linux-gnu
 gcc_version:
-  - 13.3.0
+  - 14.3.0
 gcc_maj_ver:
-  - 13
+  - 14
 libgfortran_soname:
   - 5
 binutils_version:
