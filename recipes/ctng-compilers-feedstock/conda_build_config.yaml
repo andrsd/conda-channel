@@ -1,0 +1,40 @@
+triplet:
+  - x86_64-conda-linux-gnu
+gcc_version:
+  - 12.4.0
+gcc_maj_ver:
+  - 12
+libgfortran_soname:
+  - 5
+binutils_version:
+  - 2.40
+cross_target_platform:
+  - linux-64
+cross_target_stdlib_version:
+  - 2.17
+cross_target_stdlib:
+  - sysroot
+# openmp versions
+openmp_ver:
+  - 5.1
+libgomp_ver:
+  - 1.0.0
+_libgcc_mutex:
+  - 0.1 main
+c_stdlib:          # [win]
+  - m2w64-sysroot  # [win]
+c_stdlib_version:  # [win]
+  - 12             # [win]
+# need to manually downgrade global pin until we do #147
+c_stdlib_version:  # [linux64]
+  - 2.12           # [linux64]
+cdt_name:          # [linux64]
+  - cos6           # [linux64]
+zip_keys:
+  - - cross_target_stdlib_version
+    - cross_target_stdlib
+    - triplet
+    - cross_target_platform
+  - - gcc_version
+    - gcc_maj_ver
+    - libgfortran_soname
