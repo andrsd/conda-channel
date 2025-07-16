@@ -1,0 +1,64 @@
+--- ThirdParty/diy2/vtkdiy2/include/vtkdiy2/fmt/format.h.org	2025-07-16 21:41:47
++++ ThirdParty/diy2/vtkdiy2/include/vtkdiy2/fmt/format.h	2025-07-16 21:39:25
+@@ -432,8 +432,8 @@
+ }
+ 
+ // Counts the number of code points in a UTF-8 string.
+-inline size_t count_code_points(basic_string_view<char8_t> s) {
+-  const char8_t* data = s.data();
++inline size_t count_code_points(basic_string_view<char> s) {
++  const char* data = s.data();
+   size_t num_code_points = 0;
+   for (size_t i = 0, size = s.size(); i != size; ++i) {
+     if ((data[i] & 0xc0) != 0x80) ++num_code_points;
+@@ -441,13 +441,13 @@
+   return num_code_points;
+ }
+ 
+-inline char8_t to_char8_t(char c) { return static_cast<char8_t>(c); }
++inline char to_char8_t(char c) { return static_cast<char>(c); }
+ 
+ template <typename InputIt, typename OutChar>
+ using needs_conversion = bool_constant<
+     std::is_same<typename std::iterator_traits<InputIt>::value_type,
+                  char>::value &&
+-    std::is_same<OutChar, char8_t>::value>;
++    std::is_same<OutChar, char>::value>;
+ 
+ template <typename OutChar, typename InputIt, typename OutputIt,
+           FMT_ENABLE_IF(!needs_conversion<InputIt, OutChar>::value)>
+@@ -481,12 +481,12 @@
+ }  // namespace internal
+ 
+ // A UTF-8 string view.
+-class u8string_view : public basic_string_view<char8_t> {
++class u8string_view : public basic_string_view<char> {
+  public:
+   u8string_view(const char* s)
+-      : basic_string_view<char8_t>(reinterpret_cast<const char8_t*>(s)) {}
++      : basic_string_view<char>(reinterpret_cast<const char*>(s)) {}
+   u8string_view(const char* s, size_t count) FMT_NOEXCEPT
+-      : basic_string_view<char8_t>(reinterpret_cast<const char8_t*>(s), count) {
++      : basic_string_view<char>(reinterpret_cast<const char*>(s), count) {
+   }
+ };
+ 
+--- ThirdParty/diy2/vtkdiy2/include/vtkdiy2/fmt/core.h.org	2025-07-16 21:41:47
++++ ThirdParty/diy2/vtkdiy2/include/vtkdiy2/fmt/core.h	2025-07-16 21:39:25
+@@ -331,14 +331,14 @@
+ 
+ #ifndef __cpp_char8_t
+ // A UTF-8 code unit type.
+-enum char8_t : unsigned char {};
++// enum char8_t : unsigned char {};
+ #endif
+ 
+ /** Specifies if ``T`` is a character type. Can be specialized by users. */
+ template <typename T> struct is_char : std::false_type {};
+ template <> struct is_char<char> : std::true_type {};
+ template <> struct is_char<wchar_t> : std::true_type {};
+-template <> struct is_char<char8_t> : std::true_type {};
++//template <> struct is_char<char8_t> : std::true_type {};
+ template <> struct is_char<char16_t> : std::true_type {};
+ template <> struct is_char<char32_t> : std::true_type {};
+ 

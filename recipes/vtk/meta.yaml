@@ -1,16 +1,20 @@
 {% set version = "9.3.0" %}
-{% set build = 2 %}
+{% set parts = version.split(".") %}
+{% set maj_min = parts[0] ~ "." ~ parts[1] %}
+{% set build = 4 %}
 
 package:
   name: vtk
   version: {{ version }}
 
 source:
-  url: https://www.vtk.org/files/release/9.3/VTK-{{ version }}.tar.gz
+  url: https://www.vtk.org/files/release/{{ maj_min }}/VTK-{{ version }}.tar.gz
   sha256: fdc7b9295225b34e4fdddc49cd06e66e94260cb00efee456e0f66568c9681be9
   patches:
-    - files/liblzma-fix.patch
-    - files/exodusii-ex-utils.patch
+    - files/0001-liblzma-fix.patch
+    - files/0002-exodusii-ex-utils.patch
+    - files/0003-diy2-fmt.patch
+    - files/0004-octree-fix.patch
 
 build:
   number: {{ build }}
@@ -43,7 +47,6 @@ requirements:
     - libnetcdf 4.9.* {{ mpi }}_*
     - lz4-c
     - xorg-libxt  # [linux]
-    - ffmpeg
     - utfcpp
     - eigen 3.4.*
     - double-conversion
@@ -58,7 +61,7 @@ requirements:
     - pugixml
     - mpi4py
     - fmt 9.*
-    - mesalib  # [linux]
+    - mesalib 23.2.*   # [linux]
   run:
     - {{ mpi }}
     - python {{ python }}
@@ -88,7 +91,31 @@ requirements:
     - tbb-devel
     - numpy
     - mpi4py
-    - mesalib  # [linux]
+    - mesalib 23.2.*   # [linux]
+
+test:
+  commands:
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkNew.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkCommonCoreModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkCommonDataModelModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkFiltersCoreModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOCoreModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOExodusModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOEnSightModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOLegacyModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOParallelXMLModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOXMLModule.h
+    - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOParallelModule.h
+    - test -f $PREFIX/lib/libvtkCommonCore-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkCommonDataModel-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkFiltersCore-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOCore-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOExodus-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOEnSight-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOLegacy-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOParallelXML-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOXML-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkParallelCore-{{ maj_min }}$SHLIB_EXT
 
 about:
   summary: |

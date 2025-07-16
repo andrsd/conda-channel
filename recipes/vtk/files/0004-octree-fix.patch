@@ -1,0 +1,11 @@
+--- Utilities/octree/octree/octree_node.txx.org	2023-11-13 16:37:21
++++ Utilities/octree/octree/octree_node.txx	2025-07-16 21:55:50
+@@ -210,7 +210,7 @@
+   {
+     throw std::domain_error("Attempt to access children of an octree leaf node.");
+   }
+-  return this->_M_chilren[child];
++  return this->m_children[child];
+ }
+ 
+ /**\brief Return a reference to a child node.
