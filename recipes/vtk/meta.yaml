@@ -14,6 +14,7 @@ source:
     - files/0001-liblzma-fix.patch
     - files/0002-exodusii-ex-utils.patch
     - files/0003-diy2-fmt.patch
+    - files/0004-octree-fix.patch
 
 build:
   number: {{ build }}
