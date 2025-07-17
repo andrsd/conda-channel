@@ -37,6 +37,7 @@ cmake_args=(
     -DVTK_MODULE_ENABLE_VTK_IOXML=YES
     -DVTK_MODULE_ENABLE_VTK_ParallelCore=YES
     -DVTK_MODULE_ENABLE_VTK_sqlite=NO
+    -DVTK_MODULE_ENABLE_VTK_fmt=NO
 )
 
 if [[ "$target_platform" == linux-* ]]
