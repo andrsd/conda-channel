@@ -1,7 +1,7 @@
 {% set version = "9.3.0" %}
 {% set parts = version.split(".") %}
 {% set maj_min = parts[0] ~ "." ~ parts[1] %}
-{% set build = 4 %}
+{% set build = 5 %}
 
 package:
   name: vtk
@@ -33,65 +33,45 @@ requirements:
 
   host:
     - python {{ python }}
-    - zlib
-    - freetype
     - hdf5 1.12.* {{ mpi }}_*
-    - libxml2
     - libpng
     - libjpeg-turbo
-    - libtiff
     - jsoncpp
-    - expat
     - tbb
     - tbb-devel
     - libnetcdf 4.9.* {{ mpi }}_*
     - lz4-c
-    - xorg-libxt  # [linux]
     - utfcpp
-    - eigen 3.4.*
-    - double-conversion
-    - pugixml
-    - glew
     - libogg
     - libtheora
     - nlohmann_json
     - proj
-    - loguru
     - gl2ps
-    - pugixml
-    - mpi4py
     - fmt 9.*
+    - zlib
     - mesalib 23.2.*   # [linux]
+    - xorg-libxt       # [linux]
   run:
     - {{ mpi }}
     - python {{ python }}
-    - zlib
-    - freetype
     - hdf5 1.12.* {{ mpi }}_*
-    - libxml2
     - libpng
     - libjpeg-turbo
-    - libtiff
     - jsoncpp
-    - expat
     - tbb
+    - tbb-devel
     - libnetcdf 4.9.* {{ mpi }}_*
     - lz4-c
     - utfcpp
-    - eigen 3.4.*
-    - double-conversion
-    - pugixml
-    - glew
     - libogg
     - libtheora
     - nlohmann_json
     - proj
-    - loguru
     - gl2ps
-    - tbb-devel
-    - numpy
-    - mpi4py
+    - fmt 9.*
+    - zlib
     - mesalib 23.2.*   # [linux]
+    - xorg-libxt       # [linux]
 
 test:
   commands:
