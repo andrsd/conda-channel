@@ -61,7 +61,7 @@ requirements:
     - pugixml
     - mpi4py
     - fmt 9.*
-    - mesalib  # [linux]
+    - mesalib 23.2.*   # [linux]
   run:
     - {{ mpi }}
     - python {{ python }}
@@ -91,7 +91,7 @@ requirements:
     - tbb-devel
     - numpy
     - mpi4py
-    - mesalib  # [linux]
+    - mesalib 23.2.*   # [linux]
 
 test:
   commands:
