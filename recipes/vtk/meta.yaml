@@ -106,16 +106,16 @@ test:
     - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOParallelXMLModule.h
     - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOXMLModule.h
     - test -f $PREFIX/include/vtk-{{ maj_min }}/vtkIOParallelModule.h
-    - test -f $PREFIX/lib/libvtkCommonCore-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkCommonDataModel-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkFiltersCore-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkIOCore-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkIOExodus-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkIOEnSight-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkIOLegacy-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkIOParallelXML-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkIOXML-{{ maj_min }}.$SHLIB_EXT
-    - test -f $PREFIX/lib/libvtkParallelCore-{{ maj_min }}.$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkCommonCore-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkCommonDataModel-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkFiltersCore-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOCore-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOExodus-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOEnSight-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOLegacy-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOParallelXML-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkIOXML-{{ maj_min }}$SHLIB_EXT
+    - test -f $PREFIX/lib/libvtkParallelCore-{{ maj_min }}$SHLIB_EXT
 
 about:
   summary: |
