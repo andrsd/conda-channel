@@ -1,4 +1,4 @@
-{% set version = "24.07.0" %}
+{% set version = "25.06.0" %}
 {% set build = "0" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/formo/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: b92321511b9d8f8f37de72aac88950bdb2f06fe9b0d5d146aa631ecb54df25d5
+  sha256: 3321a16b32dc8655f85afe9facf7867249435706fb0625d5c7809f61b8e7a44b
 
 build:
   number: {{ build }}
@@ -21,12 +21,12 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
-    - occt >=7.7.*
+    - occt >=7.9.*
     - fmt >=9
     - pybind11
   run:
     - python
-    - occt >=7.7.*
+    - occt >=7.9.*
     - fmt >=9
 
 about:
