@@ -1,27 +1,3 @@
---- ./IO/CellGrid/vtkCellGridReader.cxx.org	2025-07-29 09:41:48
-+++ ./IO/CellGrid/vtkCellGridReader.cxx	2025-07-29 09:45:10
-@@ -399,7 +399,7 @@
-     file.seekg(0, std::ios::end);
-     auto end = file.tellg();
-     file.seekg(start, std::ios::beg);
--    std::vector<std::uint8_t> data;
-+    std::vector<char> data;
-     data.resize(end - start);
-     auto readSize = data.size() / sizeof(std::istream::char_type) +
-       (data.size() % sizeof(std::istream::char_type) ? 1 : 0);
- 
---- ./IO/Legacy/vtkLegacyCellGridReader.cxx.org	2025-03-28 00:59:55
-+++ ./IO/Legacy/vtkLegacyCellGridReader.cxx	2025-07-29 09:47:20
-@@ -99,7 +99,7 @@
-       return 1;
-     }
- 
--    std::vector<std::uint8_t> raw;
-+    std::vector<char> raw;
-     raw.resize(contentLength);
-     if (!this->GetIStream()->read(
-           reinterpret_cast<char*>(raw.data()), static_cast<std::streamsize>(contentLength)))
- 
 --- ./Rendering/OpenGL2/CMakeLists.txt.org	2025-03-28 00:59:55
 +++ ./Rendering/OpenGL2/CMakeLists.txt	2025-07-29 10:27:37
 @@ -448,7 +448,7 @@
