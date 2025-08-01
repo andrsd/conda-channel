@@ -1,4 +1,4 @@
-{% set version = "2.0.2" %}
+{% set version = "2.0.4" %}
 {% set build = 1 %}
 
 package:
@@ -7,7 +7,9 @@ package:
 
 source:
   url: https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: d4ab79f09a28bb5aaec225d6c93f3e8fdf6abb837ca6780841b1d6572112c29b
+  sha256: 48f309eb2d7f15efdba1abebd9928ad17cd07b0d3a338cb4b1f309bac693c7fb
+  patches:
+    - files/cmake.patch
 
 build:
   number: {{ build }}

@@ -1,0 +1,38 @@
+diff --git a/cmake/exodusiicpp-config.cmake.in b/cmake/exodusiicpp-config.cmake.in
+index 12a94c5..924cb02 100644
+--- a/cmake/exodusiicpp-config.cmake.in
++++ b/cmake/exodusiicpp-config.cmake.in
+@@ -2,8 +2,13 @@ set(EXODUSIICPP_VERSION @PROJECT_VERSION@)
+ 
+ @PACKAGE_INIT@
+ 
++list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
++
+ include("${CMAKE_CURRENT_LIST_DIR}/exodusiicpp-targets.cmake")
++include(CMakeFindDependencyMacro)
+ 
++find_dependency(NetCDF REQUIRED)
++find_dependency(ExodusII REQUIRED)
+ check_required_components(exodusIIcpp)
+ 
+ find_library(EXODUSIICPP_LIBRARY NAMES exodusIIcpp HINTS ${PACKAGE_PREFIX_DIR}/lib NO_DEFAULT_PATH)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c57e772..d03df76 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -35,7 +35,6 @@ target_link_libraries(
+     ${PROJECT_NAME}
+     PUBLIC
+         fmt::fmt
+-    PRIVATE
+         exodusii::exodusii
+ )
+ 
+@@ -79,5 +78,7 @@ install(
+     FILES
+         "${CMAKE_CURRENT_BINARY_DIR}/exodusiicpp-config.cmake"
+         "${CMAKE_CURRENT_BINARY_DIR}/exodusiicpp-config-version.cmake"
++        "${CMAKE_SOURCE_DIR}/cmake/FindExodusII.cmake"
++        "${CMAKE_SOURCE_DIR}/cmake/FindNetCDF.cmake"
+     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/exodusIIcpp
+ )
