@@ -1,0 +1,47 @@
+{% set version = "1.0.1" %}
+{% set build = "0" %}
+
+package:
+  name: krado
+  version: {{ version }}
+
+source:
+  url: https://github.com/andrsd/krado/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: d752ce959c077f42996b2b1c99018b2f11c60b020975a0bc67a3eef960cb3a13
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ cdt('mesa-libGL-devel') }}  # [linux]
+    - {{ compiler('cxx') }}
+    - cmake
+    - make
+  host:
+    - python {{ python }}
+    - setuptools
+    - exodusiicpp >=2.0.*
+    - occt >=7.9.*
+    - eigen >=3.4.*
+    - boost >=1.70
+    - fmt >=9
+    - spdlog
+    - pybind11
+  run:
+    - python
+    - exodusiicpp >=2.0.*
+    - occt >=7.9.*
+    - fmt >=9
+    - spdlog
+
+about:
+  home: https://github.com/andrsd/krado
+  license: MIT
+  license_file: LICENSE
+  summary: Mesh manipulation package
+  doc_url: https://andrsd.github.io/krado
+
+extra:
+  recipe-maintainers:
+    - andrsd
