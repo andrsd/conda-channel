@@ -34,7 +34,7 @@ outputs:
         - {{ compiler('cxx') }}
         - libtool  # [unix]
       host:
-        - python
+        - python {{ python }}
         - pip
         - certifi>=2020.06.20
         - pybind11 >=2.6
@@ -47,7 +47,7 @@ outputs:
         - setuptools_scm_git_archive
         - tk  # [linux]
       run:
-        - python
+        - python {{ python }}
         - certifi >=2020.06.20
         - contourpy >=1.0.1
         - cycler >=0.10
@@ -82,9 +82,9 @@ outputs:
       skip: true  # [py<39]
     requirements:
       host:
-        - python
+        - python {{ python }}
       run:
-        - python
+        - python {{ python }}
         - pyqt >=5.10  # [not osx and not aarch64 and not ppc64le and python_impl == "cpython"]
         - tornado >=5
         - {{ pin_subpackage('matplotlib-base', max_pin="x.x.x") }}
