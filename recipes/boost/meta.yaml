@@ -23,14 +23,14 @@ source:
     - patches/0001-Add-default-value-for-cxx-and-cxxflags-options-for-t.patch
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
     - {{ compiler('cxx') }}
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - python {{ PY_DUMMY_VER }}              # [build_platform != target_platform]
-    - numpy {{ NP_DUMMY_VER }}               # [build_platform != target_platform]
+    - python {{ python }}                    # [build_platform != target_platform]
+    - numpy {{ numpy }}                      # [build_platform != target_platform]
   host:
     - icu               # [unix]
     - xz                # [unix]
@@ -38,8 +38,8 @@ requirements:
     - zlib
     - zstd
     # see conda_build_config
-    - python {{ PY_DUMMY_VER }}
-    - numpy {{ NP_DUMMY_VER }}
+    - python {{ python }}
+    - numpy {{ numpy }}
 
 outputs:
   - name: libboost-headers
@@ -221,13 +221,13 @@ outputs:
       build:
         - python {{ python }}                    # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-        - numpy                                  # [build_platform != target_platform]
+        - numpy {{ numpy }}               # [build_platform != target_platform]
         - {{ compiler('cxx') }}
       host:
         # ensure python_impl gets picked up by smithy (by using it as a selector) and therefore
         # populated in the .ci_config/*.yaml files, for use in {build,install}-py.{sh,bat}.
         - python {{ python }}
-        - numpy
+        - numpy {{ numpy }}
         # keep this in host to ensure that the environment content snapshot before/after
         # installation doesn't consider the headers or CMake metadata part of this output
         - {{ pin_subpackage("libboost-devel", exact=True) }}
@@ -280,7 +280,7 @@ outputs:
         - cmake             # [win]
       host:
         - python {{ python }}
-        - numpy
+        - numpy {{ numpy }}
         # as for libboost-python
         - {{ pin_subpackage("libboost-devel", exact=True) }}
       run:
@@ -306,8 +306,8 @@ outputs:
     requirements:
       host:
         # match host deps to avoid hash collisions between wrappers
-        - python
-        - numpy
+        - python {{ python }}
+        - numpy {{ numpy }}
         - {{ pin_subpackage("libboost-python-devel", exact=True) }}
       run:
         - {{ pin_subpackage("libboost-python-devel", exact=True) }}

@@ -1,9 +1,5 @@
-# we only need _a_ python version to build the headers for libboost-headers,
-# putting it in CBC means it's accessible also in the build scripts
-PY_DUMMY_VER:
-  - "3.11"
-NP_DUMMY_VER:
-  - "1.26"
+numpy:
+  - 1.26
 
 python:
   - 3.10

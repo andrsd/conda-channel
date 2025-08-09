@@ -71,7 +71,7 @@ mkdir temp_prefix
     runtime-link=shared \
     link=shared \
     toolset=${TOOLSET} \
-    python="${PY_DUMMY_VER}" \
+    python="${PY_VER}" \
     include="${INCLUDE_PATH}" \
     cxxflags="${CXXFLAGS}" \
     linkflags="${LINKFLAGS}" \
