@@ -26,6 +26,7 @@ requirements:
     - pkg-config
     - libtool                                # [unix]
     - ninja
+    - meson
   host:
     - python {{ python }}
     - python-build
