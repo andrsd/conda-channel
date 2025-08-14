@@ -3,6 +3,7 @@ MACOSX_DEPLOYMENT_TARGET:   # [osx]
   - 11.0                    # [osx and arm64]
 
 python:
+  - 3.10
   - 3.11
   - 3.12
 
