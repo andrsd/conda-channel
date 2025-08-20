@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
   sha256: adfaf2518e2a25a786cef596093ccca01cf9a6d2693e4bfbc1ea0ede38694ddc
+  patches:
+    - files/0001-Adding-missing-include.patch
 
 build:
   number: {{ build }}
