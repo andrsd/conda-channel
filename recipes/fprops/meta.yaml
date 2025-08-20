@@ -1,4 +1,4 @@
-{% set version = "7.0.0" %}
+{% set version = "7.1.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,9 @@ package:
 
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: f3e02d972290f990621f95e8023dec7a72f874c34c4ca9078fd55caa2382f441
+  sha256: adfaf2518e2a25a786cef596093ccca01cf9a6d2693e4bfbc1ea0ede38694ddc
+  patches:
+    - files/0001-Adding-missing-include.patch
 
 build:
   number: {{ build }}
