@@ -1,0 +1,41 @@
+{% set name = "cargo-auditable" %}
+{% set version = "0.7.0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/rust-secure-code/cargo-auditable/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: d2b81a7da3cb6c03d8cd977c36dc9adf7f2a3a587ce7c35c8e97ced5a9c83334
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ compiler('rust') }}
+    - {{ compiler('c') }}
+    - cargo-bundle-licenses
+
+test:
+  requires:
+    - {{ compiler('rust') }}
+  commands:
+    - cargo auditable --help
+
+about:
+  homepage: https://github.com/rust-secure-code/cargo-auditable
+  repository: https://github.com/rust-secure-code/cargo-auditable
+  documentation: https://github.com/rust-secure-code/cargo-auditable
+  summary: Make production Rust binaries auditable
+  license: Apache-2.0 OR MIT
+  license_file:
+    - LICENSE-MIT
+    - LICENSE-APACHE
+    - THIRDPARTY.yml
+
+extra:
+  recipe-maintainers:
+    - andrsd
