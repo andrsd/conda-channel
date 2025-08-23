@@ -1,0 +1,46 @@
+{% set name = "cargo-flamegraph" %}
+{% set version = "0.6.9" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  url: "https://github.com/flamegraph-rs/flamegraph/archive/v{{ version }}.tar.gz"
+  sha256: dd9b83affab5f9c1eaad0de9034037780e634c96fef4dce8fa83900e58cc240c
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ compiler('rust') }}
+    - {{ compiler('c') }}
+    - cargo-bundle-licenses
+    - cargo-auditable
+  run:
+    - addr2line-rust    # [unix]
+
+tests:
+  commands:
+    - cargo-flamegraph --help
+    - flamegraph --help
+
+about:
+  homepage: https://github.com/flamegraph-rs/flamegraph/
+  summary: "A Rust-powered flamegraph generator with additional support for Cargo projects."
+  description: |
+    A Rust-powered flamegraph generator with additional support for Cargo
+    projects! It can be used to profile anything, not just Rust projects! No
+    perl or pipes required <3
+  license: MIT OR Apache-2.0
+  license_file:
+    - LICENSE-APACHE
+    - LICENSE-MIT
+    - THIRDPARTY.yml
+  repository: https://github.com/flamegraph-rs/flamegraph
+
+extra:
+  recipe-maintainers:
+    - andrsd
