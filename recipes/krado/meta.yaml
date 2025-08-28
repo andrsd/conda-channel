@@ -1,5 +1,5 @@
 {% set version = "1.1.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: krado
@@ -26,14 +26,14 @@ requirements:
     - eigen >=3.4.*
     - boost >=1.70
     - fmt >=9
-    - spdlog
+    - spdlog ==1.11.*
     - pybind11
   run:
     - python
     - exodusiicpp >=2.0.*
     - occt >=7.9.*
     - fmt >=9
-    - spdlog
+    - spdlog ==1.11.*
 
 about:
   home: https://github.com/andrsd/krado
