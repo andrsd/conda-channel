@@ -1,4 +1,4 @@
-{% set version = "0.7" %}
+{% set version = "0.10" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/gmsh2exo/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 04bf4e30b8cddf52531dc52f6b94f890b0261a708acda31c0007abc2ba788d40
+  sha256: 9a84caef92b7c667a2c1502f322ad04807240c99020c52ef410c55e412320346
 
 build:
   number: {{ build }}
@@ -20,12 +20,12 @@ requirements:
     - flex
     - {{ compiler('cxx') }}
   host:
-    - fmt 9.*
+    - fmt 11.*
     - flex
-    - exodusii 2022.08.* {{ mpi }}_*
+    - exodusii 2022.10.* {{ mpi }}_*
   run:
-    - fmt 9.*
-    - exodusii 2022.08.* {{ mpi }}_*
+    - fmt 11.*
+    - exodusii 2022.10.* {{ mpi }}_*
 
 test:
   commands:
