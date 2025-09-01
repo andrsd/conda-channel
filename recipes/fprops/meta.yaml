@@ -1,4 +1,4 @@
-{% set version = "7.1.0" %}
+{% set version = "8.0.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,9 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: adfaf2518e2a25a786cef596093ccca01cf9a6d2693e4bfbc1ea0ede38694ddc
-  patches:
-    - files/0001-Adding-missing-include.patch
+  sha256: 26a1b3210b68a233ad4137de07079eb69605469bf38b62664d4b78bca7bbfe98
 
 build:
   number: {{ build }}
@@ -23,13 +21,13 @@ requirements:
     - pybind11
     - python {{ python }}
   host:
-    - fmt 9.*
+    - fmt 11.*
     - hdf5 1.12.* {{ mpi }}_*
     - eigen 3.4.*
     - python {{ python }}
     - zlib
   run:
-    - fmt 9.*
+    - fmt 11.*
     - eigen 3.4.*
     - hdf5 1.12.* {{ mpi }}_*
     - python {{ python }}
