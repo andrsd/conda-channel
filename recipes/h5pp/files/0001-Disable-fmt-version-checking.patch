@@ -1,0 +1,31 @@
+From e45eafcf71b7cbdb5f40c80f42da55a883a504a6 Mon Sep 17 00:00:00 2001
+From: David Andrs <andrsd@gmail.com>
+Date: Mon, 1 Sep 2025 07:12:05 -0600
+Subject: [PATCH] Disable fmt version checking
+
+The check fails against fmt 11.*
+---
+ cmake/modules/Findfmt.cmake | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/cmake/modules/Findfmt.cmake b/cmake/modules/Findfmt.cmake
+index 276d5d5..ecd2550 100644
+--- a/cmake/modules/Findfmt.cmake
++++ b/cmake/modules/Findfmt.cmake
+@@ -53,11 +53,12 @@ function(find_fmt)
+                 HINTS ${FMT_INCLUDE_DIR} ${FMT_INCLUDE_DIR}../ ${CMAKE_PREFIX_PATH} ${CMAKE_INSTALL_PREFIX}
+                 PATH_SUFFIXES lib fmt fmt/lib
+                 )
+-        fmt_check_version_include(FMT_INCLUDE_DIR)
++        # fmt_check_version_include(FMT_INCLUDE_DIR)
+     endif()
+     set(FMT_INCLUDE_DIR ${FMT_INCLUDE_DIR}  PARENT_SCOPE)
+     set(FMT_LIBRARY     ${FMT_LIBRARY}      PARENT_SCOPE)
+     set(FMT_VERSION     ${FMT_VERSION}      PARENT_SCOPE)
++    set(FMT_VERSION     "11.2.0"            PARENT_SCOPE)
+ endfunction()
+ 
+ function(set_fmt_version tgt_name vers)
+-- 
+2.39.5 (Apple Git-154)
+
