@@ -1,4 +1,4 @@
-{% set version = "2.0.5" %}
+{% set version = "3.0.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 5469a317250eb93ee1784ca1b5af96537882593113af7b58a9088c5fe5374e98
+  sha256: 79985573a1477a60e69731faa9f73a47ad19899a909d800ba45c74e6d690868b
 
 build:
   number: {{ build }}
@@ -22,11 +22,11 @@ requirements:
   host:
     - exodusii 2022.10.* {{ mpi }}_*
     - yaml-cpp 0.8.*
-    - fmt 9.*
+    - fmt 11.*
   run:
     - exodusii 2022.10.* {{ mpi }}_*
     - yaml-cpp 0.8.*
-    - fmt 9.*
+    - fmt 11.*
 
 about:
   summary: |
