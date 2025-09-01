@@ -1,4 +1,4 @@
-{% set version = "1.7.0" %}
+{% set version = "2.0.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/mpicpp-lite/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: b17515101560393c7fb5bee7d9acd371714e723e24c88d230d6290ce33b19902
+  sha256: 3a8a27a117ed514a7fe48addb41b3faa91b2fa6bca1d0ebae22c4fc1514e4ee6
 
 build:
   number: {{ build }}
@@ -18,13 +18,13 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - make
-    - fmt 9.*
+    - fmt 11.*
     - {{ mpi }}
   host:
-    - fmt 9.*
+    - fmt 11.*
     - {{ mpi }}
   run:
-    - fmt 9.*
+    - fmt 11.*
     - {{ mpi }}
 
 test:
