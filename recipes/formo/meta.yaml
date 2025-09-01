@@ -1,5 +1,5 @@
-{% set version = "25.06.0" %}
-{% set build = "0" %}
+{% set version = "25.09.0" %}
+{% set build = 0 %}
 
 package:
   name: formo
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/formo/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 3321a16b32dc8655f85afe9facf7867249435706fb0625d5c7809f61b8e7a44b
+  sha256: 2394ee1d22a31744e6f8091858f3e985ff87b5a51218c7b497cf419a88d209d3
 
 build:
   number: {{ build }}
@@ -22,12 +22,12 @@ requirements:
     - python {{ python }}
     - setuptools
     - occt >=7.9.*
-    - fmt >=9
+    - fmt 11.*
     - pybind11
   run:
     - python
     - occt >=7.9.*
-    - fmt >=9
+    - fmt 11.*
 
 about:
   home: https://github.com/andrsd/formo
