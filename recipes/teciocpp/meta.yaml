@@ -1,5 +1,5 @@
-{% set version = "0.1.0" %}
-{% set build = 1 %}
+{% set version = "0.2.0" %}
+{% set build = 0 %}
 
 package:
   name: teciocpp
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/teciocpp/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: da723f058067c175981e46f16a8ffd073a9a4e389f7d6e34dbcad27996008581
+  sha256: cb3e0538fe43f7f7c8d20ff0235babab5d3c78b501aca46d4af75e0270b32ef1
 
 build:
   number: {{ build }}
@@ -18,14 +18,14 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - make
-    - fmt 9.*
+    - fmt 11.*
     - {{ mpi }}
   host:
     - boost 1.84.*
-    - fmt 9.*
+    - fmt 11.*
     - {{ mpi }}
   run:
-    - fmt 9.*
+    - fmt 11.*
     - {{ mpi }}
 
 test:
