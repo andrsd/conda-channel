@@ -1,5 +1,5 @@
-{% set version = "1.1.0" %}
-{% set build = 1 %}
+{% set version = "2.0.0" %}
+{% set build = 0 %}
 
 package:
   name: krado
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/krado/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 62bbb4a97ec69c7909c25d1b040ac9a02cd33f3badfe117b9498845b9ea24f8c
+  sha256: 1ee4fa0f3e70d34b85592953a8a69afe1918f5ba74a2b2ea1da466fa3eb1bd54
 
 build:
   number: {{ build }}
@@ -21,19 +21,19 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
-    - exodusiicpp >=2.0.*
+    - exodusiicpp =3.*
     - occt >=7.9.*
     - eigen >=3.4.*
     - boost >=1.70
-    - fmt >=9
-    - spdlog ==1.11.*
+    - fmt 11.*
+    - spdlog =1.*
     - pybind11
   run:
     - python
-    - exodusiicpp >=2.0.*
+    - exodusiicpp =3.*
     - occt >=7.9.*
-    - fmt >=9
-    - spdlog ==1.11.*
+    - fmt 11.*
+    - spdlog =1.*
 
 about:
   home: https://github.com/andrsd/krado
