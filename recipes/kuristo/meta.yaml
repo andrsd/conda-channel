@@ -1,5 +1,5 @@
 {% set name = "kuristo" %}
-{% set version = "0.4.0" %}
+{% set version = "0.6.0" %}
 {% set build = 0 %}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://github.com/andrsd/kuristo/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: ed8a4ddb9df6be6e58196f44382bc81f19d737e6a31a62c7bde7b966b23d8a7e
+  sha256: ff7535101d56622bb7efc5d01cd481a64044652d71c38cdfe221efa69babb519
 
 build:
   noarch: python
