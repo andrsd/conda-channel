@@ -1,25 +1,29 @@
 {% set name = "kuristo" %}
-{% set version = "0.6.1" %}
-{% set build = 0 %}
+{% set version = "0.6.2" %}
+{% set build = 2 %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/andrsd/kuristo/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 423d20b687abe5c826bc43f8687a5344a3ab15c380d7bb26fd3250c16218a233
+  git_url: https://github.com/andrsd/kuristo
+  git_rev: v{{ version }}
 
 build:
   noarch: python
   number: {{ build }}
-  script: {{ PYTHON }} -m pip install . -vv
+  script:
+    - {{ PYTHON }} -m setuptools_scm > kuristo/_version.py
+    - {{ PYTHON }} -m pip install . -vv
 
 requirements:
   host:
     - python >=3.10
     - pip
     - setuptools
+    - setuptools_scm
+    - wheel
   run:
     - python >=3.10
     - pyaml
@@ -31,6 +35,8 @@ requirements:
 test:
   imports:
     - kuristo
+  commands:
+    - kuristo --help
 
 about:
   home: https://github.com/andrsd/kuristo
