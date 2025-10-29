@@ -1,4 +1,4 @@
-{% set version = "2.0.0" %}
+{% set version = "2.1.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/krado/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 1ee4fa0f3e70d34b85592953a8a69afe1918f5ba74a2b2ea1da466fa3eb1bd54
+  sha256: 79979b9932777d0193e60442cf81fb32b5862337ba14baa06f583977f3add2e4
 
 build:
   number: {{ build }}
