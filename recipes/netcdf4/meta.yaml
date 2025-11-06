@@ -1,13 +1,6 @@
 {% set version = "1.7.3" %}
 {% set build = 0 %}
 
-# recipe-lint fails if mpi is undefined
-{% set mpi = mpi or 'nompi' %}
-{% if mpi == "nompi" %}
-# prioritize nompi via build number
-{% set build = build + 100 %}
-{% endif %}
-
 package:
   name: netcdf4
   version: {{ version }}
@@ -17,10 +10,10 @@ source:
   sha256: dff77ab20e26e43426dd19256e71aacbd4c92bfb172cc30e647c9e34b4c53828
 
 build:
-  skip: true  # [(win and vc<14) or (win and mpi != 'nompi')]
+  skip: true  # [win]
   number: {{ build }}
 
-  string: {{ mpi }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ build }}
+  string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ build }}
   entry_points:
     - ncinfo = netCDF4.utils:ncinfo
     - nc4tonc3 = netCDF4.utils:nc4tonc3
@@ -42,11 +35,8 @@ requirements:
     # need to list hdf5 and libnetcdf twice to get version pinning from conda_build_config
     # and build pinning from {{ mpi_prefix }}
     - hdf5
-    - hdf5 * {{ mpi }}_*
     - libnetcdf
-    - libnetcdf * {{ mpi }}_*
-    - {{ mpi }}  # [mpi != 'nompi']
-    - mpi4py  # [mpi != 'nompi']
+    - mpi4py
     - setuptools >=61
     - setuptools_scm >=3.4
     - zlib
@@ -57,18 +47,13 @@ requirements:
     - numpy
     # the 'nompi' build should work with both non-MPI and MPI variants of the
     # following libs
-    - hdf5  # [mpi == 'nompi']
-    - libnetcdf  # [mpi == 'nompi']
-    - hdf5 * {{ mpi }}_*  # [mpi != 'nompi']
-    - libnetcdf * {{ mpi }}_*  # [mpi != 'nompi']
-    - {{ mpi }}  # [mpi != 'nompi']
-    - mpi4py  # [mpi != 'nompi']
+    - hdf5
+    - libnetcdf
+    - mpi4py
 
 test:
   source_files:
     - test
-  files:
-    - parallel_test.py  # [mpi != 'nompi']
   imports:
     - netCDF4
     - cftime
@@ -79,9 +64,7 @@ test:
     - ncinfo -h
     - nc4tonc3 -h
     - nc3tonc4 -h
-    - mpirun -np 4 python parallel_test.py  # [mpi == 'mpich']
-    - mpirun --oversubscribe -np 4 python parallel_test.py  # [mpi == 'openmpi']
-    - cd test && python run_all.py
+    - cd test && export NO_NET=YES; python run_all.py
 
 about:
   home: http://github.com/Unidata/netcdf4-python
