@@ -1,0 +1,41 @@
+{% set version = "0.1.0" %}
+{% set build = 0 %}
+
+package:
+  name: exodusii-utils
+  version: {{ version }}
+
+source:
+  url: https://github.com/andrsd/exodusII-utils/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7264625b2aa0ec6790ca6a64573491194a3cf928cd716705f4a54f887991eab4
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+    - make
+  host:
+    - fmt 11.*
+    - exodusiicpp 3.*
+  run:
+    - fmt 11.*
+    - exodusiicpp 3.*
+
+test:
+  commands:
+    - $PREFIX/bin/exo-info --help
+    - $PREFIX/bin/exo-join --help
+
+about:
+  home: data['url']
+  license: MIT
+  summary: Set of utils for exodusII files
+  doc_url: https://andrsd.github.io/exodusII-utils
+
+extra:
+  recipe-maintainers:
+    - andrsd
