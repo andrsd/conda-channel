@@ -1,4 +1,4 @@
-{% set version = "0.1.0" %}
+{% set version = "0.2.0" %}
 {% set build = 0 %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/exodusII-utils/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7264625b2aa0ec6790ca6a64573491194a3cf928cd716705f4a54f887991eab4
+  sha256: d5c34f60894cf906111ada1184c9a700b3536a741e2b8d60ee3f53cc1fc99fd8
 
 build:
   number: {{ build }}
