@@ -1,5 +1,5 @@
 {% set name = "kuristo" %}
-{% set version = "0.7.1" %}
+{% set version = "0.7.2" %}
 {% set build = 0 %}
 
 package:
@@ -19,13 +19,13 @@ build:
 
 requirements:
   host:
-    - python >=3.10
+    - python >=3.10, <3.14
     - pip
     - setuptools
     - setuptools_scm
     - wheel
   run:
-    - python >=3.10
+    - python >=3.10, <3.14
     - pyaml
     - networkx
     - rich
