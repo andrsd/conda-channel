@@ -1,6 +1,6 @@
 {% set version = "0.10" %}
 {% set commit = "12d1556505c244059741466dec3e012af4974e3b" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: gmsh2exo
@@ -23,10 +23,10 @@ requirements:
   host:
     - fmt 11.*
     - flex
-    - exodusii 2022.10.* {{ mpi }}_*
+    - exodusii 2024.06.* {{ mpi }}_*
   run:
     - fmt 11.*
-    - exodusii 2022.10.* {{ mpi }}_*
+    - exodusii 2024.06.* {{ mpi }}_*
 
 test:
   commands:
