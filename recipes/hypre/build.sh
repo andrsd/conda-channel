@@ -25,8 +25,9 @@ elif [[ "$target_platform" == osx-* ]]; then
     )
 fi
 
-mkdir build
-cd build
-cmake "${cmake_args[@]}" ${SRC_DIR}/src
-make -j${CPU_COUNT}
-make install
+cmake \
+    -S ${SRC_DIR}/src \
+    -B build \
+    "${cmake_args[@]}"
+cmake --build build --parallel ${CPU_COUNT}
+cmake --build build -- install
