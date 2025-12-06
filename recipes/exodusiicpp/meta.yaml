@@ -1,5 +1,5 @@
 {% set version = "3.0.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: exodusiicpp
@@ -20,11 +20,11 @@ requirements:
     - cmake
     - make
   host:
-    - exodusii 2022.10.* {{ mpi }}_*
+    - exodusii 2024.06.* {{ mpi }}_*
     - yaml-cpp 0.8.*
     - fmt 11.*
   run:
-    - exodusii 2022.10.* {{ mpi }}_*
+    - exodusii 2024.06.* {{ mpi }}_*
     - yaml-cpp 0.8.*
     - fmt 11.*
 
