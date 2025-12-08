@@ -1,20 +1,20 @@
-MACOSX_DEPLOYMENT_TARGET: # [osx]
-  - 10.15 # [x86_64 and osx]
-  - 11.3 # [arm64 and osx]
+MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
+  - 10.15                                                   # [x86_64 and osx]
+  - 11.3                                                    # [arm64 and osx]
 
 c_compiler:
-  - gcc # [linux]
-  - clang # [osx]
+  - gcc             # [linux]
+  - clang           # [osx]
 c_compiler_version:
-  - 15 # [linux]
-  - 20 # [osx]
+  - 15              # [linux]
+  - 20              # [osx]
 
 cxx_compiler:
-  - gxx # [linux]
-  - clangxx # [osx]
+  - gxx             # [linux]
+  - clangxx         # [osx]
 cxx_compiler_version:
-  - 15 # [linux]
-  - 20 # [osx]
+  - 15              # [linux]
+  - 20              # [osx]
 
 fortran_compiler:
   - gfortran
