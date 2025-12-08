@@ -7,11 +7,11 @@ c_compiler:
   - gcc                                                     # [linux]
 c_compiler_version:
   - 20                                                      # [osx]
-  - 14                                                      # [linux]
+  - 15                                                      # [linux]
 
 cxx_compiler:
   - clangxx                                                 # [osx]
   - gxx                                                     # [linux]
 cxx_compiler_version:
   - 20                                                      # [osx]
-  - 14                                                      # [linux]
+  - 15                                                      # [linux]
