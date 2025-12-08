@@ -1,7 +1,7 @@
 {% set version = "9.5.0" %}
 {% set parts = version.split(".") %}
 {% set maj_min = parts[0] ~ "." ~ parts[1] %}
-{% set build = 2 %}
+{% set build = 3 %}
 
 package:
   name: vtk
