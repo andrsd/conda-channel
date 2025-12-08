@@ -16,8 +16,8 @@ pushd ${SRC_DIR}/build
   sed -i.bak 's/install-collect2: collect2 /install-collect2: collect2$(exeext) /g' gcc/Makefile
   make -C gcc prefix=${PREFIX} install-driver install-cpp install-gcc-ar install-headers install-plugin install-lto-wrapper install-collect2
   # not sure if this is the same as the line above.  Run both, just in case
-  make -C lto-plugin prefix=${PREFIX} install
-  install -dm755 ${PREFIX}/lib/bfd-plugins/
+  make -C lto-plugin prefix=${PREFIX} install || true
+  install -dm755 ${PREFIX}/lib/bfd-plugins/ || true
 
   # statically linked, so this so does not exist
   # ln -s $PREFIX/lib/gcc/$TARGET/liblto_plugin.so ${PREFIX}/lib/bfd-plugins/
@@ -45,6 +45,10 @@ pushd ${SRC_DIR}/build
 
   make prefix=${PREFIX} install-fixincludes
   make -C gcc prefix=${PREFIX} install-mkheaders
+
+  if [[ -d ${TARGET}/libatomic ]]; then
+    make -C ${TARGET}/libatomic prefix=${PREFIX} install
+  fi
 
   if [[ -d ${TARGET}/libgomp ]]; then
     make -C ${TARGET}/libgomp prefix=${PREFIX} install
@@ -103,7 +107,7 @@ for opt; do
       exit 1;;
   esac
 done
-exec gcc $fl ${1+"$@"}
+exec ${TARGET}-c89${EXEEXT} $fl ${1+"$@"}
 EOF
 
   cat > ${PREFIX}/bin/${TARGET}-c99${EXEEXT} <<"EOF"
@@ -116,7 +120,7 @@ for opt; do
       exit 1;;
   esac
 done
-exec gcc $fl ${1+"$@"}
+exec ${TARGET}-c99${EXEEXT} $fl ${1+"$@"}
 EOF
 
   chmod 755 ${PREFIX}/bin/${TARGET}-c{8,9}9${EXEEXT}
@@ -135,39 +139,30 @@ popd
 #   setting LINK_LIBGCC_SPECS on make
 #   setting LINK_LIBGCC_SPECS in gcc/Makefile
 specdir=$PREFIX/lib/gcc/$TARGET/${gcc_version}
-if [[ "$build_platform" == "$target_platform" ]]; then
-    $PREFIX/bin/${TARGET}-gcc${EXEEXT} -dumpspecs > $specdir/specs
-    # validate assumption that specs in build/gcc/specs are exactly the
-    # same as dumped specs so that I don't need to depend on gcc_impl in conda-gcc-specs subpackage
-    diff -s ${SRC_DIR}/build/gcc/specs $specdir/specs
-elif [[ "$target_platform" == "$cross_target_platform" && ${TARGET} != *mingw* ]]; then
-    # For support of of native specs, we need this
-    # This is the only place where we need QEMU.
-    # Remove this elif condition for local experimentation if you
-    # do not have QEMU setup
-    $PREFIX/bin/${TARGET}-gcc -dumpspecs > $specdir/specs
-else
-    $BUILD_PREFIX/bin/${TARGET}-gcc -dumpspecs > $specdir/specs
-    # validate assumption that specs in build/gcc/specs are exactly the
-    # same as dumped specs so that I don't need to depend on gcc_impl in conda-gcc-specs subpackage
-    diff -s ${SRC_DIR}/build/gcc/specs $specdir/specs
-fi
+cp ${SRC_DIR}/build/gcc/specs $specdir/specs
+cat $specdir/specs
 
 # make a copy of the specs without our additions so that people can choose not to use them
 # by passing -specs=builtin.specs
 cp $specdir/specs $specdir/builtin.specs
 
 # modify the default specs to only have %include_noerr that includes an optional conda.specs
-# package installable via the conda-gcc-specs package where conda.specs (for $cross_target_platform
-# == $target_platform) will add the minimal set of flags for the 'native' toolchains to be useable
+# package installable via the conda-gcc-specs package where conda.specs (for ${TARGET}
+# == ${HOST}) will add the minimal set of flags for the 'native' toolchains to be useable
 # without anything additional set in the enviornment or extra cmdline args.
 echo  "%include_noerr <conda.specs>" >> $specdir/specs
 
 # We use double quotes here because we want $PREFIX and $TARGET to be expanded at build time
 #   and recorded in the specs file.  It will undergo a prefix replacement when our compiler
 #   package is installed.
-sed -i -e "/\*link_command:/,+1 s+%.*+& %{!static:-rpath ${PREFIX}/lib}+" $specdir/specs
+if [[ "${TARGET}" == *linux* ]]; then
+  sed -i.bak "/\*link_command:/,+1 s+%.*+& %{!static:-rpath ${PREFIX}/lib}+" $specdir/specs
+elif [[ "${TARGET}" == *darwin* ]]; then
+  sed -i.bak "s#@loader_path#${PREFIX}/lib#g" $specdir/specs
+fi
+rm -f $specdir/specs.bak
 
+mkdir -p ${PREFIX}/share/licenses/gcc
 
 # Install Runtime Library Exception
 install -Dm644 $SRC_DIR/COPYING.RUNTIME \
@@ -185,7 +180,7 @@ pushd ${PREFIX}
       *script*executable*)
       ;;
       *executable*)
-        ${BUILD_PREFIX}/bin/${TARGET}-strip --strip-all -v "${_file}" || :
+        ${BUILD_PREFIX}/bin/${HOST}-strip ${STRIP_ARGS} -v "${_file}" || :
       ;;
     esac
   done
@@ -195,64 +190,93 @@ set -x
 
 #${PREFIX}/bin/${TARGET}-gcc "${RECIPE_DIR}"/c11threads.c -std=c11
 
-mkdir -p ${PREFIX}/${TARGET}/lib
 mkdir -p ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}
 
-if [[ "$target_platform" == "$cross_target_platform" ]]; then
+if [[ "${HOST}" == "${TARGET}" ]]; then
+  if [[ "${TARGET}" == *darwin* ]]; then
+    rm -rf ${PREFIX}/lib/libgomp.*dylib
+    rm -rf ${PREFIX}/lib/libgomp.a
+  fi
   # making these this way so conda build doesn't muck with them
-  pushd ${PREFIX}/${TARGET}/lib
-    if [[ "${TARGET}" != *mingw* ]]; then
-      ln -sf ../../lib/libgomp.so libgomp.so
-      for lib in libgfortran libatomic libquadmath libitm lib{a,l,ub,t}san; do
-        for f in ${PREFIX}/lib/${lib}.so*; do
-          ln -s ../../lib/$(basename $f) ${PREFIX}/${TARGET}/lib/$(basename $f)
-        done
-      done
+  pushd ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
+    if [[ "${TARGET}" == *darwin* ]]; then
+      ln -sf ../../../libomp.dylib libgomp.dylib
     fi
-
-    for f in ${PREFIX}/lib/*.spec; do
-      mv $f ${PREFIX}/${TARGET}/lib/$(basename $f)
+    for name in atomic gomp cc1 itm quadmath {a,hwa,l,t,ub}san; do
+      [ -e "${PREFIX}/lib/lib${name}${SHLIB_EXT}" ] || continue
+      ln -s ../../../lib${name}${SHLIB_EXT} lib${name}${SHLIB_EXT}
     done
-    if [[ "${TARGET}" != *mingw* ]]; then
-      for f in ${PREFIX}/lib/*.o; do
-        mv $f ${PREFIX}/${TARGET}/lib/$(basename $f)
-      done
-    fi
   popd
-  for lib in asan atomic gomp hwasan itm lsan quadmath tsan ubsan; do
-    if [[ -f "${PREFIX}/lib/lib${lib}.a" ]]; then
-     mv ${PREFIX}/lib/lib${lib}.*a ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
-    fi
-  done
-  for lib in libasan.so libatomic.so libgomp.so libhwasan.so libitm.so liblsan.so libquadmath.so libtsan.so libubsan.so libstdc++.so libstdc++.so.6 libgcc_s.so; do
-    if [[ -f "${PREFIX}/lib/${lib}" ]]; then
-     # install a shared library here since the directory ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}
-     # has the highest preference and we want shared libraries to have the highest preference
-     rm ${PREFIX}/lib/${lib}
-     ln -sf ${PREFIX}/lib/${lib} ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
-    fi
-  done
 else
   source ${RECIPE_DIR}/install-libgcc.sh
-  for lib in libcc1; do
-    mv ${PREFIX}/lib/${lib}.so* ${PREFIX}/${TARGET}/lib/ || true
-    mv ${PREFIX}/lib/${lib}.so* ${PREFIX}/${TARGET}/lib/ || true
-  done
+  if [[ "${TARGET}" == *darwin* ]]; then
+    rm -rf ${PREFIX}/${TARGET}/lib/libgomp.*dylib
+    rm -rf ${PREFIX}/${TARGET}/lib/libgomp.a
+  fi
   rm -f ${PREFIX}/share/info/*.info
-  for lib in asan atomic gomp hwasan itm lsan quadmath tsan ubsan; do
-    if [[ -f "${PREFIX}/${TARGET}/lib/lib${lib}.a" ]]; then
-     mv ${PREFIX}/${TARGET}/lib/lib${lib}.*a ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
+  # TODO: create a TBD file libgomp.tbd that re-exports libomp.dylib
+  # and remove libgomp.dylib symlink from _openmp_mutex
+  for name in atomic gomp cc1 itm quadmath {a,hwa,l,t,ub}san; do
+    if [[ -f "${PREFIX}/${TARGET}/lib/lib${name}.so" ]]; then
+      mv ${PREFIX}/${TARGET}/lib/lib${name}.so* ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/ || true
     fi
-    if [[ -f "${PREFIX}/${TARGET}/lib/lib${lib}.so" ]]; then
-     ln -sf ${PREFIX}/${TARGET}/lib/lib${lib}.so ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
+    if [[ -f "${PREFIX}/${TARGET}/lib/lib${name}.dylib" ]]; then
+      mv ${PREFIX}/${TARGET}/lib/lib${name}.*dylib ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/ || true
     fi
   done
 fi
+  
+mkdir -p ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
+for name in atomic gomp itm quadmath {a,hwa,l,t,ub}san; do
+  if [[ -f "${PREFIX}/lib/lib${name}.a" ]]; then
+   mv ${PREFIX}/lib/lib${name}.*a ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
+  fi
+  if [[ -f "${PREFIX}/${TARGET}/lib/lib${name}.a" ]]; then
+   mv ${PREFIX}/${TARGET}/lib/lib${name}.*a ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/
+  fi
+done
 
-if [[ -f ${PREFIX}/lib/libgomp.spec ]]; then
-  mv ${PREFIX}/lib/libgomp.spec ${PREFIX}/${TARGET}/lib/libgomp.spec
+for f in ${PREFIX}/lib/*.spec; do
+  [ -e "$f" ] || continue
+  mv $f ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/$(basename $f)
+done
+for f in ${PREFIX}/${TARGET}/lib/*.spec; do
+  [ -e "$f" ] || continue
+  mv $f ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/$(basename $f)
+done
+if [[ "${TARGET}" == *linux* ]]; then
+  # sanitizer preinit files
+  for f in ${PREFIX}/lib/*.o; do
+    [ -e "$f" ] || continue
+    mv $f ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/$(basename $f)
+  done
+  for f in ${PREFIX}/${TARGET}/lib/*.o; do
+    [ -e "$f" ] || continue
+    mv $f ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/$(basename $f)
+  done
+fi
+rm -f ${PREFIX}/share/info/dir
+
+mkdir -p ${PREFIX}/libexec/gcc/${TARGET}/${gcc_version}
+if [[ "${TARGET}" == *darwin* ]]; then
+  TOOLS="ar as c++filt ld nm ranlib size strings strip"
+elif [[ "${TARGET}" == *linux* ]]; then
+  TOOLS=TOOLS="addr2line ar c++filt elfedit ld nm objcopy objdump ranlib readelf size strings strip"
+elif [[ "${TARGET}" == *mingw* ]]; then
+  TOOLS=""
+  #TOOLS=TOOLS="addr2line ar c++filt elfedit ld nm objcopy objdump ranlib readelf size strings strip dlltool dllwrap windmc windres"
 fi
 
-rm -f ${PREFIX}/share/info/dir
+for f in ${TOOLS}; do
+  ln -sf ${PREFIX}/bin/${TARGET}-${f} ${PREFIX}/libexec/gcc/${TARGET}/${gcc_version}/${f}
+done
+
+if [[ "${TARGET}" == *darwin* ]]; then
+  # stdio.h from the SDK is vendored and "fixed" here, but we need to allow
+  # using different SDKs
+  rm -f ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/include-fixed/stdio.h
+  # same here, but we need to support __FLT_EVAL_METHOD__=16 on older SDKs
+  cp ${RECIPE_DIR}/include-fixed-math.h ${PREFIX}/lib/gcc/${TARGET}/${gcc_version}/include-fixed/math.h
+fi
 
 source ${RECIPE_DIR}/make_tool_links.sh

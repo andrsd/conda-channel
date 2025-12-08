@@ -1,20 +1,21 @@
-triplet:
+TARGET:
   - x86_64-conda-linux-gnu
 gcc_version:
-  - 14.3.0
+  - 15.2.0
 gcc_maj_ver:
-  - 14
+  - 15
 libgfortran_soname:
   - 5
 binutils_version:
-  - 2.40
+  - 2.44
 cross_target_platform:
   - linux-64
 cross_target_stdlib_version:
   - 2.17
 cross_target_stdlib:
   - sysroot
-# openmp versions
+cross_target_cxx_stdlib:
+  - libstdcxx      # openmp versions
 openmp_ver:
   - 5.1
 libgomp_ver:
@@ -26,14 +27,17 @@ c_stdlib:          # [win]
 c_stdlib_version:  # [win]
   - 12             # [win]
 # need to manually downgrade global pin until we do #147
+c_stdlib:          # [linux64]
+  - sysroot        # [linux64]
 c_stdlib_version:  # [linux64]
-  - 2.12           # [linux64]
+  - 2.17           # [linux64]
 cdt_name:          # [linux64]
   - cos6           # [linux64]
 zip_keys:
   - - cross_target_stdlib_version
     - cross_target_stdlib
-    - triplet
+    - cross_target_cxx_stdlib
+    - TARGET
     - cross_target_platform
   - - gcc_version
     - gcc_maj_ver
