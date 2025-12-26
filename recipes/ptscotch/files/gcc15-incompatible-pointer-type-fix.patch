@@ -1,0 +1,11 @@
+--- src/scotch/amk_m2.h.org	2025-12-26 16:19:42.828495691 -0700
++++ src/scotch/amk_m2.h	2025-12-26 16:26:12.733197194 -0700
+@@ -91,7 +91,7 @@
+ **  The function prototypes.
+ */
+
+-void                        C_domnBipart        (ArchMesh2 *, ArchMesh2Dom *, Anum, Anum *, Anum *, int (*) ());
++void                        C_domnBipart        (ArchMesh2 *, ArchMesh2Dom *, Anum, Anum *, Anum *, DomnBipartFunc);
+ int                         C_domnBipartOne     (const ArchMesh2 * const, const ArchMesh2Dom * const, ArchMesh2Dom * restrict const, ArchMesh2Dom * restrict const);
+
+ /*
