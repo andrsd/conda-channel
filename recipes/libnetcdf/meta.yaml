@@ -1,5 +1,5 @@
-{% set version = "4.9.2" %}
-{% set build = 2 %}
+{% set version = "4.9.3" %}
+{% set build = 1 %}
 
 package:
   name: libnetcdf
