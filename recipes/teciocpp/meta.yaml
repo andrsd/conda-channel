@@ -1,5 +1,5 @@
 {% set version = "0.2.0" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: teciocpp
@@ -21,7 +21,7 @@ requirements:
     - fmt 11.*
     - {{ mpi }}
   host:
-    - boost 1.84.*
+    - boost 1.82.*
     - fmt 11.*
     - {{ mpi }}
   run:
