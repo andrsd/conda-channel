@@ -1,7 +1,7 @@
 {% set version = "1.14.6" %}
 {% set maj_min_patch_ver = "_".join(version.split(".")) %}
 {% set maj_min_ver = "_".join(version.split(".")[:2]) %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: hdf5
@@ -14,20 +14,20 @@ source:
 build:
   number: {{ build }}
   string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
-  skip: true # [win]
+  skip: true   # [win]
 
 requirements:
   build:
-    - gnuconfig  # [unix]
+    - gnuconfig                    # [unix]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
-    - cmake >=3.2.2  # [win]
-    - autoconf  # [not win]
-    - automake  # [not win]
-    - libtool  # [not win]
-    - make  # [not win]
-    - ninja  # [win]
+    - cmake >=3.2.2                # [win]
+    - autoconf                     # [not win]
+    - automake                     # [not win]
+    - libtool                      # [not win]
+    - make                         # [not win]
+    - ninja                        # [win]
     - {{ mpi }}
   host:
     - {{ mpi }}
