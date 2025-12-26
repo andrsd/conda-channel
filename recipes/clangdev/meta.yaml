@@ -1,7 +1,7 @@
-{% set version = "20.1.3" %}
+{% set version = "20.1.8" %}
 {% set major_version = version.split(".")[0] %}
 {% set tail_version = version.split(".")[-1] %}
-{% set build_number = 0 %}
+{% set build_number = 1 %}
 
 # always includes minor as of v18, see https://github.com/llvm/llvm-project/issues/76273
 {% set maj_min = major_version ~ "." ~ version.split(".")[1] %}
@@ -23,7 +23,7 @@ package:
 
 source:
   - url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-    sha256: b40c0d185b98c2ee3c0cb2f14cde65a06008b33dfb471cc7ad868f8ca3f7f897
+    sha256: a6cbad9b2243b17e87795817cfff2107d113543a12486586f8a055a2bb044963
     patches:
       - files/0001-Find-conda-gcc-installation.patch
       - files/0002-Fix-sysroot-detection-for-linux.patch
@@ -53,13 +53,13 @@ requirements:
     - python >3
     - llvmdev =={{ version }}    # [build_platform != target_platform]
     - libxml2                    # [build_platform != target_platform]
-    - zlib                       # [build_platform != target_platform]
+    - zlib 1.3.*                 # [build_platform != target_platform]
     - zstd                       # [build_platform != target_platform]
   host:
     - libcxx-devel {{ cxx_compiler_version }}   # [osx]
     - llvmdev =={{ version }}
     - libxml2
-    - zlib
+    - zlib 1.3.*
     - zstd
 
 outputs:
@@ -72,9 +72,9 @@ outputs:
       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
-        - zlib     # [unix]
-        - libxml2  # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - libxml2       # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -93,7 +93,7 @@ outputs:
         - libcxx-devel =={{ maj_min }}.*  # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - {{ pin_subpackage("clang", exact=True) }}
@@ -146,9 +146,9 @@ outputs:
         - {{ pin_subpackage("libclang-cpp" ~ maj_min, max_pin="x.x") }}   # [unix]
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
-        - zlib     # [unix]
-        - libxml2  # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - libxml2       # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -162,7 +162,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*  # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         # we need to do this manually because clang_bootstrap has no run-export
@@ -191,9 +191,9 @@ outputs:
         - {{ pin_subpackage("libclang-cpp" ~ maj_min, max_pin="x.x") }}   # [unix]
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
-        - zlib     # [unix]
-        - libxml2  # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - libxml2       # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -208,7 +208,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*   # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - {{ pin_subpackage("libclang-cpp" ~ maj_min, exact=True) }}  # [unix]
@@ -241,8 +241,8 @@ outputs:
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
         - libxml2
-        - zlib     # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -257,7 +257,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*   # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         # we need to do this manually because clang_bootstrap has no run-export
@@ -304,9 +304,9 @@ outputs:
         - {{ pin_subpackage("libclang" ~ libclang_soversion, max_pin=None) }}
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
-        - zlib     # [unix]
-        - libxml2  # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - libxml2       # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -322,7 +322,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*   # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - {{ pin_subpackage("libclang" ~ libclang_soversion, exact=True) }}
@@ -349,8 +349,8 @@ outputs:
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
         - libxml2
-        - zlib     # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -365,7 +365,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*  # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - {{ pin_subpackage("libclang-cpp" ~ maj_min, exact=True) }}  # [unix]
@@ -406,8 +406,8 @@ outputs:
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
         - libxml2
-        - zlib     # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - zstd          # [unix]
     requirements:
       # for run-exports
       build:                        # [win]
@@ -418,7 +418,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*   # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - binutils_impl_{{ target_platform }}  # [linux]
@@ -448,8 +448,8 @@ outputs:
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
         - libxml2
-        - zlib     # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - zstd          # [unix]
     requirements:
       # for run-exports
       build:                        # [win]
@@ -460,7 +460,7 @@ outputs:
         - libcxx-devel {{ cxx_compiler_version }}.*   # [osx]
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - libstdcxx-devel_{{ target_platform }}  # [linux]
@@ -493,9 +493,9 @@ outputs:
       skip: true  # [win]
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
-        - zlib     # [unix]
-        - libxml2  # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - libxml2       # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         # "compiling .pyc files" fails without this
@@ -515,7 +515,7 @@ outputs:
         - llvm =={{ version }}
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - {{ pin_subpackage("libclang-cpp" ~ maj_min, max_pin="x.x") }}   # [unix]
@@ -540,7 +540,7 @@ outputs:
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
     requirements:
       build:
@@ -563,7 +563,7 @@ outputs:
         - llvm =={{ version }}
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - {{ pin_subpackage("libclang-cpp" ~ maj_min, max_pin="x.x") }}          # [unix]
@@ -585,8 +585,8 @@ outputs:
       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       ignore_run_exports_from:
         # the build fails if it doesn't find the following, but it's not used
-        - zlib     # [unix]
-        - zstd     # [unix]
+        - zlib 1.3.*    # [unix]
+        - zstd          # [unix]
     requirements:
       build:
         # "compiling .pyc files" fails without this
@@ -608,7 +608,7 @@ outputs:
         - llvm =={{ version }}
         - llvmdev =={{ version }}
         - libxml2
-        - zlib
+        - zlib 1.3.*
         - zstd
       run:
         - ucrt                                          # [win]
