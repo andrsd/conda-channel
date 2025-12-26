@@ -1,0 +1,19 @@
+--- src/utils/ncmpidump/ncmpidump.h.org	2025-12-26 16:35:17.934231924 -0700
++++ src/utils/ncmpidump/ncmpidump.h	2025-12-26 16:35:58.138307910 -0700
+@@ -6,6 +6,8 @@
+ /* $Id$ */
+
+
++#include <stdbool.h>
++
+ /* error checking macro */
+ #define NC_CHECK(status)    {\
+ 	    int nc_status = status;\
+@@ -16,7 +18,6 @@
+ #define  Printf  (void) printf
+
+ typedef int boolean;
+-enum {false=0, true=1};
+
+ struct ncdim {			/* dimension */
+     char name[NC_MAX_NAME];
