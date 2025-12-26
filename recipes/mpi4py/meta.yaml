@@ -1,5 +1,5 @@
 {% set version = "4.1.0" %}
-{% set build = 1 %}
+{% set build = 2 %}
 {% set mpi = mpi or 'mpich' %}
 
 package:
