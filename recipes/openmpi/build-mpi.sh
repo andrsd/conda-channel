@@ -37,37 +37,6 @@ if [[ "$target_platform" == osx-* ]]; then
     wrapper_ldflags='-Wl,-rpath,${libdir}'
 fi
 
-# UCX and UCC support
-build_with_ucx=""
-build_with_ucc=""
-if [[ "$target_platform" == linux-* && "$target_platform" != linux-ppc64le ]]; then
-    echo "Build with UCX/UCC support"
-    build_with_ucx="--with-ucx=$PREFIX"
-    build_with_ucc="--with-ucc=$PREFIX"
-fi
-
-
-# CUDA support
-cuda_version="${cuda_compiler_version:-}"
-if [[ ! -z "$cuda_version" && "$cuda_version" != "None" ]]; then
-    echo "Build with CUDA support"
-    # locate cuda.h target
-    # nvcc activation already deals with this in $CFLAGS, etc.
-    # but openmpi needs to find cuda.h itself for some reason
-    if [[ "${target_platform}" == "linux-64" ]]; then
-      cuda_target=x86_64-linux
-    elif [[ "${target_platform}" == "linux-aarch64" ]]; then
-      cuda_target=sbsa-linux
-    elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
-      cuda_target=ppc64le-linux
-    else
-      echo "unexpected cuda target_platform=${target_platform}"
-      exit 1
-    fi
-    cuda_dir="$BUILD_PREFIX/targets/$cuda_target"
-    build_with_cuda="--with-cuda=$cuda_dir --with-io-romio-flags=ac_cv_lib_cudart_cudaStreamSynchronize=no"
-fi
-
 if [[ $CONDA_BUILD_CROSS_COMPILATION == "1" ]]; then
     #
     # To regenerate the `cross-gfortran.*.sh` files follow these steps:
@@ -105,10 +74,7 @@ fi
             --with-pmix=internal \
             --with-prrte=internal \
             --with-zlib=$PREFIX \
-            --enable-ipv6 \
-            $build_with_ucx \
-            $build_with_ucc \
-            $build_with_cuda
+            --enable-ipv6
 
 make -j"${CPU_COUNT:-1}"
 make install
@@ -119,15 +85,6 @@ rm -rf $PREFIX/include/prte*.h
 rm -rf $PREFIX/share/prte/rst
 
 POST_LINK=$PREFIX/bin/.openmpi-post-link.sh
-if [ -n "$build_with_cuda" ]; then
-    echo "setting MCA mca_base_component_show_load_errors to 0..."
-    echo "mca_base_component_show_load_errors = 0" >> $PREFIX/etc/openmpi-mca-params.conf
-    echo "setting MCA opal_warn_on_missing_libcuda to 0..."
-    echo "opal_warn_on_missing_libcuda = 0" >> $PREFIX/etc/openmpi-mca-params.conf
-    echo "setting MCA opal_cuda_support to 0..."
-    echo "opal_cuda_support = 0" >> $PREFIX/etc/openmpi-mca-params.conf
-    cat $RECIPE_DIR/post-link-cuda.sh >> $POST_LINK
-fi
 if [ -f $POST_LINK ]; then
     chmod +x $POST_LINK
 fi
