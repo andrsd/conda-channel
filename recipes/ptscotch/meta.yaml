@@ -8,6 +8,8 @@ package:
 source:
   url: https://web.cels.anl.gov/projects/petsc/download/externalpackages/scotch-v{{ version }}.tar.gz
   sha256: b44acd0d2f53de4b578fa3a88944cccc45c4d2961cd8cefa9b9a1d5431de8e2b
+  patches:
+    - files/gcc15-incompatible-pointer-type-fix.patch
 
 build:
   number: {{ build }}
