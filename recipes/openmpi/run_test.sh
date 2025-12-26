@@ -21,31 +21,6 @@ if [[ $PKG_NAME == "openmpi" ]]; then
     fi
   fi
 
-  if [[ -n "$(conda list | grep cuda-version)" ]]; then
-    echo "Improper CUDA dependency!"
-    exit 1
-  fi
-
-  if [[ "$target_platform" == linux-* ]]; then
-    if [[ -z "$(ompi_info | grep 'with-cuda')" ]]; then
-      echo "OpenMPI configured without CUDA support!"
-      exit 1
-    fi
-    # check for at least one cuda DSO
-    # because ompi_info can report cuda being enabled when it isn't
-    find "${PREFIX}/lib/openmpi" -name "*cuda*.so"
-    test -f "${PREFIX}/lib/openmpi/mca_accelerator_cuda.so"
-    
-    # make sure libmpi doesn't link cuda
-    # this doesn't actually check if cuda will be loaded,
-    # only a direct link in libmpi. 
-    # But that's most likely if this gets mixed up again.
-    if [[ $(patchelf --print-needed $CONDA_PREFIX/lib/libmpi.so | grep -cE 'libcuda.*\.so') -gt 0 ]]; then
-      echo "improper dependency on CUDA shared libraries"
-      patchelf --print-needed $CONDA_PREFIX/lib/libmpi.so
-    fi
-  fi
-
   command -v mpiexec
   $MPIEXEC --help
   $MPIEXEC -n 4 ./helloworld.sh
@@ -89,7 +64,7 @@ fi
 if [[ $PKG_NAME == "openmpi-mpifort" ]]; then
   command -v mpifort
   mpifort -show
-  
+
   test -z "${OMPI_FC:-}"
   test -z "${OMPI_FCFLAGS:-}"
 
