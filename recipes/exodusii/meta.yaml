@@ -1,5 +1,5 @@
 {% set version = "2024.06.27" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: exodusii
@@ -20,17 +20,17 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
     - {{ mpi }}
-    - cmake
+    - cmake 3.*
     - make
     - libnetcdf 4.9.* {{ mpi }}_*
     - libpnetcdf 1.12.* {{ mpi }}_*
-    - hdf5 1.12.* {{ mpi }}_*
+    - hdf5 1.14.* {{ mpi }}_*
     - fmt 11.*
   run:
     - {{ mpi }}
     - libnetcdf 4.9.* {{ mpi }}_*
     - libpnetcdf 1.12.* {{ mpi }}_*
-    - hdf5 1.12.* {{ mpi }}_*
+    - hdf5 1.14.* {{ mpi }}_*
     - fmt 11.*
 
 test:
