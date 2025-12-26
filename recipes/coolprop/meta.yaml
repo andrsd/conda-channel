@@ -1,6 +1,6 @@
 {% set name = "CoolProp" %}
 {% set version = "6.6.0" %}
-{% set build  = 0 %}
+{% set build  = 1 %}
 # WARNING external resources may need update as well
 
 package:
@@ -60,11 +60,11 @@ requirements:
   run:
     - python {{ python }}
     - numpy
-    - matplotlib-base 3.8.0
+    - matplotlib-base 3.10.*
 
 test:
   requires:
-    - matplotlib-base 3.8.0
+    - matplotlib-base 3.10.*
   imports:
     - CoolProp
     - CoolProp.tests
