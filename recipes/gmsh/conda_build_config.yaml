@@ -9,3 +9,7 @@ blas:
 lapack:
   - openblas  # [linux]
   - libaccelerate-osx  # [osx]
+
+libomp:
+  - llvm-openmp        # [osx]
+  - libgomp            # [linux]
