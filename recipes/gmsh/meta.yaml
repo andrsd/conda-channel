@@ -1,6 +1,6 @@
 {% set name = "gmsh" %}
 {% set version = "4.12.0" %}
-{% set build = 2 %}
+{% set build = 3 %}
 {% set sha256 = "2a6007872ba85abd9901914826f6986a2437ab7104f564ccefa1b7a3de742c17" %}
 
 package:
@@ -28,7 +28,7 @@ outputs:
     script: bld_gmsh.bat  # [win]
     requirements:
       build:
-        - cmake
+        - cmake 3.*
         - make  # [unix]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
@@ -39,14 +39,16 @@ outputs:
         - {{ lapack }}
         - gmp  # [not win]
         - occt 7.9
-        - zlib
+        - zlib 1.3.*
+        - {{ libomp }}
 
       run:
         - gmp  # [not win]
         - {{ pin_compatible('occt', max_pin='x.x.x') }}
         - libpng
         - libjpeg-turbo
-        - zlib
+        - zlib 1.3.*
+        - {{ libomp }}
 
     test:
       commands:
