@@ -1,5 +1,7 @@
-{% set version = "20.1.3" %}
+{% set version = "20.1.8" %}
 {% set major_ver = version.split('.')[0] %}
+{% set build = 1 %}
+
 
 package:
   name: compiler-rt-packages
@@ -7,17 +9,17 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: b40c0d185b98c2ee3c0cb2f14cde65a06008b33dfb471cc7ad868f8ca3f7f897
+  sha256: a6cbad9b2243b17e87795817cfff2107d113543a12486586f8a055a2bb044963
   patches:
     - files/0001-no-code-sign.patch
     - files/0002-Revert-Declare-_availability_version_check-as-weak_i.patch
 
 build:
-  number: 0
+  number: {{ build }}
 
 requirements:
   build:
-    - cmake >=3.4.3
+    - cmake 3.*
     - {{ compiler('cxx') }}
     - python *
     - ninja
@@ -26,7 +28,7 @@ requirements:
     - clangdev {{ version }}
     - llvmdev {{ version }}
     - libcxx   # [osx]
-    - zlib
+    - zlib 1.3.*
     - libxml2
 
 outputs:
