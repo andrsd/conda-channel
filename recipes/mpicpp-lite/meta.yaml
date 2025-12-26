@@ -1,5 +1,5 @@
-{% set version = "2.1.0" %}
-{% set build = 2 %}
+{% set version = "2.2.0" %}
+{% set build = 0 %}
 
 package:
   name: mpicpp-lite
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/mpicpp-lite/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 38e8742f8a56c5f627bfe77ef600c8067af3efdb09992ade2aeba0546c2eb931
+  sha256: 2d059a25c2f9d0866d4ce28e09ebbe32e8f0915b9373d29e4e6bb757d56d4288
 
 build:
   number: {{ build }}
