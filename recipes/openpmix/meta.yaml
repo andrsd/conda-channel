@@ -1,0 +1,122 @@
+{% set name = "openpmix" %}
+{% set version = "6.0.0" %}
+{% set build = 1 %}
+
+package:
+  name: openpmix-feedstock
+  version: {{ version }}
+
+source:
+  url: https://github.com/openpmix/openpmix/releases/download/v{{ version }}/pmix-{{ version }}.tar.bz2
+  sha256: bfe969966d0ce82e032739cac286239bd5ad74a831d7adae013284919f125318
+
+build:
+  skip: true  # [win]
+  number: {{ build }}
+
+# one top-level build
+# outputs select which files to include
+# from this build
+# but don't run any build scripts themselves
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - make
+    - flex
+    - pkg-config
+    - python 3.12
+  host:
+    - libevent 2.1.*
+    - libhwloc 2.12.*
+    - zlib 1.3.*
+
+outputs:
+  - name: libpmix
+    files:
+      # libpmix has everything except for specific exclusions
+      include:
+        - '**/*'
+      exclude:
+        # these are in -bin
+        - bin/
+        # these are in -devel
+        - include/
+        - lib/pkgconfig/
+        # exclude docs (not packaged)
+        - share/doc/
+        - share/man/
+    build:
+      run_exports:
+        - {{ pin_subpackage('libpmix', max_pin='x') }}
+    requirements:
+      # only need requirements with run_exports here
+      # no build is actually run
+      # TODO: remove extras when recipe name is fixed to not match this output
+      build:
+        - {{ compiler('c') }}
+        - make
+        - pkg-config
+        - python 3.12
+      host:
+        - libevent 2.1.*
+        - libhwloc 2.12.*
+        - zlib 1.3.*
+
+    test:
+      commands:
+        - test -f $PREFIX/lib/libpmix${SHLIB_EXT}
+        - test ! -f $PREFIX/lib/libpmpix.a
+        - test ! -f $PREFIX/bin/pmix_info
+        - test ! -d $PREFIX/include/pmix/src
+        - test ! -d $PREFIX/share/doc/pmix
+
+  - name: libpmix-devel
+    build:
+      run_exports:
+        - {{ pin_subpackage('libpmix', max_pin='x') }}
+    files:
+      include:
+        - include/
+        - lib/pkgconfig/
+    requirements:
+      run:
+        - {{ pin_subpackage('libpmix', exact=True) }}
+    test:
+      requires:
+        - pkg-config
+      commands:
+        - test -f $PREFIX/include/pmix.h
+        - test -d $PREFIX/include/pmix/src
+        - test -f $PREFIX/lib/libpmix${SHLIB_EXT}
+        - pkg-config --cflags --libs pmix
+
+  - name: pmix-bin
+    files:
+      # should only include files excluded by libpmix
+      include:
+        - bin/
+    requirements:
+      build:
+        - {{ compiler('c') }}
+      host:
+        - {{ pin_subpackage('libpmix', exact=True) }}
+      run:
+        - {{ pin_subpackage('libpmix', exact=True) }}
+    test:
+      commands:
+        - pmix_info
+
+about:
+  home: https://pmix.org
+  summary: OpenPMIx Implementation of the PMIx Standard
+  description: |
+    Reference Implementation of the Process Management Interface Exascale (PMIx) standard
+  license: BSD-3-Clause
+  license_file: LICENSE
+  doc_url: https://docs.openpmix.org
+  dev_url: https://github.com/openpmix/openpmix
+
+extra:
+  feedstock-name: openpmix
+  recipe-maintainers:
+    - andrsd
