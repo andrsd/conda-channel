@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 79985573a1477a60e69731faa9f73a47ad19899a909d800ba45c74e6d690868b
+  patches:
+    - files/gcc-missing-include-fix.patch
 
 build:
   number: {{ build }}
