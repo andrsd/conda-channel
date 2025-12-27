@@ -1,0 +1,11 @@
+--- contrib/metis/GKlib/string.c.org	2025-12-27 11:56:26.576921214 -0700
++++ contrib/metis/GKlib/string.c	2025-12-27 11:59:37.094570341 -0700
+@@ -13,6 +13,8 @@
+ */
+ /************************************************************************/
+ 
++#define _XOPEN_SOURCE
++#include <time.h>
+ #include "GKlib.h"
+ 
+ 

@@ -17,7 +17,8 @@ cmake -S . -B build \
     -DGMSH_RELEASE=1 \
     -DENABLE_TOUCHBAR=OFF \
     -DENABLE_CAIRO=$USE_CAIRO \
-    -DENABLE_WRAP_PYTHON=ON
+    -DENABLE_WRAP_PYTHON=ON \
+    -DENABLE_TESTS=OFF
 
 cmake --build build --parallel ${CPU_COUNT} -- install
 

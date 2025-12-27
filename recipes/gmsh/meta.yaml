@@ -13,6 +13,8 @@ source:
   patches:
     - patches/fltk_nominmax.patch
     - patches/disable_wmain.patch
+    - patches/strptime-fix.patch        # [linux]
+    - patches/omp-linkage-fix.patch
 
 build:
   number: {{ build }}

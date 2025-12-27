@@ -1,0 +1,23 @@
+--- src/mesh/meshGRegionHxt.cpp.org	2025-12-27 12:56:19.712265050 -0700
++++ src/mesh/meshGRegionHxt.cpp	2025-12-27 12:53:00.475622719 -0700
+@@ -24,8 +24,8 @@
+ 
+ #if defined(HAVE_HXT)
+ 
+-extern "C" {
+ #include "hxt_omp.h"
++extern "C" {
+ #include "hxt_tetMesh.h"
+ #include "hxt_tetDelaunay.h"
+ }
+--- contrib/hxt/tetBR/src/hxt_boundary_recovery.cxx.org	2025-12-27 12:47:27.108896719 -0700
++++ contrib/hxt/tetBR/src/hxt_boundary_recovery.cxx	2025-12-27 12:50:50.636508140 -0700
+@@ -1,7 +1,7 @@
++#include "hxt_omp.h"
+ extern "C" {
+ #include "hxt_mesh.h"
+ #include "hxt_tools.h"
+-#include "hxt_omp.h"
+ #include "predicates.h"
+ }
+ 
