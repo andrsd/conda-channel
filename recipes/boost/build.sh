@@ -1,6 +1,16 @@
 #!/bin/bash
 set -ex
 
+# work-around for https://github.com/bfgroup/b2/issues/405
+echo "using python" > user-config.jam
+echo ": $PY_DUMMY_VER" >> user-config.jam
+echo ": $PYTHON" >> user-config.jam
+echo ": $PREFIX/include/python$PY_DUMMY_VER" >> user-config.jam
+echo ": $PREFIX/lib" >> user-config.jam
+echo ";" >> user-config.jam
+# see https://www.boost.org/build/doc/html/bbv2/overview/configuration.html
+export BOOST_BUILD_PATH=$SRC_DIR
+
 # Hints:
 # http://boost.2283326.n4.nabble.com/how-to-build-boost-with-bzip2-in-non-standard-location-td2661155.html
 # http://www.gentoo.org/proj/en/base/amd64/howtos/?part=1&chap=3
@@ -17,6 +27,8 @@ CXXFLAGS="${CXXFLAGS} -fPIC"
 
 if [[ "${target_platform}" == osx* ]]; then
     TOOLSET=clang
+    # see https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
+    CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
 elif [[ "${target_platform}" == linux* ]]; then
     TOOLSET=gcc
 fi
@@ -71,10 +83,11 @@ mkdir temp_prefix
     runtime-link=shared \
     link=shared \
     toolset=${TOOLSET} \
-    python="${PY_VER}" \
+    python="${PY_DUMMY_VER}" \
     include="${INCLUDE_PATH}" \
     cxxflags="${CXXFLAGS}" \
     linkflags="${LINKFLAGS}" \
+    cxxstd=20 \
     --layout=system \
     -j"${CPU_COUNT}" \
     install
@@ -85,3 +98,10 @@ rm -f ./temp_prefix/lib/libboost_python*
 rm -f ./temp_prefix/lib/libboost_numpy*
 rm -rf ./temp_prefix/lib/cmake/boost_python*
 rm -rf ./temp_prefix/lib/cmake/boost_numpy*
+
+# Use a larger default for pre-generated headers.
+# This generates more macros for larger sizes. See
+# https://github.com/boostorg/hana/blob/boost-1.85.0/include/boost/hana/detail/struct_macros.hpp.erb
+# for more details.
+export MAX_NUMBER_OF_MEMBERS=200
+erb boost/hana/detail/struct_macros.hpp.erb > temp_prefix/include/boost/hana/detail/struct_macros.hpp

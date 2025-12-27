@@ -1,7 +1,7 @@
-{% set version = "1.84.0" %}
+{% set version = "1.88.0" %}
 
 {% set boost_libs = [
-    "atomic", "chrono", "container", "context", "contract", "coroutine",
+    "atomic", "charconv", "chrono", "cobalt", "container", "context", "contract", "coroutine",
     "date_time", "filesystem", "graph", "iostreams", "locale", "log", "log_setup",
     "math_c99", "math_c99f", "math_tr1", "math_tr1f", "prg_exec_monitor",
     "program_options", "random", "regex", "serialization", "system", "thread",
@@ -11,26 +11,35 @@
 {% set boost_libs_static_only = ["exception", "test_exec_monitor"] %}
 {% set boost_libs_py = ["python%s" % py, "numpy%s" % py] %}
 
+# we only need _a_ python version to build the headers for libboost-headers,
+# make it accessible in the build scripts via build/script_env below.
+{% set PY_DUMMY_VER = "3.10" %}
+{% set NP_DUMMY_VER = "2.0" %}
+
 package:
   name: boost-split
   version: {{ version }}
 
 source:
   url: https://archives.boost.io/release/{{ version }}/source/boost_{{ version|replace(".", "_") }}.tar.bz2
-  sha256: cc4b893acf645c9d4b698e9a0f08ca8846aa5d6c68275c14c3e7949c24109454
+  sha256: 46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b
   patches:
     # ensure our compiler flags get used during bootstrapping
     - patches/0001-Add-default-value-for-cxx-and-cxxflags-options-for-t.patch
 
 build:
   number: 1
+  script_env:
+    - PY_DUMMY_VER={{ PY_DUMMY_VER }}
+    - NP_DUMMY_VER={{ NP_DUMMY_VER }}
 
 requirements:
   build:
     - {{ compiler('cxx') }}
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - python {{ python }}                    # [build_platform != target_platform]
-    - numpy {{ numpy }}                      # [build_platform != target_platform]
+    - python {{ PY_DUMMY_VER }}              # [build_platform != target_platform]
+    - numpy {{ NP_DUMMY_VER }}               # [build_platform != target_platform]
+    - ruby *
   host:
     - icu               # [unix]
     - xz                # [unix]
@@ -38,8 +47,8 @@ requirements:
     - zlib
     - zstd
     # see conda_build_config
-    - python {{ python }}
-    - numpy {{ numpy }}
+    - python {{ PY_DUMMY_VER }}
+    - numpy {{ NP_DUMMY_VER }}
 
 outputs:
   - name: libboost-headers
@@ -51,8 +60,8 @@ outputs:
         - cmake             # [win]
       host:
       run_constrained:
-        # make sure we don't co-install with old version of old package name
-        - boost-cpp ={{ version }}
+        # avoid co-installation with old naming of package
+        - boost-cpp <0.0a0
     test:
       commands:
         # presence of regular headers
@@ -98,13 +107,10 @@ outputs:
         - zlib
         - zstd
       run_constrained:
-        # Anaconda's output is also called libboost; therefore we automatically
-        # avoid issues of co-installability, because a package with the same name
-        # can only be installed once. Rather, we need to ensure that conda-forge's
-        # old name "boost-cpp" cannot be co-installed wrongly. Since we keep that
-        # output as a compatibility wrapper (see below), it's enough to enforce
-        # the same version to ensure no old boost packages can be co-installed.
-        - boost-cpp ={{ version }}
+        # avoid co-installation with old naming of package
+        - boost-cpp <0.0a0
+        # see https://www.boost.org/users/history/version_1_87_x.html
+        - __win ==0|>=10        # [win]
     test:
       commands:
         # absence of headers
@@ -165,8 +171,8 @@ outputs:
         - {{ pin_subpackage("libboost", exact=True) }}
         - {{ pin_subpackage("libboost-headers", exact=True) }}
       run_constrained:
-        # make sure we don't co-install with old version of old package name
-        - boost-cpp ={{ version }}
+        # avoid co-installation with old naming of package
+        - boost-cpp <0.0a0
     test:
       files:
         - test
@@ -195,48 +201,30 @@ outputs:
         - ./test_lib.sh   # [unix]
         - ./test_lib.bat  # [win]
 
-  # compatibility output for old naming convention
-  - name: boost-cpp
-    requirements:
-      host:
-        # match host deps to avoid hash collisions between wrappers
-        - icu               # [unix]
-        - libiconv          # [win]
-        - bzip2
-        - xz
-        - zlib
-        - zstd
-        - {{ pin_subpackage("libboost-devel", exact=True) }}
-      run:
-        - {{ pin_subpackage("libboost-devel", exact=True) }}
-    test:
-      commands:
-        - echo "tested in other outputs"
-
   # the python libraries (no headers)
   - name: libboost-python
     script: build-py.sh   # [unix]
     script: build-py.bat  # [win]
     requirements:
       build:
-        - python {{ python }}                    # [build_platform != target_platform]
+        - python {{ PY_DUMMY_VER }}              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-        - numpy {{ numpy }}               # [build_platform != target_platform]
+        - numpy {{ NP_DUMMY_VER }}               # [build_platform != target_platform]
         - {{ compiler('cxx') }}
       host:
         # ensure python_impl gets picked up by smithy (by using it as a selector) and therefore
         # populated in the .ci_config/*.yaml files, for use in {build,install}-py.{sh,bat}.
-        - python {{ python }}
-        - numpy {{ numpy }}
+        - python {{ PY_DUMMY_VER }}
+        - numpy {{ NP_DUMMY_VER }}
         # keep this in host to ensure that the environment content snapshot before/after
         # installation doesn't consider the headers or CMake metadata part of this output
         - {{ pin_subpackage("libboost-devel", exact=True) }}
       run:
-        - python {{ python }}
+        - python {{ PY_DUMMY_VER }}
         - {{ pin_compatible('numpy') }}
       run_constrained:
-        # make sure we don't co-install with old version of old package name
-        - boost ={{ version }}
+        # avoid co-installation with old naming of package
+        - boost <0.0a0
         # avoid co-installation with Anaconda's naming of this output
         - py-boost <0.0a0
     test:
@@ -272,25 +260,22 @@ outputs:
       run_exports:
         # run-export the output without the headers
         - {{ pin_subpackage("libboost-python", max_pin="x.x") }}
-        # output may also depend on boost libs
-        - {{ pin_subpackage("libboost", max_pin="x.x") }}
     requirements:
       # dummy build env to avoid EnvironmentLocationNotFound on win
       build:                # [win]
         - cmake             # [win]
       host:
-        - python {{ python }}
-        - numpy {{ numpy }}
+        - python {{ PY_DUMMY_VER }}
+        - numpy {{ NP_DUMMY_VER }}
         # as for libboost-python
         - {{ pin_subpackage("libboost-devel", exact=True) }}
       run:
-        - python {{ python }}
-        - {{ pin_compatible('numpy') }}
+        - python {{ PY_DUMMY_VER }}
         - {{ pin_subpackage("libboost-python", exact=True) }}
         - {{ pin_subpackage("libboost-devel", exact=True) }}
       run_constrained:
-        # make sure we don't co-install with old version of old package name
-        - boost ={{ version }}
+        # avoid co-installation with old naming of package
+        - boost <0.0a0
         # avoid co-installation with Anaconda's naming of this output
         - py-boost <0.0a0
     test:
@@ -300,20 +285,6 @@ outputs:
         - test -d $PREFIX/lib/cmake/boost_numpy-{{ version }}                   # [unix]
         - if not exist %LIBRARY_LIB%\cmake\boost_python-{{ version }} exit 1    # [win]
         - if not exist %LIBRARY_LIB%\cmake\boost_numpy-{{ version }} exit 1     # [win]
-
-  # compatibility output for old naming convention
-  - name: boost
-    requirements:
-      host:
-        # match host deps to avoid hash collisions between wrappers
-        - python {{ python }}
-        - numpy {{ numpy }}
-        - {{ pin_subpackage("libboost-python-devel", exact=True) }}
-      run:
-        - {{ pin_subpackage("libboost-python-devel", exact=True) }}
-    test:
-      commands:
-        - echo "tested in other outputs"
 
 about:
   home: http://www.boost.org/
@@ -326,4 +297,3 @@ about:
 extra:
   recipe-maintainers:
     - andrsd
-  feedstock-name: boost
