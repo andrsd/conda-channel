@@ -13,7 +13,7 @@ cmake_args=(
     -DVTK_BUILD_TESTING=OFF
     -DVTK_BUILD_EXAMPLES=OFF
     -DVTK_LEGACY_SILENT=OFF
-    -DVTK_WRAP_PYTHON=ON
+    -DVTK_WRAP_PYTHON=OFF
     -DVTK_WRAP_JAVA=OFF
     -DVTK_USE_MPI=ON
     -DVTK_USE_EXTERNAL=ON
@@ -54,7 +54,8 @@ if [[ "$target_platform" == linux-* ]]
 then
     cmake_args+=(
         "-DVTK_USE_X=OFF"
-        "-DVTK_OPENGL_HAS_OSMESA=ON"
+        "-DVTK_OPENGL_HAS_EGL=OFF"
+        "-DVTK_OPENGL_USE_GLES=OFF"
     )
 fi
 

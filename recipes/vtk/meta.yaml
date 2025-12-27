@@ -1,7 +1,7 @@
 {% set version = "9.5.0" %}
 {% set parts = version.split(".") %}
 {% set maj_min = parts[0] ~ "." ~ parts[1] %}
-{% set build = 4 %}
+{% set build = 5 %}
 
 package:
   name: vtk
@@ -15,21 +15,19 @@ source:
 
 build:
   number: {{ build }}
-  string: {{ mpi }}_py{{ PY_VER.replace('.', '') }}h{{ PKG_HASH }}_{{ build }}
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
   skip: true # [win]
 
 requirements:
   build:
     - cmake
     - make
-    - python {{ python }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ mpi }}
     - mpi4py
 
   host:
-    - python {{ python }}
     - hdf5 1.14.* {{ mpi }}_*
     - libpng
     - libjpeg-turbo
@@ -46,11 +44,15 @@ requirements:
     - gl2ps
     - fmt 11.*
     - zlib 1.3.*
-    - mesalib 25.1.*   # [linux]
-    - xorg-libxt       # [linux]
+    - xorg-libxt         # [linux]
+    - libgl-devel        # [linux]
+    - libegl-devel       # [linux]
+    - libglvnd-devel     # [linux]
+    - libglx-devel       # [linux]
+    - libglu             # [linux]
+    - libopengl-devel    # [linux]
   run:
     - {{ mpi }}
-    - python {{ python }}
     - hdf5 1.14.* {{ mpi }}_*
     - libpng
     - libjpeg-turbo
