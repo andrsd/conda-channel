@@ -46,7 +46,7 @@ requirements:
     - gl2ps
     - fmt 11.*
     - zlib 1.3.*
-    - mesalib 23.2.*   # [linux]
+    - mesalib 25.1.*   # [linux]
     - xorg-libxt       # [linux]
   run:
     - {{ mpi }}
@@ -67,7 +67,7 @@ requirements:
     - gl2ps
     - fmt 11.*
     - zlib 1.3.*
-    - mesalib 23.2.*   # [linux]
+    - mesalib 25.1.*   # [linux]
     - xorg-libxt       # [linux]
 
 test:
