@@ -1,0 +1,23 @@
+--- backends/i386_regs.c.org	2025-12-26 20:17:51.968492189 -0700
++++ backends/i386_regs.c	2025-12-26 20:18:30.352563008 -0700
+@@ -83,7 +83,7 @@
+ 
+   switch (regno)
+     {
+-      static const char baseregs[][2] =
++      static const char baseregs[][3] =
+ 	{
+ 	  "ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "ip"
+ 	};
+--- backends/x86_64_regs.c.org	2025-12-26 20:20:07.372742175 -0700
++++ backends/x86_64_regs.c	2025-12-26 20:20:22.956770968 -0700
+@@ -80,7 +80,7 @@
+ 
+   switch (regno)
+     {
+-      static const char baseregs[][2] =
++      static const char baseregs[][3] =
+ 	{
+ 	  "ax", "dx", "cx", "bx", "si", "di", "bp", "sp"
+ 	};
+  
