@@ -1,0 +1,8 @@
+--- CMakeLists.txt.org	2026-01-07 13:43:39
++++ CMakeLists.txt	2026-01-07 13:43:50
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.16)
+ project(ParMETIS C)
+ 
+ set(GKLIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/metis/GKlib CACHE PATH "path to GKlib")
