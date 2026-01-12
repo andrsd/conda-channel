@@ -6,27 +6,18 @@ export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 
 mkdir builddir
 
-# HACK: extend $CONDA_PREFIX/meson_cross_file that's created in
-# https://github.com/conda-forge/ctng-compiler-activation-feedstock/blob/main/recipe/activate-gcc.sh
-# https://github.com/conda-forge/clang-compiler-activation-feedstock/blob/main/recipe/activate-clang.sh
-# to use host python; requires that [binaries] section is last in meson_cross_file
-echo "python = '${PREFIX}/bin/python'" >> ${CONDA_PREFIX}/meson_cross_file.txt
-
 if [[ $target_platform == "osx-arm64" ]]; then
-    # currently cannot properly detect long double format
-    # on osx-arm64 when cross-compiling in QEMU, see
+    # cannot properly detect long double format when cross-compiling, see
     # https://github.com/numpy/numpy/pull/24414
-    echo "[properties]" >> ${CONDA_PREFIX}/meson_cross_file.txt
-    echo "longdouble_format = 'IEEE_DOUBLE_LE'" >> ${CONDA_PREFIX}/meson_cross_file.txt
+    # write to separate cross-file to not interfere with default cross-python activation, c.f.
+    # https://github.com/conda-forge/cross-python-feedstock/blob/91d3c9cf/recipe/activate-cross-python.sh#L111-L125
+    echo "[properties]"                                 > $SRC_DIR/numpy_cross_file.txt
+    echo "longdouble_format = 'IEEE_DOUBLE_LE'"         >> $SRC_DIR/numpy_cross_file.txt
+    export MESON_ARGS="$MESON_ARGS --cross-file=$SRC_DIR/numpy_cross_file.txt"
+    # see #370 and https://github.com/numpy/numpy/issues/29820
+    export CFLAGS="$CFLAGS -DACCELERATE_NEW_LAPACK"
+    export CXXFLAGS="$CXXFLAGS -DACCELERATE_NEW_LAPACK"
 fi
-
-if [[ -z ${var+x} ]] ; then
-    export MESON_ARGS="--buildtype release --prefix=$PREFIX -Dlibdir=lib"
-fi
-
-# meson-python already sets up a -Dbuildtype=release argument to meson, so
-# we need to strip --buildtype out of MESON_ARGS or fail due to redundancy
-MESON_ARGS_REDUCED="$(echo $MESON_ARGS | sed 's/--buildtype release //g')"
 
 # -wnx flags mean: --wheel --no-isolation --skip-dependency-check
 if [[ "$target_platform" == osx-* ]]; then
@@ -34,15 +25,15 @@ if [[ "$target_platform" == osx-* ]]; then
       -Cbuilddir=builddir \
       -Csetup-args=-Dblas=accelerate \
       -Csetup-args=-Dlapack=accelerate \
-      -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=} \
+      -Csetup-args=${MESON_ARGS// / -Csetup-args=} \
       || (cat builddir/meson-logs/meson-log.txt && exit 1)
 else
   $PYTHON -m build -w -n -x \
       -Cbuilddir=builddir \
       -Csetup-args=-Dblas=openblas \
       -Csetup-args=-Dlapack=openblas \
-      -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=} \
+      -Csetup-args=${MESON_ARGS// / -Csetup-args=} \
       || (cat builddir/meson-logs/meson-log.txt && exit 1)
 fi
 
-pip install dist/numpy*.whl
+$PYTHON -m pip install dist/numpy*.whl
