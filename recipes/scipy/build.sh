@@ -9,19 +9,23 @@ mkdir builddir
 # to use host python; requires that [binaries] section is last in meson_cross_file
 echo "python = '${PREFIX}/bin/python'" >> ${CONDA_PREFIX}/meson_cross_file.txt
 
-if [[ -z ${var+x} ]] ; then
-    export MESON_ARGS="--buildtype release --prefix=$PREFIX -Dlibdir=lib"
-fi
-
-# meson-python already sets up a -Dbuildtype=release argument to meson, so
-# we need to strip --buildtype out of MESON_ARGS or fail due to redundancy
-MESON_ARGS_REDUCED="$(echo $MESON_ARGS | sed 's/--buildtype release //g')"
-
 # -wnx flags mean: --wheel --no-isolation --skip-dependency-check
-$PYTHON -m build -w -n -x \
-    -Cbuilddir=builddir \
-    -Csetup-args=-Dblas=blas \
-    -Csetup-args=-Dlapack=lapack \
-    -Csetup-args=-Duse-g77-abi=true \
-    -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=} \
-    || (cat builddir/meson-logs/meson-log.txt && exit 1)
+if [[ "$target_platform" == osx-* ]]; then
+    $PYTHON -m build -w -n -x \
+        -Cbuilddir=builddir \
+        -Cinstall-args=--tags=runtime,python-runtime,devel \
+        -Csetup-args=-Dblas=accelerate \
+        -Csetup-args=-Dlapack=accelerate \
+        -Csetup-args=-Duse-g77-abi=true \
+        -Csetup-args=${MESON_ARGS// / -Csetup-args=} \
+        || (cat builddir/meson-logs/meson-log.txt && exit 1)
+else
+    $PYTHON -m build -w -n -x \
+        -Cbuilddir=builddir \
+        -Cinstall-args=--tags=runtime,python-runtime,devel \
+        -Csetup-args=-Dblas=openblas \
+        -Csetup-args=-Dlapack=openblas \
+        -Csetup-args=-Duse-g77-abi=true \
+        -Csetup-args=${MESON_ARGS// / -Csetup-args=} \
+        || (cat builddir/meson-logs/meson-log.txt && exit 1)
+fi

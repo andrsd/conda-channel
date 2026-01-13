@@ -1,9 +1,17 @@
 numpy:
-  - 1.26
+  - 2
+
 python_impl:
   - cpython
+
 python:
-  - 3.9
-  - 3.10
   - 3.11
   - 3.12
+
+blas:
+  - openblas            # [linux]
+  - libaccelerate-osx   # [osx]
+
+lapack:
+  - openblas            # [linux]
+  - libaccelerate-osx   # [osx]
