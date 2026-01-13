@@ -1,5 +1,5 @@
 {% set version = "3.15.1" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: h5py
@@ -28,22 +28,22 @@ requirements:
     - hdf5 1.14.* {{ mpi }}_*                # [build_platform != target_platform]
     - numpy {{ numpy }}                      # [build_platform != target_platform]
     - {{ compiler("c") }}
-    - {{ mpi }}                              # [mpi == 'openmpi' and build_platform != target_platform]
+    - {{ mpi }}
   host:
     - python {{ python }}
     - pip
     - setuptools
     - numpy {{ numpy }}
-    - {{ mpi }}  # [mpi != 'nompi']
-    - mpi4py >=3.0  # [mpi != 'nompi']
+    - {{ mpi }}
+    - mpi4py >=3.0
     - hdf5 1.14.* {{ mpi }}_*
     - cython >=0.29.31,<4
     - pkgconfig
   run:
-    - python
+    - python {{ python }}
     - cached-property
-    - {{ mpi }}  # [mpi != 'nompi']
-    - mpi4py >=3.0  # [mpi != 'nompi']
+    - {{ mpi }}
+    - mpi4py >=3.0
     - hdf5 1.14.* {{ mpi }}_*
 
 test:
