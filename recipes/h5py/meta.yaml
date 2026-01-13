@@ -15,7 +15,7 @@ source:
 
 build:
   skip: true  # [py<=37]
-  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  string: {{ mpi }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ build }}
   number: {{ build }}
   script_env:
     - HDF5_HAS_ROS3=1  # [build_platform != target_platform]
