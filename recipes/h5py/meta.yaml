@@ -1,5 +1,5 @@
-{% set version = "3.10.0" %}
-{% set build = 3 %}
+{% set version = "3.15.1" %}
+{% set build = 1 %}
 
 package:
   name: h5py
@@ -7,7 +7,11 @@ package:
 
 source:
   url: https://github.com/h5py/h5py/archive/{{ version }}.tar.gz
-  sha256: 9cac7838ab139ec71adf721a1305b954e18efa4f80c82fcfe34e1eb9639ded29
+  sha256: 55a03d8fc1db535b243cccda3e6237844da25a17a2df3bc0ea9db6fbbbd7bf2b
+  patches:
+    # Disable complex256 for arm64
+    # follow https://github.com/conda-forge/cross-python-feedstock/issues/92
+    - files/bad-numpy-patch.patch   # [osx and arm64]
 
 build:
   skip: true  # [py<=37]
@@ -18,29 +22,29 @@ build:
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
+    - python {{ python }}                    # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - cython 0.29.32                         # [build_platform != target_platform]
-    - hdf5 * {{ mpi }}_*                     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
+    - cython >=0.29.31,<4                    # [build_platform != target_platform]
+    - hdf5 1.14.* {{ mpi }}_*                # [build_platform != target_platform]
+    - numpy {{ numpy }}                      # [build_platform != target_platform]
     - {{ compiler("c") }}
-    - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
+    - {{ mpi }}                              # [mpi == 'openmpi' and build_platform != target_platform]
   host:
-    - python
+    - python {{ python }}
     - pip
-    - numpy
+    - setuptools
+    - numpy {{ numpy }}
     - {{ mpi }}  # [mpi != 'nompi']
     - mpi4py >=3.0  # [mpi != 'nompi']
-    - hdf5 * {{ mpi }}_*
-    - cython 0.29.32
+    - hdf5 1.14.* {{ mpi }}_*
+    - cython >=0.29.31,<4
     - pkgconfig
   run:
     - python
     - cached-property
-    - {{ pin_compatible('numpy') }}
     - {{ mpi }}  # [mpi != 'nompi']
     - mpi4py >=3.0  # [mpi != 'nompi']
-    - hdf5 * {{ mpi }}_*
+    - hdf5 1.14.* {{ mpi }}_*
 
 test:
   imports:
