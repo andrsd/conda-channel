@@ -1,5 +1,5 @@
-{% set version = "3.0.0" %}
-{% set build = 3 %}
+{% set version = "3.1.0" %}
+{% set build = 0 %}
 
 package:
   name: exodusiicpp
@@ -7,9 +7,7 @@ package:
 
 source:
   url: https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 79985573a1477a60e69731faa9f73a47ad19899a909d800ba45c74e6d690868b
-  patches:
-    - files/gcc-missing-include-fix.patch
+  sha256: d8c18aabf4d58b4b46f6586e463a8cdb626db472b3ebe61491ea2a16392c2112
 
 build:
   number: {{ build }}
