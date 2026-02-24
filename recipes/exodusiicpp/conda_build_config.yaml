@@ -5,3 +5,22 @@ MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
 mpi:
   - mpich  # [not win]
   - openmpi
+
+python:
+  - 3.11
+  - 3.12
+  - 3.13
+
+c_compiler:
+  - clang                   # [osx]
+  - gcc                     # [linux]
+c_compiler_version:
+  - "20"                    # [osx]
+  - "15"                    # [linux]
+
+cxx_compiler:
+  - clangxx                 # [osx]
+  - gxx                     # [linux]
+cxx_compiler_version:
+  - "20"                    # [osx]
+  - "15"                    # [linux]
