@@ -1,6 +1,6 @@
 {% set version = "2022.03.23" %}
 {% set commit = "529470f1d079c2526576d5ee9ab9e6783ae5758c" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: poly2tri
