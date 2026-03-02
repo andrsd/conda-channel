@@ -1,6 +1,6 @@
 MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
   - 10.15                                                   # [x86_64 and osx]
-  - 11.3                                                    # [arm64 and osx]
+  - 13.3                                                    # [arm64 and osx]
 
 mpi:
   - mpich  # [not win]
@@ -10,17 +10,3 @@ python:
   - 3.11
   - 3.12
   - 3.13
-
-c_compiler:
-  - clang                   # [osx]
-  - gcc                     # [linux]
-c_compiler_version:
-  - "20"                    # [osx]
-  - "15"                    # [linux]
-
-cxx_compiler:
-  - clangxx                 # [osx]
-  - gxx                     # [linux]
-cxx_compiler_version:
-  - "20"                    # [osx]
-  - "15"                    # [linux]
