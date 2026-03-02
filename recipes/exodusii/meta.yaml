@@ -1,5 +1,5 @@
 {% set version = "2024.06.27" %}
-{% set build = 2 %}
+{% set build = 3 %}
 
 package:
   name: exodusii
@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/sandialabs/seacas/archive/v{{ version | replace('.', '-') }}.tar.gz
   sha256: a28db6aa3d03ff0a54a091210cf867661427f0b22ac08f89a4cc3bd8e0c704b2
+  patches:
+    - files/clang-21-include-fix.patch
 
 build:
   number: {{ build }}
