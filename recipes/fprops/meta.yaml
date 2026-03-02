@@ -1,5 +1,5 @@
 {% set version = "8.2.0" %}
-{% set build = 3 %}
+{% set build = 4 %}
 
 package:
   name: fprops
@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/andrsd/fprops/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 3d5e0c38f30d7f454a13b42c1d6b342c35b0bcbd12ba917d4a13cee463abe9f9
+  patches:
+    - files/fix-include.patch
 
 build:
   number: {{ build }}

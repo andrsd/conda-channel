@@ -1,0 +1,10 @@
+--- include/fprops/exception.h.org	2026-03-02 10:46:50
++++ include/fprops/exception.h	2026-03-02 10:46:11
+@@ -3,6 +3,7 @@
+ 
+ #pragma once
+ 
++#include <cstdlib>
+ #include "fmt/format.h"
+ #include <exception>
+ 
