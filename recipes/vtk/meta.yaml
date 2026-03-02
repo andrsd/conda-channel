@@ -1,7 +1,7 @@
 {% set version = "9.5.0" %}
 {% set parts = version.split(".") %}
 {% set maj_min = parts[0] ~ "." ~ parts[1] %}
-{% set build = 5 %}
+{% set build = 6 %}
 
 package:
   name: vtk
@@ -12,6 +12,7 @@ source:
   sha256: 04ae86246b9557c6b61afbc534a6df099244fbc8f3937f82e6bc0570953af87d
   patches:
     - files/vtk-patch.patch
+    - files/fmt-include-fix.patch
 
 build:
   number: {{ build }}

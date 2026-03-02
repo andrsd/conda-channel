@@ -1,0 +1,10 @@
+--- ThirdParty/fmt/vtkfmt/vtkfmt/format.h.org	2025-06-23 13:12:36
++++ ThirdParty/fmt/vtkfmt/vtkfmt/format.h	2026-03-02 11:39:19
+@@ -42,6 +42,7 @@
+ 
+ #ifndef FMT_MODULE
+ #  include <cmath>    // std::signbit
++#  include <cstdlib>
+ #  include <cstddef>  // std::byte
+ #  include <cstdint>  // uint32_t
+ #  include <cstring>  // std::memcpy
