@@ -1,6 +1,6 @@
 {% set version = "5.0.8" %}
 {% set major = version.rpartition('.')[0] %}
-{% set build = 1000 %}
+{% set build = 1001 %}
 
 # give conda package a higher build number
 {% if mpi_type == 'conda' %}
