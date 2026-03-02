@@ -1,5 +1,5 @@
 {% set version = "2.3.0" %}
-{% set build = 4 %}
+{% set build = 5 %}
 
 package:
   name: krado
@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/andrsd/krado/archive/refs/tags/v{{ version }}.tar.gz
   sha256: ac22c51d05d0e787f9a5e04d8153c556ceeee8e08a4532357af641b3db751416
+  patches:
+    - files/include-fix.patch
 
 build:
   number: {{ build }}
