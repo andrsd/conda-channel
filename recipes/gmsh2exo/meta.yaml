@@ -1,6 +1,6 @@
 {% set version = "0.10" %}
 {% set commit = "12d1556505c244059741466dec3e012af4974e3b" %}
-{% set build = 2 %}
+{% set build = 3 %}
 
 package:
   name: gmsh2exo
@@ -9,6 +9,8 @@ package:
 source:
   url: https://github.com/andrsd/gmsh2exo/archive/{{ commit }}.tar.gz
   sha256: f388cc8c6fea950f9f574fe3352211ef6dd618b160ab71a9977e74ae295bfb7b
+  patches:
+    - files/include-fix.patch
 
 build:
   number: {{ build }}
