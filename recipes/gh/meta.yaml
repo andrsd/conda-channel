@@ -14,7 +14,7 @@ build:
   script_env:
     - GH_VERSION=v{{ version }}
   number: {{ build }}
-  skip: True  # [win or linux]
+  skip: True  # [win]
 
 requirements:
   build:
