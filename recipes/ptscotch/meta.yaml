@@ -1,5 +1,5 @@
-{% set version = "7.0.6" %}
-{% set build = 3 %}
+{% set version = "7.0.10" %}
+{% set build = 0 %}
 
 package:
   name: ptscotch
@@ -7,9 +7,11 @@ package:
 
 source:
   url: https://web.cels.anl.gov/projects/petsc/download/externalpackages/scotch-v{{ version }}.tar.gz
-  sha256: b44acd0d2f53de4b578fa3a88944cccc45c4d2961cd8cefa9b9a1d5431de8e2b
+  sha256: 8327725a08cdd4fc7575e291251883b4f93f75b07a54bc58f89f50dcbba7b244
   patches:
-    - files/gcc15-incompatible-pointer-type-fix.patch
+    - files/0001-put-metis-headers-in-include-scotch.patch
+    - files/0002-fix-ptesmumps.h.patch
+    - files/0007-use-external-dummysizes.patch
 
 build:
   number: {{ build }}
