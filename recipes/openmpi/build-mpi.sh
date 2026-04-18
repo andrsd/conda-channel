@@ -71,9 +71,10 @@ fi
             --with-hwloc=$PREFIX \
             --with-libevent=$PREFIX \
             --with-libfabric=$PREFIX \
-            --with-pmix=internal \
-            --with-prrte=internal \
+            --with-pmix=$PREFIX \
             --with-zlib=$PREFIX \
+            --disable-ucc \
+            --disable-ucx \
             --enable-ipv6
 
 make -j"${CPU_COUNT:-1}"
