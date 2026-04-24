@@ -28,14 +28,14 @@ requirements:
     - eigen =3.4.*
     - libboost-devel =1.88.*
     - fmt 11.*
-    - spdlog =1.*
+    - spdlog 1.16.*
     - pybind11
   run:
     - python
     - exodusiicpp =3.*
     - occt =7.9.*
     - fmt 11.*
-    - spdlog =1.*
+    - spdlog 1.16.*
 
 about:
   home: https://github.com/andrsd/krado
