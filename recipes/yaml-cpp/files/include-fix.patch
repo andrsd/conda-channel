@@ -1,0 +1,10 @@
+--- src/emitterutils.cpp.org	2026-05-01 07:57:35.744855512 -0600
++++ src/emitterutils.cpp	2026-05-01 07:57:55.640823751 -0600
+@@ -1,6 +1,7 @@
+ #include <algorithm>
+ #include <iomanip>
+ #include <sstream>
++#include <cstdint>
+ 
+ #include "emitterutils.h"
+ #include "exp.h"

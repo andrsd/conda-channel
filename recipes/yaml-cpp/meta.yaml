@@ -1,0 +1,40 @@
+{% set version = "0.8.0" %}
+{% set build = 1000 %}
+
+package:
+  name: yaml-cpp
+  version: {{ version }}
+
+source:
+  url: https://github.com/jbeder/yaml-cpp/archive/refs/tags/{{ version }}.tar.gz
+  sha256: fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
+  patches:
+    - files/include-fix.patch
+
+build:
+  number: {{ build }}
+  skip: true # [win]
+
+requirements:
+  build:
+    - cmake
+    - make
+    - {{ compiler('cxx') }}
+
+test:
+  commands:
+    - test -f "${PREFIX}/lib/libyaml-cpp${SHLIB_EXT}"                       # [unix]
+    - test -f "${PREFIX}/lib/cmake/yaml-cpp/yaml-cpp-config.cmake"          # [unix]
+
+about:
+  home: https://github.com/jbeder/yaml-cpp
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: yaml-cpp is a YAML parser and emitter in C++ matching the YAML 1.2 spec.
+  doc_url: https://github.com/jbeder/yaml-cpp/wiki/Tutorial
+  dev_url: https://github.com/jbeder/yaml-cpp
+
+extra:
+  recipe-maintainers:
+    - andrsd
