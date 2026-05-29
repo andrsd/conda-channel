@@ -1,6 +1,6 @@
 {% set version = "5.0.10" %}
 {% set major_minor = ".".join(version.split(".")[:2]) %}
-{% set build = 1002 %}
+{% set build = 1003 %}
 
 # give conda package a higher build number
 {% if mpi_type == 'conda' %}
