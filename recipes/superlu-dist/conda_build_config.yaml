@@ -1,0 +1,21 @@
+MACOSX_DEPLOYMENT_TARGET:                                   # [osx]
+  - 10.15                                                   # [x86_64 and osx]
+  - 13.3                                                    # [arm64 and osx]
+
+mpi:
+  - mpich
+  - openmpi
+
+blas:
+  - openblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+lapack:
+  - openblas  # [linux]
+  - libaccelerate-osx  # [osx]
+
+pin_run_as_build:
+  metis:
+    max_pin: x.x
+  parmetis:
+    max_pin: x.x

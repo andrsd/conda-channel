@@ -1,0 +1,48 @@
+{% set version = "9.2.1" %}
+{% set build = 0 %}
+
+package:
+  name: superlu-dist
+  version: {{ version }}
+
+source:
+  url: https://github.com/xiaoyeli/superlu_dist/archive/v{{ version }}.tar.gz
+  sha256: c80a1c2edaaa451ee9a54e005e5f3f56dc55cabe2b0a8d7acf5a1447a648157a
+
+build:
+  skip: true  # [win]
+  string: {{ mpi }}_h{{ PKG_HASH }}_{{ build }}
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ compiler('fortran') }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - make
+    - cmake
+    - {{ mpi }}
+    - {{ blas }}
+    - {{ lapack }}
+    - metis 5.1.0.p12
+    - parmetis 4.0.* {{ mpi }}_*
+  run:
+    - {{ blas }}
+    - {{ lapack }}
+    - {{ mpi }}
+    - metis 5.1.0.p12
+    - parmetis 4.0.* {{ mpi }}_*
+
+test:
+  commands:
+    - test -f $PREFIX/lib/libsuperlu_dist$SHLIB_EXT
+    - test -f $PREFIX/include/superlu_defs.h
+
+about:
+  home: https://github.com/xiaoyeli/superlu_dist/
+  summary: Distributed memory, MPI based SuperLU
+  license_file: License.txt
+
+extra:
+  recipe-maintainers:
+    - andrsd
