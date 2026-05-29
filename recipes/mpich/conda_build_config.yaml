@@ -7,14 +7,14 @@ c_compiler:
   - clang           # [osx]
 c_compiler_version:
   - 15              # [linux]
-  - 20              # [osx]
+  - 22              # [osx]
 
 cxx_compiler:
   - gxx             # [linux]
   - clangxx         # [osx]
 cxx_compiler_version:
   - 15              # [linux]
-  - 20              # [osx]
+  - 22              # [osx]
 
 fortran_compiler:
   - gfortran
