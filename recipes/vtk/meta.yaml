@@ -1,7 +1,7 @@
 {% set version = "9.5.0" %}
 {% set parts = version.split(".") %}
 {% set maj_min = parts[0] ~ "." ~ parts[1] %}
-{% set build = 6 %}
+{% set build = 7 %}
 
 package:
   name: vtk
@@ -33,8 +33,8 @@ requirements:
     - libpng
     - libjpeg-turbo
     - jsoncpp
-    - tbb
-    - tbb-devel
+    - tbb 2022.3.*
+    - tbb-devel 2022.3.*
     - libnetcdf 4.9.* {{ mpi }}_*
     - lz4-c
     - utfcpp
@@ -58,8 +58,8 @@ requirements:
     - libpng
     - libjpeg-turbo
     - jsoncpp
-    - tbb
-    - tbb-devel
+    - tbb 2022.3.*
+    - tbb-devel 2022.3.*
     - libnetcdf 4.9.* {{ mpi }}_*
     - lz4-c
     - utfcpp
