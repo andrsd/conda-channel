@@ -1,5 +1,5 @@
 {% set version = "3.24.6" %}
-{% set build = 3 %}
+{% set build = 4 %}
 
 package:
   name: petsc
@@ -36,6 +36,7 @@ requirements:
     - metis 5.1.0.p12
     - parmetis 4.0.* {{ mpi }}_*
     - hypre 3.0.* {{ mpi }}_*
+    - superlu-dist 9.2.* {{ mpi }}_*
   run:
     - {{ blas }}
     - {{ lapack }}
@@ -48,6 +49,7 @@ requirements:
     - metis 5.1.0.p12
     - parmetis 4.0.* {{ mpi }}_*
     - hypre 3.0.* {{ mpi }}_*
+    - superlu-dist 9.2.* {{ mpi }}_*
 
 test:
   requires:
