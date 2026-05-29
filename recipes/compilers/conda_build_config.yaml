@@ -6,20 +6,23 @@ c_compiler:
   - clang                   # [osx]
   - gcc                     # [linux]
 c_compiler_version:
-  - "20"                    # [osx]
+  - "22"                    # [osx]
   - "15"                    # [linux]
 
 cxx_compiler:
   - clangxx                 # [osx]
   - gxx                     # [linux]
 cxx_compiler_version:
-  - "20"                    # [osx]
+  - "22"                    # [osx]
   - "15"                    # [linux]
 
 fortran_compiler:
   - gfortran
 fortran_compiler_version:
   - "15"
+
+llvm_openmp:
+  - "22"                    # [osx]
 
 cross_platform:
   - linux-64                # [linux]

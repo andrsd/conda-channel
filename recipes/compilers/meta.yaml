@@ -26,7 +26,7 @@
 
 package:
   name: compilers
-  version: 1.11.0
+  version: 1.12.0
 
 build:
    number: 1000
@@ -95,7 +95,7 @@ outputs:
         - cctools >=1010.6                # [osx]
         - ld64 >=951.9                    # [osx]
         - llvm-openmp                     # [osx]
-        - gfortran_{{ cross_platform }}   # [linux or osx]
+        - gfortran                        # [linux or osx]
         - {{ pin_subpackage('c-compiler', exact=True) }}  # [linux]
     test:
       commands:
