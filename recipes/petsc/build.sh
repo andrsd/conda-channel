@@ -59,6 +59,8 @@ python ./configure \
   --with-metis=1 \
   --with-parmetis=1 \
   --with-hypre=1 \
+  --with-superlu_dist=1 \
+  --with-superlu_dist-pkg-config="$PREFIX/lib/pkgconfig" \
   --with-zlib=1 \
   --with-x=0 \
   --with-pic=1 \
