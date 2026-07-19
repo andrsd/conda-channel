@@ -1,6 +1,13 @@
 #!/bin/bash
-
 set -x
+
+sedinplace() {
+  if [[ $(uname) == Darwin ]]; then
+    sed -i "" "$@"
+  else
+    sed -i"" "$@"
+  fi
+}
 
 CMAKE_BUILD_TYPE=Release
 
@@ -14,3 +21,5 @@ cmake ${CMAKE_ARGS} \
   -DWITH_KOKKOS=OFF \
   ${SRC_DIR}
 make install -j${CPU_COUNT}
+
+sedinplace s%${BUILD_PREFIX}%${PREFIX}%g ${PREFIX}/share/cmake/caliper/caliper-targets.cmake
