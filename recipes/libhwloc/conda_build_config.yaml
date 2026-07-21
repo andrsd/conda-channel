@@ -5,15 +5,11 @@ cuda_compiler_version:
   - None
 
 cxx_compiler_version:
-  - 16                 # [osx]
-  - 18                 # [osx]
-  - 20                 # [osx]
+  - 22                 # [osx]
   - 11                 # [linux]
 
 libcxx_version:
-  - 16                 # [osx]
-  - 16                 # [osx]
-  - 20                 # [osx]
+  - 22                 # [osx]
   - 11                 # [linux]
 
 ROCM_COMPILATION:
