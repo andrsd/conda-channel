@@ -1,6 +1,6 @@
 {% set version = "5.0.10" %}
 {% set major_minor = ".".join(version.split(".")[:2]) %}
-{% set build = 1002 %}
+{% set build = 1004 %}
 
 # give conda package a higher build number
 {% if mpi_type == 'conda' %}
@@ -38,7 +38,7 @@ outputs:
       host:
         - libevent 2.1.*
         - libfabric-devel {{ libfabric }}.*
-        - libhwloc 2.12.*
+        - libhwloc 2.13.*
         - libpmix-devel 5.0.*
         - zlib 1.3.*
         - libnl 3.11.*                         # [linux]

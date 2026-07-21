@@ -1,6 +1,6 @@
 {% set name = "prrte" %}
 {% set version = "4.0.0" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: {{ name|lower }}-split
@@ -26,7 +26,7 @@ requirements:
     - pkg-config
   host:
     - libevent 2.1.*
-    - libhwloc 2.12.*
+    - libhwloc 2.13.*
     - libpmix-devel 6.0.*
     - pmix-bin 6.0.*
 
@@ -55,7 +55,7 @@ outputs:
         - {{ compiler('c') }}
       host:
         - libevent 2.1.*
-        - libhwloc 2.12.*
+        - libhwloc 2.13.*
         - libpmix-devel 6.0.*
         # not needed for run exports
         # but pcc symlink is removed if not here
@@ -95,7 +95,7 @@ outputs:
         - {{ compiler('c') }}
       host:
         - libevent 2.1.*
-        - libhwloc 2.12.*
+        - libhwloc 2.13.*
         - libpmix-devel 6.0.*
         - pmix-bin 6.0.*
         - {{ pin_subpackage('libprrte', exact=True) }}
