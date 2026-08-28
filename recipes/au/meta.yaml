@@ -1,5 +1,5 @@
-{% set version = "0.5.1" %}
-{% set build = 1 %}
+{% set version = "0.6.0" %}
+{% set build = 0 %}
 
 package:
   name: au
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/aurora-opensource/au/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 65675096bab253f81813760a5643810cb60c662a4fb2944bb49d77d9c11c85e8
+  sha256: e03aba27139b1e090b520945e62fc3ba2bf9128a096d68576eaf301970d5fb10
 
 build:
   number: {{ build }}
