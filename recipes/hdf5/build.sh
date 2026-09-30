@@ -41,3 +41,9 @@ sedinplace() {
 
 sedinplace "s%${BUILD_PREFIX}%\${prefix}%g" $PREFIX/bin/h5c++
 sedinplace "s%${BUILD_PREFIX}%\${prefix}%g" $PREFIX/bin/h5pcc
+
+# strip compiler definitions that can hose up builds using HDF5
+sedinplace "s%-DNDEBUG%%g" $PREFIX/bin/h5c++
+sedinplace "s%-DNDEBUG%%g" $PREFIX/bin/h5pcc
+sedinplace "s%-D_FORTIFY_SOURCE=2%%g" $PREFIX/bin/h5c++
+sedinplace "s%-D_FORTIFY_SOURCE=2%%g" $PREFIX/bin/h5pcc
