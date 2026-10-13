@@ -1,5 +1,5 @@
 {% set version = "3.0.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: krado
@@ -21,7 +21,7 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
-    - exodusiicpp =3.*
+    - exodusiicpp =3.2.*
     - occt =7.9.*
     - eigen =3.4.*
     - libboost-devel =1.88.*
@@ -30,7 +30,7 @@ requirements:
     - pybind11
   run:
     - python
-    - exodusiicpp =3.*
+    - exodusiicpp =3.2.*
     - occt =7.9.*
     - fmt 11.*
     - spdlog 1.16.*
