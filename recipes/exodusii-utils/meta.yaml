@@ -1,5 +1,5 @@
 {% set version = "0.4.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: exodusii-utils
@@ -20,10 +20,10 @@ requirements:
     - make
   host:
     - fmt 11.*
-    - exodusiicpp 3.2.*
+    - exodusiicpp 3.3.*
   run:
     - fmt 11.*
-    - exodusiicpp 3.2.*
+    - exodusiicpp 3.3.*
 
 test:
   commands:
