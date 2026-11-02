@@ -1,3 +1,7 @@
+cxx_compiler_version:
+  - 22                  # [osx]
+  - 15                  # [linux]
+
 python:
   - 3.11
   - 3.12
